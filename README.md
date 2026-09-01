@@ -11,7 +11,7 @@ We maintain a curated list of resources on **Test-Time Training / Test-Time Adap
 **本仓库特色（Features）**：
 
 - 📄 **51 篇论文全部附英文 PDF**（`papers/pdf/`）
-- 🇨🇳 **中文翻译 PDF**（`papers/zh/`，由 [SuperTranslate](https://github.com/asimfish/super_translate) 保版式翻译；46/51 已完成，余 5 篇因翻译 API 余额耗尽待补，见 `scripts/translate_missing.sh`）
+- 🇨🇳 **中文翻译 PDF**（`papers/zh/`，由 [SuperTranslate](https://github.com/asimfish/super_translate) 保版式翻译；51/51 全部完成；其中 5 篇（标 \* 号）为 pdf2zh-Google 备胎版，DeepSeek 充值后可运行 `scripts/translate_missing.sh` 重出高质量版）
 - 📝 **逐篇中文精读笔记**（`notes/`，含方法拆解/关键数字/局限/关联阅读）
 - 💡 **趋势与洞见报告**（`insights/TRENDS_AND_INSIGHTS.md`，七大趋势 + 五条核心洞见 + 开放问题）
 - 📊 **汇总报告**：HTML 幻灯片（`report/robo_ttt_report.html`）与 Beamer PDF（`report/robo_ttt_report.pdf`）
@@ -80,11 +80,11 @@ TTT/TTA 的概念源头与稳定性/安全性基础。做任何机器人 TTT 前
 
     *Nicklas Hansen, Rishabh Jangir, Yu Sun, Guillem Alenyà, Pieter Abbeel, Alexei A. Efros, Lerrel Pinto, Xiaolong Wang*
 
-2. **RMA: Rapid Motor Adaptation for Legged Robots.** RSS 2021. [paper](https://arxiv.org/abs/2107.04034) [pdf](papers/pdf/RMA_2107.04034.pdf) ⏳中译待补 [解读](notes/RMA_2107.04034.md)
+2. **RMA: Rapid Motor Adaptation for Legged Robots.** RSS 2021. [paper](https://arxiv.org/abs/2107.04034) [pdf](papers/pdf/RMA_2107.04034.pdf) [中译\*](papers/zh/RMA_2107.04034_zh.pdf) [解读](notes/RMA_2107.04034.md)
 
     *Ashish Kumar, Zipeng Fu, Deepak Pathak, Jitendra Malik*
 
-3. **Deep Online Learning via Meta-Learning: Continual Adaptation for Model-Based RL (MOLe).** arXiv 2018. [paper](https://arxiv.org/abs/1812.07671) [pdf](papers/pdf/MOLe_1812.07671.pdf) ⏳中译待补 [解读](notes/MOLe_1812.07671.md)
+3. **Deep Online Learning via Meta-Learning: Continual Adaptation for Model-Based RL (MOLe).** arXiv 2018. [paper](https://arxiv.org/abs/1812.07671) [pdf](papers/pdf/MOLe_1812.07671.pdf) [中译\*](papers/zh/MOLe_1812.07671_zh.pdf) [解读](notes/MOLe_1812.07671.md)
 
     *Anusha Nagabandi, Chelsea Finn, Sergey Levine*
 
@@ -92,7 +92,7 @@ TTT/TTA 的概念源头与稳定性/安全性基础。做任何机器人 TTT 前
 
     *Michael O'Connell, Guanya Shi, Xichen Shi, Kamyar Azizzadenesheli, Anima Anandkumar, Yisong Yue, Soon-Jo Chung*
 
-5. **Online Adaptation of Learned Vehicle Dynamics Model with Meta-Learning Approach.** IROS 2024. [paper](https://arxiv.org/abs/2409.14950) [pdf](papers/pdf/ContinualMAML_2409.14950.pdf) ⏳中译待补 [解读](notes/ContinualMAML_2409.14950.md)
+5. **Online Adaptation of Learned Vehicle Dynamics Model with Meta-Learning Approach.** IROS 2024. [paper](https://arxiv.org/abs/2409.14950) [pdf](papers/pdf/ContinualMAML_2409.14950.pdf) [中译\*](papers/zh/ContinualMAML_2409.14950_zh.pdf) [解读](notes/ContinualMAML_2409.14950.md)
 
     *Yuki Tsuchiya, Thomas Balch, Paul Drews, Guy Rosman*
 
@@ -230,9 +230,9 @@ TTT/TTA 的概念源头与稳定性/安全性基础。做任何机器人 TTT 前
 
 1. **VANE: Reliable Test-Time Training for Vision-Language-Action Models via Future Visual Representation Prediction.** arXiv 2026. [paper](https://arxiv.org/abs/2608.09448) [pdf](papers/pdf/VANE_2608.09448.pdf) [中译](papers/zh/VANE_2608.09448_zh.pdf) [解读](notes/VANE_2608.09448.md)
 
-2. **TTT-VLA: Test-Time Latent Prompt Optimization for Vision-Language-Action Models.** arXiv 2026. [paper](https://arxiv.org/abs/2606.03127) [pdf](papers/pdf/TTTVLA-LPO_2606.03127.pdf) ⏳中译待补 [解读](notes/TTTVLA-LPO_2606.03127.md)
+2. **TTT-VLA: Test-Time Latent Prompt Optimization for Vision-Language-Action Models.** arXiv 2026. [paper](https://arxiv.org/abs/2606.03127) [pdf](papers/pdf/TTTVLA-LPO_2606.03127.pdf) [中译\*](papers/zh/TTTVLA-LPO_2606.03127_zh.pdf) [解读](notes/TTTVLA-LPO_2606.03127.md)
 
-3. **RoVer: Robot Reward Model as Test-Time Verifier for Vision-Language-Action Model.** arXiv 2025. [paper](https://arxiv.org/abs/2510.10975) [pdf](papers/pdf/RoVer_2510.10975.pdf) ⏳中译待补 [解读](notes/RoVer_2510.10975.md)
+3. **RoVer: Robot Reward Model as Test-Time Verifier for Vision-Language-Action Model.** arXiv 2025. [paper](https://arxiv.org/abs/2510.10975) [pdf](papers/pdf/RoVer_2510.10975.pdf) [中译\*](papers/zh/RoVer_2510.10975_zh.pdf) [解读](notes/RoVer_2510.10975.md)
 
 4. **E-TTS: A New Embodied Test-Time Scaling Framework for Robotic Manipulation.** arXiv 2026. [paper](https://arxiv.org/abs/2606.27268) [pdf](papers/pdf/E-TTS_2606.27268.pdf) [中译](papers/zh/E-TTS_2606.27268_zh.pdf) [解读](notes/E-TTS_2606.27268.md)
 
