@@ -4,7 +4,11 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
+[English](README_en.md) | 中文
+
 We maintain a curated list of resources on **Test-Time Training / Test-Time Adaptation / Test-Time Scaling for robot policies and autonomous driving** — how deployed embodied agents keep learning and improving after training ends.
+
+![timeline](assets/timeline.svg)
 
 我们维护一份「机器人测试时训练」资源清单：涵盖 TTA/TTT 基础、部署时策略适应、TTT 新浪潮（TTT 层/测试时 RL）、机器人与驾驶的权重级 TTT、免权重 test-time steering、2025-2026 前沿、免梯度上下文适应、失败检测与适应触发，以及 TTT 之前的 RL 微调与平滑探索。
 

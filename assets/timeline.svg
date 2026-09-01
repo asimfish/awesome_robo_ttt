@@ -1,0 +1,231 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="560" viewBox="0 0 1400 560" font-family="-apple-system,Helvetica,Arial,sans-serif">
+<rect width="1400" height="560" fill="#ffffff"/>
+<text x="60" y="34" font-size="20" font-weight="700" fill="#1f2937">Test-Time Training for Robot Policies — 88 papers, 2017–2026</text>
+<text x="60" y="54" font-size="12" fill="#6b7280">awesome_robo_ttt · colored by category · one dot per paper</text>
+<line x1="60" y1="480" x2="1360" y2="480" stroke="#9ca3af" stroke-width="1.5"/>
+<line x1="60.0" y1="476" x2="60.0" y2="484" stroke="#9ca3af"/>
+<text x="60.0" y="502" font-size="13" text-anchor="middle" fill="#374151" font-weight="600">2017</text>
+<text x="60.0" y="520" font-size="11" text-anchor="middle" fill="#9ca3af">1 paper</text>
+<circle cx="60.0" cy="466.0" r="4.5" fill="#2980b9"/>
+<text x="68.0" y="469.5" font-size="10" fill="#374151">MAML</text>
+<line x1="204.4" y1="476" x2="204.4" y2="484" stroke="#9ca3af"/>
+<text x="204.4" y="502" font-size="13" text-anchor="middle" fill="#374151" font-weight="600">2018</text>
+<text x="204.4" y="520" font-size="11" text-anchor="middle" fill="#9ca3af">2 papers</text>
+<circle cx="204.4" cy="466.0" r="4.5" fill="#2980b9"/>
+<text x="212.4" y="469.5" font-size="10" fill="#374151">MOLe</text>
+<circle cx="204.4" cy="440.0" r="4.5" fill="#2980b9"/>
+<text x="212.4" y="443.5" font-size="10" fill="#374151">GrBAL</text>
+<line x1="348.9" y1="476" x2="348.9" y2="484" stroke="#9ca3af"/>
+<text x="348.9" y="502" font-size="13" text-anchor="middle" fill="#374151" font-weight="600">2019</text>
+<text x="348.9" y="520" font-size="11" text-anchor="middle" fill="#9ca3af">1 paper</text>
+<circle cx="348.9" cy="466.0" r="4.5" fill="#7f8c8d"/>
+<text x="356.9" y="469.5" font-size="10" fill="#374151">TTT</text>
+<line x1="493.3" y1="476" x2="493.3" y2="484" stroke="#9ca3af"/>
+<text x="493.3" y="502" font-size="13" text-anchor="middle" fill="#374151" font-weight="600">2020</text>
+<text x="493.3" y="520" font-size="11" text-anchor="middle" fill="#9ca3af">5 papers</text>
+<circle cx="493.3" cy="466.0" r="4.5" fill="#7f8c8d"/>
+<text x="501.3" y="469.5" font-size="10" fill="#374151">TENT</text>
+<circle cx="493.3" cy="440.0" r="4.5" fill="#7f8c8d"/>
+<text x="501.3" y="443.5" font-size="10" fill="#374151">SHOT</text>
+<circle cx="493.3" cy="414.0" r="4.5" fill="#2980b9"/>
+<text x="501.3" y="417.5" font-size="10" fill="#374151">PAD</text>
+<circle cx="493.3" cy="388.0" r="4.5" fill="#16a085"/>
+<text x="501.3" y="391.5" font-size="10" fill="#374151">RecoveryRL</text>
+<circle cx="493.3" cy="362.0" r="4.5" fill="#27ae60"/>
+<text x="501.3" y="365.5" font-size="10" fill="#374151">gSDE</text>
+<line x1="637.8" y1="476" x2="637.8" y2="484" stroke="#9ca3af"/>
+<text x="637.8" y="502" font-size="13" text-anchor="middle" fill="#374151" font-weight="600">2021</text>
+<text x="637.8" y="520" font-size="11" text-anchor="middle" fill="#9ca3af">3 papers</text>
+<circle cx="637.8" cy="466.0" r="4.5" fill="#7f8c8d"/>
+<text x="645.8" y="469.5" font-size="10" fill="#374151">TTTpp</text>
+<circle cx="637.8" cy="440.0" r="4.5" fill="#7f8c8d"/>
+<text x="645.8" y="443.5" font-size="10" fill="#374151">MEMO</text>
+<circle cx="637.8" cy="414.0" r="4.5" fill="#2980b9"/>
+<text x="645.8" y="417.5" font-size="10" fill="#374151">RMA</text>
+<line x1="782.2" y1="476" x2="782.2" y2="484" stroke="#9ca3af"/>
+<text x="782.2" y="502" font-size="13" text-anchor="middle" fill="#374151" font-weight="600">2022</text>
+<text x="782.2" y="520" font-size="11" text-anchor="middle" fill="#9ca3af">8 papers</text>
+<circle cx="782.2" cy="466.0" r="4.5" fill="#7f8c8d"/>
+<text x="790.2" y="469.5" font-size="10" fill="#374151">TTT-MAE</text>
+<circle cx="782.2" cy="440.0" r="4.5" fill="#7f8c8d"/>
+<text x="790.2" y="443.5" font-size="10" fill="#374151">EATA</text>
+<circle cx="782.2" cy="414.0" r="4.5" fill="#7f8c8d"/>
+<text x="790.2" y="417.5" font-size="10" fill="#374151">CoTTA</text>
+<circle cx="782.2" cy="388.0" r="4.5" fill="#2980b9"/>
+<text x="790.2" y="391.5" font-size="10" fill="#374151">NeuralFly</text>
+<circle cx="782.2" cy="362.0" r="4.5" fill="#2980b9"/>
+<text x="790.2" y="365.5" font-size="10" fill="#374151">DayDreamer</text>
+<circle cx="782.2" cy="336.0" r="4.5" fill="#8e44ad"/>
+<text x="790.2" y="339.5" font-size="10" fill="#374151">AlgDistill</text>
+<circle cx="782.2" cy="310.0" r="4.5" fill="#16a085"/>
+<text x="790.2" y="313.5" font-size="10" fill="#374151">Diffuser</text>
+<circle cx="782.2" cy="284.0" r="4.5" fill="#16a085"/>
+<text x="790.2" y="287.5" font-size="10" fill="#374151">CTG</text>
+<line x1="926.7" y1="476" x2="926.7" y2="484" stroke="#9ca3af"/>
+<text x="926.7" y="502" font-size="13" text-anchor="middle" fill="#374151" font-weight="600">2023</text>
+<text x="926.7" y="520" font-size="11" text-anchor="middle" fill="#9ca3af">11 papers</text>
+<circle cx="926.7" cy="466.0" r="4.5" fill="#7f8c8d"/>
+<text x="934.7" y="469.5" font-size="10" fill="#374151">SAR</text>
+<circle cx="926.7" cy="440.0" r="4.5" fill="#7f8c8d"/>
+<text x="934.7" y="443.5" font-size="10" fill="#374151">RDumb</text>
+<circle cx="926.7" cy="414.0" r="4.5" fill="#7f8c8d"/>
+<text x="934.7" y="417.5" font-size="10" fill="#374151">DIA</text>
+<circle cx="926.7" cy="388.0" r="4.5" fill="#7f8c8d"/>
+<text x="934.7" y="391.5" font-size="10" fill="#374151">AR-TTA</text>
+<circle cx="926.7" cy="362.0" r="4.5" fill="#2980b9"/>
+<text x="934.7" y="365.5" font-size="10" fill="#374151">ROAM</text>
+<circle cx="926.7" cy="336.0" r="4.5" fill="#16a085"/>
+<text x="934.7" y="339.5" font-size="10" fill="#374151">SafeDiffuser</text>
+<circle cx="926.7" cy="310.0" r="4.5" fill="#16a085"/>
+<text x="934.7" y="313.5" font-size="10" fill="#374151">IDQL</text>
+<circle cx="926.7" cy="284.0" r="4.5" fill="#16a085"/>
+<text x="934.7" y="287.5" font-size="10" fill="#374151">PDMClosed</text>
+<circle cx="926.7" cy="258.0" r="4.5" fill="#27ae60"/>
+<text x="934.7" y="261.5" font-size="10" fill="#374151">RLPD</text>
+<circle cx="926.7" cy="232.0" r="4.5" fill="#27ae60"/>
+<text x="934.7" y="235.5" font-size="10" fill="#374151">CalQL</text>
+<circle cx="926.7" cy="206.0" r="4.5" fill="#27ae60"/>
+<text x="934.7" y="209.5" font-size="10" fill="#374151">PinkNoise</text>
+<line x1="1071.1" y1="476" x2="1071.1" y2="484" stroke="#9ca3af"/>
+<text x="1071.1" y="502" font-size="13" text-anchor="middle" fill="#374151" font-weight="600">2024</text>
+<text x="1071.1" y="520" font-size="11" text-anchor="middle" fill="#9ca3af">16 papers</text>
+<circle cx="1071.1" cy="466.0" r="4.5" fill="#2980b9"/>
+<text x="1079.1" y="469.5" font-size="10" fill="#374151">ContinualMAML</text>
+<circle cx="1071.1" cy="441.0" r="4.5" fill="#2980b9"/>
+<text x="1079.1" y="444.5" font-size="10" fill="#374151">BayesMPC</text>
+<circle cx="1071.1" cy="416.0" r="4.5" fill="#8e44ad"/>
+<text x="1079.1" y="419.5" font-size="10" fill="#374151">TTTLayers</text>
+<circle cx="1071.1" cy="391.0" r="4.5" fill="#8e44ad"/>
+<text x="1079.1" y="394.5" font-size="10" fill="#374151">ARC-TTT</text>
+<circle cx="1071.1" cy="366.0" r="4.5" fill="#8e44ad"/>
+<text x="1079.1" y="369.5" font-size="10" fill="#374151">SnellTTC</text>
+<circle cx="1071.1" cy="341.0" r="4.5" fill="#16a085"/>
+<text x="1079.1" y="344.5" font-size="10" fill="#374151">DiffusionES</text>
+<circle cx="1071.1" cy="316.0" r="4.5" fill="#16a085"/>
+<text x="1079.1" y="319.5" font-size="10" fill="#374151">ITPS</text>
+<circle cx="1071.1" cy="291.0" r="4.5" fill="#16a085"/>
+<text x="1079.1" y="294.5" font-size="10" fill="#374151">HydraMDP</text>
+<circle cx="1071.1" cy="266.0" r="4.5" fill="#16a085"/>
+<text x="1079.1" y="269.5" font-size="10" fill="#374151">ConsistencyPolicy</text>
+<circle cx="1071.1" cy="241.0" r="4.5" fill="#2c3e50"/>
+<text x="1079.1" y="244.5" font-size="10" fill="#374151">ICRT</text>
+<circle cx="1071.1" cy="216.0" r="4.5" fill="#2c3e50"/>
+<text x="1079.1" y="219.5" font-size="10" fill="#374151">InstantPolicy</text>
+<circle cx="1071.1" cy="191.0" r="4.5" fill="#2c3e50"/>
+<text x="1079.1" y="194.5" font-size="10" fill="#374151">AnyCar</text>
+<circle cx="1071.1" cy="166.0" r="4.5" fill="#d35400"/>
+<text x="1079.1" y="169.5" font-size="10" fill="#374151">Sentinel</text>
+<circle cx="1071.1" cy="141.0" r="4.5" fill="#27ae60"/>
+<text x="1079.1" y="144.5" font-size="10" fill="#374151">DPPO</text>
+<circle cx="1071.1" cy="116.0" r="4.5" fill="#27ae60"/>
+<text x="1079.1" y="119.5" font-size="10" fill="#374151">WSRL</text>
+<circle cx="1071.1" cy="91.0" r="4.5" fill="#27ae60"/>
+<text x="1079.1" y="94.5" font-size="10" fill="#374151">HILSERL</text>
+<line x1="1215.6" y1="476" x2="1215.6" y2="484" stroke="#9ca3af"/>
+<text x="1215.6" y="502" font-size="13" text-anchor="middle" fill="#374151" font-weight="600">2025</text>
+<text x="1215.6" y="520" font-size="11" text-anchor="middle" fill="#9ca3af">25 papers</text>
+<circle cx="1215.6" cy="466.0" r="4.5" fill="#8e44ad"/>
+<text x="1223.6" y="469.5" font-size="10" fill="#374151">VideoTTT</text>
+<circle cx="1215.6" cy="450.0" r="4.5" fill="#8e44ad"/>
+<text x="1223.6" y="453.5" font-size="10" fill="#374151">TTRL</text>
+<circle cx="1215.6" cy="434.0" r="4.5" fill="#8e44ad"/>
+<text x="1223.6" y="437.5" font-size="10" fill="#374151">TTT-E2E</text>
+<circle cx="1215.6" cy="418.0" r="4.5" fill="#8e44ad"/>
+<text x="1223.6" y="421.5" font-size="10" fill="#374151">TTCSurvey</text>
+<circle cx="1215.6" cy="402.0" r="4.5" fill="#8e44ad"/>
+<text x="1223.6" y="405.5" font-size="10" fill="#374151">Titans</text>
+<circle cx="1215.6" cy="386.0" r="4.5" fill="#8e44ad"/>
+<text x="1223.6" y="389.5" font-size="10" fill="#374151">LaCT</text>
+<circle cx="1215.6" cy="370.0" r="4.5" fill="#8e44ad"/>
+<text x="1223.6" y="373.5" font-size="10" fill="#374151">ATLAS</text>
+<circle cx="1215.6" cy="354.0" r="4.5" fill="#8e44ad"/>
+<text x="1223.6" y="357.5" font-size="10" fill="#374151">TNT</text>
+<circle cx="1215.6" cy="338.0" r="4.5" fill="#c0392b"/>
+<text x="1223.6" y="341.5" font-size="10" fill="#374151">Centaur</text>
+<circle cx="1215.6" cy="322.0" r="4.5" fill="#c0392b"/>
+<text x="1223.6" y="325.5" font-size="10" fill="#374151">MPA</text>
+<circle cx="1215.6" cy="306.0" r="4.5" fill="#16a085"/>
+<text x="1223.6" y="309.5" font-size="10" fill="#374151">RoboMonkey</text>
+<circle cx="1215.6" cy="290.0" r="4.5" fill="#16a085"/>
+<text x="1223.6" y="293.5" font-size="10" fill="#374151">DSRL</text>
+<circle cx="1215.6" cy="274.0" r="4.5" fill="#16a085"/>
+<text x="1223.6" y="277.5" font-size="10" fill="#374151">DynaGuide</text>
+<circle cx="1215.6" cy="258.0" r="4.5" fill="#16a085"/>
+<text x="1223.6" y="261.5" font-size="10" fill="#374151">ADPro</text>
+<circle cx="1215.6" cy="242.0" r="4.5" fill="#16a085"/>
+<text x="1223.6" y="245.5" font-size="10" fill="#374151">GTRS</text>
+<circle cx="1215.6" cy="226.0" r="4.5" fill="#16a085"/>
+<text x="1223.6" y="229.5" font-size="10" fill="#374151">HydraNeXt</text>
+<circle cx="1215.6" cy="210.0" r="4.5" fill="#16a085"/>
+<text x="1223.6" y="213.5" font-size="10" fill="#374151">DriveCritic</text>
+<circle cx="1215.6" cy="194.0" r="4.5" fill="#16a085"/>
+<text x="1223.6" y="197.5" font-size="10" fill="#374151">GPC</text>
+<circle cx="1215.6" cy="178.0" r="4.5" fill="#e67e22"/>
+<text x="1223.6" y="181.5" font-size="10" fill="#374151">RoVer</text>
+<circle cx="1215.6" cy="162.0" r="4.5" fill="#2c3e50"/>
+<text x="1223.6" y="165.5" font-size="10" fill="#374151">RICL</text>
+<circle cx="1215.6" cy="146.0" r="4.5" fill="#2c3e50"/>
+<text x="1223.6" y="149.5" font-size="10" fill="#374151">LocoFormer</text>
+<circle cx="1215.6" cy="130.0" r="4.5" fill="#d35400"/>
+<text x="1223.6" y="133.5" font-size="10" fill="#374151">FAILDetect</text>
+<circle cx="1215.6" cy="114.0" r="4.5" fill="#d35400"/>
+<text x="1223.6" y="117.5" font-size="10" fill="#374151">SAFE</text>
+<circle cx="1215.6" cy="98.0" r="4.5" fill="#27ae60"/>
+<text x="1223.6" y="101.5" font-size="10" fill="#374151">QChunking</text>
+<circle cx="1215.6" cy="82.0" r="4.5" fill="#27ae60"/>
+<text x="1223.6" y="85.5" font-size="10" fill="#374151">ConRFT</text>
+<line x1="1360.0" y1="476" x2="1360.0" y2="484" stroke="#9ca3af"/>
+<text x="1360.0" y="502" font-size="13" text-anchor="middle" fill="#374151" font-weight="600">2026</text>
+<text x="1360.0" y="520" font-size="11" text-anchor="middle" fill="#9ca3af">16 papers</text>
+<circle cx="1360.0" cy="466.0" r="4.5" fill="#c0392b"/>
+<text text-anchor="end" x="1352.0" y="469.5" font-size="10" fill="#374151">RoboTTT</text>
+<circle cx="1360.0" cy="441.0" r="4.5" fill="#c0392b"/>
+<text text-anchor="end" x="1352.0" y="444.5" font-size="10" fill="#374151">TT-VLA</text>
+<circle cx="1360.0" cy="416.0" r="4.5" fill="#c0392b"/>
+<text text-anchor="end" x="1352.0" y="419.5" font-size="10" fill="#374151">WAMTTT</text>
+<circle cx="1360.0" cy="391.0" r="4.5" fill="#c0392b"/>
+<text text-anchor="end" x="1352.0" y="394.5" font-size="10" fill="#374151">PostTrainSurvey</text>
+<circle cx="1360.0" cy="366.0" r="4.5" fill="#c0392b"/>
+<text text-anchor="end" x="1352.0" y="369.5" font-size="10" fill="#374151">TTTParkour</text>
+<circle cx="1360.0" cy="341.0" r="4.5" fill="#16a085"/>
+<text text-anchor="end" x="1352.0" y="344.5" font-size="10" fill="#374151">TOAD</text>
+<circle cx="1360.0" cy="316.0" r="4.5" fill="#16a085"/>
+<text text-anchor="end" x="1352.0" y="319.5" font-size="10" fill="#374151">PriGo</text>
+<circle cx="1360.0" cy="291.0" r="4.5" fill="#16a085"/>
+<text text-anchor="end" x="1352.0" y="294.5" font-size="10" fill="#374151">DCDP</text>
+<circle cx="1360.0" cy="266.0" r="4.5" fill="#16a085"/>
+<text text-anchor="end" x="1352.0" y="269.5" font-size="10" fill="#374151">ORPA</text>
+<circle cx="1360.0" cy="241.0" r="4.5" fill="#e67e22"/>
+<text text-anchor="end" x="1352.0" y="244.5" font-size="10" fill="#374151">VANE</text>
+<circle cx="1360.0" cy="216.0" r="4.5" fill="#e67e22"/>
+<text text-anchor="end" x="1352.0" y="219.5" font-size="10" fill="#374151">TTTVLA-LPO</text>
+<circle cx="1360.0" cy="191.0" r="4.5" fill="#e67e22"/>
+<text text-anchor="end" x="1352.0" y="194.5" font-size="10" fill="#374151">E-TTS</text>
+<circle cx="1360.0" cy="166.0" r="4.5" fill="#e67e22"/>
+<text text-anchor="end" x="1352.0" y="169.5" font-size="10" fill="#374151">ELASTIC</text>
+<circle cx="1360.0" cy="141.0" r="4.5" fill="#e67e22"/>
+<text text-anchor="end" x="1352.0" y="144.5" font-size="10" fill="#374151">SAIL</text>
+<circle cx="1360.0" cy="116.0" r="4.5" fill="#e67e22"/>
+<text text-anchor="end" x="1352.0" y="119.5" font-size="10" fill="#374151">VLA-ATTC</text>
+<circle cx="1360.0" cy="91.0" r="4.5" fill="#e67e22"/>
+<text text-anchor="end" x="1352.0" y="94.5" font-size="10" fill="#374151">DREAMChunk</text>
+<rect x="50" y="76" width="330" height="104" rx="-962" fill="#f9fafb" stroke="#e5e7eb"/>
+<circle cx="60" cy="92" r="5" fill="#7f8c8d"/>
+<text x="70" y="96" font-size="11" fill="#374151">1. TTA/TTT foundations</text>
+<circle cx="225" cy="92" r="5" fill="#2980b9"/>
+<text x="235" y="96" font-size="11" fill="#374151">2. Policy adaptation</text>
+<circle cx="60" cy="110" r="5" fill="#8e44ad"/>
+<text x="70" y="114" font-size="11" fill="#374151">3. TTT new wave</text>
+<circle cx="225" cy="110" r="5" fill="#c0392b"/>
+<text x="235" y="114" font-size="11" fill="#374151">4. Robot/driving TTT</text>
+<circle cx="60" cy="128" r="5" fill="#16a085"/>
+<text x="70" y="132" font-size="11" fill="#374151">5. Test-time steering</text>
+<circle cx="225" cy="128" r="5" fill="#e67e22"/>
+<text x="235" y="132" font-size="11" fill="#374151">6. Frontier 25-26</text>
+<circle cx="60" cy="146" r="5" fill="#2c3e50"/>
+<text x="70" y="150" font-size="11" fill="#374151">7. In-context</text>
+<circle cx="225" cy="146" r="5" fill="#d35400"/>
+<text x="235" y="150" font-size="11" fill="#374151">8. Failure detection</text>
+<circle cx="60" cy="164" r="5" fill="#27ae60"/>
+<text x="70" y="168" font-size="11" fill="#374151">9. RL before TTT</text>
+</svg>
