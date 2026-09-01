@@ -1,0 +1,10 @@
+papers/txt/
+*.log
+.DS_Store
+papers/cache/
+report/*.aux
+report/*.nav
+report/*.snm
+report/*.toc
+report/*.out
+report/*.log

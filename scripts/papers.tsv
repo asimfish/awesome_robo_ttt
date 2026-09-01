@@ -1,0 +1,52 @@
+key	arxiv	category	venue	title
+TTT	1909.13231	1-foundations	ICML 2020	Test-Time Training with Self-Supervision for Generalization under Distribution Shifts
+TTT-MAE	2209.07522	1-foundations	NeurIPS 2022	Test-Time Training with Masked Autoencoders
+TTTpp	NEURIPS2021	1-foundations	NeurIPS 2021	TTT++: When Does Self-Supervised Test-Time Training Fail or Thrive?
+TENT	2006.10726	1-foundations	ICLR 2021	Tent: Fully Test-Time Adaptation by Entropy Minimization
+SAR	2302.12400	1-foundations	ICLR 2023	Towards Stable Test-Time Adaptation in Dynamic Wild World
+EATA	2204.02610	1-foundations	ICML 2022	Efficient Test-Time Model Adaptation without Forgetting
+CoTTA	2203.13591	1-foundations	CVPR 2022	Continual Test-Time Domain Adaptation
+RDumb	2306.05401	1-foundations	NeurIPS 2023	RDumb: A Simple Approach that Questions Our Progress in Continual Test-Time Adaptation
+DIA	2301.12576	1-foundations	ICML 2023	Uncovering Adversarial Risks of Test-Time Adaptation
+PAD	2007.04309	2-policy-adaptation	ICLR 2021	Self-Supervised Policy Adaptation during Deployment
+RMA	2107.04034	2-policy-adaptation	RSS 2021	RMA: Rapid Motor Adaptation for Legged Robots
+MOLe	1812.07671	2-policy-adaptation	arXiv 2018	Deep Online Learning via Meta-Learning: Continual Adaptation for Model-Based RL
+NeuralFly	2205.06908	2-policy-adaptation	Science Robotics 2022	Neural-Fly Enables Rapid Learning for Agile Flight in Strong Winds
+ContinualMAML	2409.14950	2-policy-adaptation	IROS 2024	Online Adaptation of Learned Vehicle Dynamics Model with Meta-Learning Approach
+BayesMPC	2411.00107	2-policy-adaptation	arXiv 2024	First, Learn What You Don't Know: Active Information Gathering for Driving at the Limits of Handling
+TTTLayers	2407.04620	3-new-wave	ICML 2025	Learning to (Learn at Test Time): RNNs with Expressive Hidden States
+ARC-TTT	2411.07279	3-new-wave	ICML 2025	The Surprising Effectiveness of Test-Time Training for Few-Shot Learning
+VideoTTT	2504.05298	3-new-wave	CVPR 2025	One-Minute Video Generation with Test-Time Training
+TTRL	2504.16084	3-new-wave	NeurIPS 2025	TTRL: Test-Time Reinforcement Learning
+AlgDistill	2210.14215	3-new-wave	ICLR 2023	In-context Reinforcement Learning with Algorithm Distillation
+TTT-E2E	2512.23675	3-new-wave	arXiv 2025	End-to-End Test-Time Training for Long Context
+SnellTTC	2408.03314	3-new-wave	arXiv 2024	Scaling LLM Test-Time Compute Optimally Can Be More Effective than Scaling Model Parameters
+TTCSurvey	2501.02497	3-new-wave	arXiv 2025	A Survey of Test-Time Compute: From Intuitive Inference to Deliberate Reasoning
+RoboTTT	2607.15275	4-robot-driving-ttt	arXiv 2026	RoboTTT: Context Scaling for Robot Policies
+TT-VLA	2601.06748	4-robot-driving-ttt	arXiv 2026	On-the-Fly VLA Adaptation via Test-Time Reinforcement Learning
+Centaur	2503.11650	4-robot-driving-ttt	arXiv 2025	Centaur: Robust End-to-End Autonomous Driving with Test-Time Training
+MPA	2511.21584	4-robot-driving-ttt	arXiv 2025	Model-Based Policy Adaptation for Closed-Loop End-to-End Autonomous Driving
+WAMTTT	2607.06988	4-robot-driving-ttt	arXiv 2026	WAM-TTT: Steering World-Action Models by Watching Human Play at Test Time
+PostTrainSurvey	2607.08072	4-robot-driving-ttt	arXiv 2026	Post-Training in End-to-End Autonomous Driving: A Unified View
+Diffuser	2205.09991	5-test-time-steering	ICML 2022	Planning with Diffusion for Flexible Behavior Synthesis
+CTG	2210.17366	5-test-time-steering	ICRA 2023	Guided Conditional Diffusion for Controllable Traffic Simulation
+SafeDiffuser	2306.00148	5-test-time-steering	ICLR 2025	SafeDiffuser: Safe Planning with Diffusion Probabilistic Models
+IDQL	2304.10573	5-test-time-steering	arXiv 2023	IDQL: Implicit Q-Learning as an Actor-Critic Method with Diffusion Policies
+RecoveryRL	2010.15920	5-test-time-steering	RA-L 2021	Recovery RL: Safe Reinforcement Learning with Learned Recovery Zones
+RoboMonkey	2506.17811	5-test-time-steering	CoRL 2025	RoboMonkey: Scaling Test-Time Sampling and Verification for Vision-Language-Action Models
+DiffusionES	2402.06559	5-test-time-steering	CVPR 2024	Diffusion-ES: Gradient-free Planning with Diffusion for Autonomous Driving
+TOAD	2606.07170	5-test-time-steering	arXiv 2026	Test-Time Trajectory Optimization for Autonomous Driving
+DSRL	2506.15799	5-test-time-steering	CoRL 2025	Steering Your Diffusion Policy with Latent Space Reinforcement Learning
+ITPS	2411.16627	5-test-time-steering	ICRA 2025	Inference-Time Policy Steering through Human Interactions
+DynaGuide	2506.13922	5-test-time-steering	NeurIPS 2025	DynaGuide: Steering Diffusion Policies with Active Dynamic Guidance
+PDMClosed	2306.07962	5-test-time-steering	CoRL 2023	Parting with Misconceptions about Learning-based Vehicle Motion Planning
+HydraMDP	2406.06978	5-test-time-steering	CVPRW 2024	Hydra-MDP: End-to-end Multimodal Planning with Multi-target Hydra-Distillation
+ConsistencyPolicy	2405.07503	5-test-time-steering	RSS 2024	Consistency Policy: Accelerated Visuomotor Policies via Consistency Distillation
+ADPro	2508.06266	5-test-time-steering	arXiv 2025	ADPro: A Test-time Adaptive Diffusion Policy via Manifold-constrained Denoising and Task-aware Initialization
+VANE	2608.09448	6-frontier	arXiv 2026	VANE: Reliable Test-Time Training for Vision-Language-Action Models via Future Visual Representation Prediction
+TTTVLA-LPO	2606.03127	6-frontier	arXiv 2026	TTT-VLA: Test-Time Latent Prompt Optimization for Vision-Language-Action Models
+RoVer	2510.10975	6-frontier	arXiv 2025	RoVer: Robot Reward Model as Test-Time Verifier for Vision-Language-Action Model
+E-TTS	2606.27268	6-frontier	arXiv 2026	E-TTS: A New Embodied Test-Time Scaling Framework for Robotic Manipulation
+ELASTIC	2606.31132	6-frontier	arXiv 2026	ELASTIC: Efficiently Learning to Adaptively Scale Test-Time Compute for Generative Control Policies
+SAIL	2603.08269	6-frontier	arXiv 2026	SAIL: Test-Time Scaling for In-Context Imitation Learning with VLM
+VLA-ATTC	2605.01194	6-frontier	arXiv 2026	VLA-ATTC: Adaptive Test-Time Compute for VLA Models with Relative Action Critic Model

@@ -1,0 +1,287 @@
+\documentclass[10pt,aspectratio=169]{beamer}
+\usetheme{Madrid}
+\usecolortheme{seahorse}
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\setCJKmainfont{Hiragino Sans GB}
+\setCJKsansfont{Hiragino Sans GB}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\definecolor{acc}{HTML}{2B5DD8}
+\definecolor{good}{HTML}{1F9D6B}
+\definecolor{warn}{HTML}{C77700}
+\definecolor{bad}{HTML}{C0392B}
+\setbeamertemplate{navigation symbols}{}
+\setbeamerfont{frametitle}{size=\large,series=\bfseries}
+\newcommand{\hl}[1]{\textcolor{good}{\textbf{#1}}}
+\newcommand{\wa}[1]{\textcolor{warn}{\textbf{#1}}}
+\newcommand{\ba}[1]{\textcolor{bad}{\textbf{#1}}}
+
+\title[awesome\_robo\_ttt]{机器人测试时训练全景}
+\subtitle{Test-Time Training for Robot Policies —— 51 篇文献调研汇总}
+\author{awesome\_robo\_ttt}
+\date{2026-09}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\begin{center}
+\small 51 篇论文 · 6 大分类 · 英文 PDF + 中文翻译 + 逐篇精读 · 7 大趋势 + 5 条洞见\\
+\texttt{github.com/asimfish/awesome\_robo\_ttt}
+\end{center}
+\end{frame}
+
+\begin{frame}{为什么机器人需要「测试时」学习}
+\begin{columns}[T]
+\column{0.48\textwidth}
+\textbf{问题：权重在部署那一刻被冻结}
+\begin{itemize}
+\item 预训练策略（DP / VLA / 端到端驾驶）遇到分布漂移即性能骤降
+\item 重新收集数据微调的周期是天级，赶不上环境变化
+\end{itemize}
+\vspace{4pt}
+\textbf{机会：测试样本携带分布信息}
+\begin{itemize}
+\item TTT 核心抽象（Sun et al., ICML 2020）：用自监督任务从无标签样本中提取分布信息
+\item 机器人闭环的免费信号更多：\hl{跟踪误差、预测-实测残差、任务进度}
+\end{itemize}
+\column{0.48\textwidth}
+\textbf{代价同样真实}
+\begin{itemize}
+\item \ba{崩溃}：长时程在线更新几乎必然退化（RDumb）
+\item \ba{延迟}：每帧梯度与实时控制预算冲突
+\item \ba{安全}：在线改权重 = 运行未认证的新模型，且打开投毒攻击面（DIA）
+\end{itemize}
+\vspace{4pt}
+\textbf{本报告回答}
+\begin{itemize}
+\item TTT 的形态与成本-收益
+\item 怎样把 TTT 装进「安全壳」
+\item 2025--2026 前沿的收敛方向
+\end{itemize}
+\end{columns}
+\end{frame}
+
+\begin{frame}{六大分类：51 篇论文的全景地图}
+\small
+\begin{tabular}{p{0.24\textwidth}p{0.33\textwidth}p{0.28\textwidth}c}
+\toprule
+\textbf{分类} & \textbf{核心问题} & \textbf{代表工作} & \textbf{篇数}\\
+\midrule
+① TTA/TTT 基础 & 何时有效 / 何时崩溃 / 攻击面 & TTT · TENT · SAR · RDumb & 9\\
+② 部署时策略适应 & 适应哪个模块、用什么信号 & PAD · RMA · Neural-Fly & 6\\
+③ TTT 新浪潮 & TTT 变成网络层 / 测试时 RL & TTT-Layers · TTRL · TTT-E2E & 8\\
+④ 机器人/驾驶权重级 TTT & 真机闭环 / 驾驶榜单证据 & RoboTTT · Centaur · WAM-TTT & 6\\
+⑤ 免权重 Steering & 不改权重的引导/搜索/验证 & DSRL · TOAD · Hydra-MDP & 15\\
+⑥ 2025--2026 前沿 & 可靠性协议 / 算力调度 / PRM & VANE · ELASTIC · RoVer & 7\\
+\bottomrule
+\end{tabular}
+\vspace{6pt}
+
+\footnotesize 每篇均含：英文 PDF（\texttt{papers/pdf}）· 中文翻译（\texttt{papers/zh}）· 精读笔记（\texttt{notes/}，方法拆解 / 关键数字 / 局限 / 关联阅读）。
+\end{frame}
+
+\begin{frame}{概念坐标：改权重 vs 不改权重（正交可叠加）}
+\begin{columns}[T]
+\column{0.48\textwidth}
+\textbf{System-1 · 权重级 TTT}（分类①②③④）
+\begin{itemize}
+\item \textbf{裸梯度}：每帧 1--20 步 SGD（TTT/PAD/Centaur）——有效但权重漂移、验证难
+\item \textbf{结构化 TTT 层}：快权重更新是前向的一部分（TTT-Layers/RoboTTT）——\hl{延迟恒定、更新规则可预先验证}
+\item \textbf{每任务 LoRA}：分钟级，段级适应（ARC-TTT）
+\item \textbf{测试时 RL}：伪奖励驱动（TTRL/TT-VLA），适合影子模式
+\end{itemize}
+\column{0.48\textwidth}
+\textbf{System-2 · 免权重 Steering}（分类⑤⑥）
+\begin{itemize}
+\item \textbf{梯度 guidance}：Diffuser / CTG / DynaGuide
+\item \textbf{采样+重排}：IDQL / RoboMonkey / Hydra-MDP
+\item \textbf{搜索}：Diffusion-ES / TOAD / SAIL
+\item \textbf{噪声空间 RL}：DSRL——\hl{唯一会持续学习的免权重路线}
+\end{itemize}
+\vspace{4pt}
+\footnotesize 同一份测试时算力，花在梯度还是采样上，是贯穿 51 篇的总取舍（Snell 2024 / TTC Survey）。
+\end{columns}
+\end{frame}
+
+\begin{frame}{分类①基础：给机器人划下的三条红线}
+\begin{itemize}
+\item \textbf{成功条件——相关性定收益}：TTT++ 理论下界：收益随自监督任务与主任务的梯度相关性增大。PAD 消融：控制任务 逆动力学 $>$ 对比学习 $>$ 旋转预测；导航任务反转。\hl{选错辅助任务，适应梯度只是噪声。}
+\item \textbf{崩溃机理——batch=1 是雷区}：SAR：BN 统计在小 batch / 混合偏移 / 类不平衡下必崩，车载流式全踩中。RDumb：长时程下 SOTA 持续 TTA \ba{全部退化到不如不适应}，只有定期硬重置可靠。防护四件套：过滤 + 信任域（EATA）+ 软恢复（CoTTA）+ 重置（RDumb）。
+\item \textbf{攻击面——输入能改模型}：DIA：测试批次 5\% 恶意样本投毒，良性样本攻击成功率 $>$92\%。\wa{影子模式 + 输入过滤 + 通道隔离}是车规语境必选项。
+\end{itemize}
+\vspace{4pt}
+\footnotesize 9 篇：TTT · TTT-MAE · TTT++ · TENT · SAR · EATA · CoTTA · RDumb · DIA
+\end{frame}
+
+\begin{frame}{分类②策略适应：「适应哪个模块」的风险谱系}
+\centering
+\small
+\begin{tabular}{lllll}
+\toprule
+RMA & Neural-Fly & TENT & PAD & CoTTA\\
+零梯度前馈 & 末层线性增益 & BN 仿射 & 视觉编码器 & 全量+随机恢复\\
+毫秒级/零风险 & 解析更新/可证稳 & 低维但 BN 是雷 & 31/36 环境提升 & 表达力最强/风险最高\\
+\bottomrule
+\end{tabular}
+\vspace{6pt}
+\begin{itemize}
+\item 风险与表达力沿谱系单调上升；证据一致指向\hl{冻结感知、只动末端/低维接口}
+\item \textbf{元训练是隐形前提}：MOLe（2018）证明不做 meta-training 在线 SGD 无效；Neural-Fly DAIML、Continual-MAML、TTT-E2E 反复验证
+\item \textbf{速度边界（反例）}：BayesMPC 真车漂移——\wa{失稳时间常数快于适应收敛}；对策：前馈兜底 + 来得及时主动采集信息
+\end{itemize}
+\end{frame}
+
+\begin{frame}{分类③新浪潮：TTT 从部署补丁变成网络层}
+\begin{columns}[T]
+\column{0.52\textwidth}
+\textbf{TTT-Layers（ICML 2025）}：隐状态本身是小模型，状态更新 = 一步自监督学习；线性复杂度，长上下文超 Mamba。\hl{TTT 变成可预先验证的网络组件。}
+\vspace{4pt}
+
+\textbf{TTT-E2E（2025）方法论基石}：测试时直接优化任务损失（只更 MLP）+ 训练期 MAML 式元学习优化「TTT 之后的损失」；128K 上下文快 2.7$\times$、延迟恒定。
+\vspace{4pt}
+
+\textbf{TTRL}：多数投票当伪奖励驱动 GRPO（AIME24 +159\%$\sim$211\%）。\wa{多数派错误时自我强化。}
+\column{0.44\textwidth}
+\textbf{成本谱系（每次适应）}
+\small
+\begin{tabular}{lll}
+\toprule
+形态 & 成本 & 适用\\
+\midrule
+TTT 层前向 & $\approx$0 & 帧级闭环\\
+单步梯度 & 百 ms 级 & 软实时(异步)\\
+20 步/样本 & 秒级 & 离线批处理\\
+每任务 LoRA & 分钟级 & 段级适应\\
+测试时 RL & 需 rollout & 影子模式\\
+\bottomrule
+\end{tabular}
+\end{columns}
+\end{frame}
+
+\begin{frame}{分类④机器人/驾驶 TTT：真机 30Hz 与驾驶榜首}
+\small
+\begin{columns}[T]
+\column{0.32\textwidth}
+\textbf{RoboTTT}（NVIDIA GEAR）
+\begin{itemize}
+\item TTT 层入 GR00T N1.7 VLA
+\item 8K 步上下文、\hl{延迟恒定}、RTX 5090 真机 30Hz 闭环
+\item DAgger 蒸馏：在线自我纠错 \hl{+36\%}
+\end{itemize}
+\column{0.32\textwidth}
+\textbf{Centaur}（驾驶 TTT 先例）
+\begin{itemize}
+\item Cluster Entropy 无监督目标，只更 score decoder
+\item 单步梯度 + 异步并行：navtest 榜首 \hl{PDMS 92.1}，navsafe 74.14 vs 56.47
+\item 失败帧检测 73.6\%；\wa{仅开环验证}
+\end{itemize}
+\column{0.32\textwidth}
+\textbf{WAM-TTT}（北大/Galbot）
+\begin{itemize}
+\item 部署时「看人类玩」：无标注人类视频写入快权重记忆
+\item 元训练对齐人-机空间
+\item 免重定向、免机器人数据
+\end{itemize}
+\end{columns}
+\vspace{6pt}
+\footnotesize 同类：TT-VLA（任务进度伪奖励，实证「重建好 $\neq$ 做得对」）· MPA（3DGS 反事实仿真 + 推理时择优）· Post-Training Survey（refinement 为后训练第四族）
+\end{frame}
+
+\begin{frame}{分类⑤免权重 Steering：设计空间与延迟账本}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\textbf{四象限（可组合）}
+\begin{itemize}
+\item \textbf{梯度 guidance}：Diffuser $\to$ CTG（STL 规则）$\to$ DynaGuide（外挂动力学）$\to$ SafeDiffuser（CBF，\wa{保证实为概率性}）
+\item \textbf{采样+重排}：IDQL（抗 OOD 高估）$\to$ RoboMonkey（幂律，N=8$\sim$32 够用）
+\item \textbf{搜索}：Diffusion-ES $\to$ TOAD（CEM，NAVSIM 94.7）
+\item \textbf{噪声空间 RL}：DSRL（基座冻结可回退）
+\end{itemize}
+\column{0.46\textwidth}
+\textbf{延迟账本（实测）}
+\small
+\begin{tabular}{lr}
+\toprule
+扩散策略 15 步 DDIM & 192ms\\
+一致性蒸馏单步 & \hl{21ms}\\
+PDM-Closed 全管线 & 91ms\\
+Hydra-MDP 蒸馏 verifier & \hl{$\approx$0}\\
+Diffusion-ES 全量搜索 & \ba{秒级}\\
+7B VLM verifier & \ba{$>$100ms}\\
+\bottomrule
+\end{tabular}
+\vspace{4pt}
+
+\textbf{铁律（TOAD）}：\ba{verifier 的 OOD 泛化决定成败}——固定词表 scorer 拿去搜索反而低于不搜索。
+\end{columns}
+\end{frame}
+
+\begin{frame}{分类⑥前沿七篇：可靠性、接口化与算力调度}
+\small
+\begin{tabular}{p{0.16\textwidth}p{0.37\textwidth}p{0.38\textwidth}}
+\toprule
+\textbf{工作} & \textbf{机制} & \textbf{代表意义}\\
+\midrule
+VANE & 影子提案 $\to$ 未来观测验证 $\to$ 提交 & 可靠性从「兜底」升级为「准入」\\
+TTT-VLA (LPO) & 只优化一个潜提示向量 & 「适应接口化」新端点\\
+RoVer & PRM 打分 + 预测改进方向 & verifier 从打分到指路\\
+E-TTS & 推理+动作联合缩放 · 历史缓冲 & 具身 TTS 参考架构（真机 +27\%）\\
+ELASTIC & meta-MDP 学算力调度 & 匹配 best-of-10、省 34\% 延迟\\
+SAIL & 轨迹级 MCTS + VLM 反馈 & scaling 升到轨迹层（95\%）\\
+VLA-ATTC & 不确定性离合器 + 相对批评家 & 平时反射、危时深思\\
+\bottomrule
+\end{tabular}
+\end{frame}
+
+\begin{frame}{七大趋势}
+\small
+\begin{enumerate}
+\item \textbf{接口化适应成主流}：全模型 $\to$ BN $\to$ 编码器 $\to$ LoRA $\to$ 噪声 $\to$ 潜提示 $\to$ 快权重层；\hl{基座冻结 + 小接口承载可变性}
+\item \textbf{可靠性从兜底升级为准入}：事后恢复/重置 $\to$ VANE 式「提案-验证-提交」；「何时适应」取代「怎么适应」
+\item \textbf{verifier 军备竞赛}：规则 $\to$ 蒸馏 $\to$ VLM $\to$ PRM+方向 $\to$ 相对比较
+\item \textbf{算力分配成为学习问题}：ELASTIC meta-MDP 调度 / DA-SIP / DIRECT——常时便宜、危时舍得花
+\item \textbf{自监督目标转向任务耦合}：重建退潮；state grounding / 未来后果 / 伪奖励上位；机器人的免费信号是独特资产
+\item \textbf{人类数据成为测试时转向信号}：WAM-TTT 看人类玩、ITPS 交互引导、SAIL 档案检索
+\item \textbf{驾驶两派对垒}：改权重（Centaur）vs 冻结搜索（TOAD）；反应式闭环 + 权重级 TTT \hl{无人占坑}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{五条核心洞见}
+\small
+\begin{itemize}
+\item \textbf{A · 「安全 TTT」事实标准}：\hl{冻结基座 + 小可变接口 + 验证式提交 + 一键回滚}（RoboTTT / DSRL / VANE 三方收敛）
+\item \textbf{B · 三时间尺度分工}：毫秒级突变 $\to$ 前馈推断；秒级决策 $\to$ 采样/搜索；分钟级慢漂移 $\to$ 梯度 TTT 带防护。单一机制包打天下已被证伪（BayesMPC / RDumb）
+\item \textbf{C · verifier 是共同天花板}：TOAD / TTRL / Hydra-MDP 三条独立证据链 $\to$ 研究布局「验证者优先」
+\item \textbf{D · 元训练是隐形前提}：八年证据一致（MOLe $\to$ TTT-E2E $\to$ WAM-TTT）——部署时才加 TTT 注定失败
+\item \textbf{E · 分层控制是天然安全垫}：策略输出高阶量、底层控制器跟踪时，适应扰动被低层滤波限幅（Neural-Fly / Centaur / DSRL 同构）
+\end{itemize}
+\end{frame}
+
+\begin{frame}{开放问题（论文机会）与仓库导览}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\textbf{开放问题}
+\begin{itemize}
+\item 反应式闭环 + 权重级 TTT（Centaur 停在非反应式）
+\item 数十万步连续漂移的适应增益衰减评测（机器人版 CCC 空缺）
+\item 控制域 TTT 层稳定训练配方
+\item 「scorer 用于搜索」的可靠性基准
+\item ISO 26262/SOTIF 下 TTT 的形式化安全论证
+\end{itemize}
+\column{0.46\textwidth}
+\textbf{推荐阅读路径}
+\begin{itemize}
+\item 快速入门：TTT $\to$ PAD $\to$ TTT-Layers $\to$ RoboTTT
+\item 做驾驶：Centaur $\to$ TOAD $\to$ Hydra-MDP $\to$ PDM-Closed
+\item 做操作：DSRL $\to$ RoboMonkey $\to$ VANE $\to$ WAM-TTT
+\item 防坑必读：TTT++ $\to$ SAR $\to$ RDumb $\to$ DIA $\to$ BayesMPC
+\end{itemize}
+\vspace{4pt}
+\centering
+\texttt{github.com/asimfish/awesome\_robo\_ttt}
+\end{columns}
+\end{frame}
+
+\end{document}
