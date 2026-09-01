@@ -50,3 +50,13 @@ E-TTS	2606.27268	6-frontier	arXiv 2026	E-TTS: A New Embodied Test-Time Scaling F
 ELASTIC	2606.31132	6-frontier	arXiv 2026	ELASTIC: Efficiently Learning to Adaptively Scale Test-Time Compute for Generative Control Policies
 SAIL	2603.08269	6-frontier	arXiv 2026	SAIL: Test-Time Scaling for In-Context Imitation Learning with VLM
 VLA-ATTC	2605.01194	6-frontier	arXiv 2026	VLA-ATTC: Adaptive Test-Time Compute for VLA Models with Relative Action Critic Model
+SHOT	2002.08546	1-foundations	ICML 2020	Do We Really Need to Access the Source Data? Source Hypothesis Transfer for Unsupervised Domain Adaptation
+MEMO	2110.09506	1-foundations	NeurIPS 2022	MEMO: Test Time Robustness via Adaptation and Augmentation
+AR-TTA	2309.10109	1-foundations	ICCVW 2023	AR-TTA: A Simple Method for Real-World Continual Test-Time Adaptation
+GTRS	2506.06664	5-test-time-steering	arXiv 2025	Generalized Trajectory Scoring for End-to-end Multimodal Planning
+HydraNeXt	2503.12030	5-test-time-steering	ICCV 2025	Hydra-NeXt: Robust Closed-Loop Driving with Open-Loop Training
+DriveCritic	2510.13108	5-test-time-steering	arXiv 2025	DriveCritic: Towards Context-Aware, Human-Aligned Evaluation for Autonomous Driving with Vision-Language Models
+DREAMChunk	2606.18589	6-frontier	arXiv 2026	DREAM-Chunk: Reactive Action Chunking with Latent World Model
+ICRT	2408.15980	7-in-context	arXiv 2024	In-Context Imitation Learning via Next-Token Prediction
+InstantPolicy	2411.12633	7-in-context	ICLR 2025	Instant Policy: In-Context Imitation Learning via Graph Diffusion
+RICL	2508.02062	7-in-context	arXiv 2025	RICL: Adding In-Context Adaptability to Pre-Trained Vision-Language-Action Models

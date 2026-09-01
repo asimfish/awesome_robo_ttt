@@ -6,13 +6,13 @@
 
 We maintain a curated list of resources on **Test-Time Training / Test-Time Adaptation / Test-Time Scaling for robot policies and autonomous driving** — how deployed embodied agents keep learning and improving after training ends.
 
-我们维护一份「机器人测试时训练」资源清单：涵盖 TTA/TTT 基础、部署时策略适应、TTT 新浪潮（TTT 层/测试时 RL）、机器人与驾驶的权重级 TTT、免权重 test-time steering，以及 2025-2026 前沿。
+我们维护一份「机器人测试时训练」资源清单：涵盖 TTA/TTT 基础、部署时策略适应、TTT 新浪潮（TTT 层/测试时 RL）、机器人与驾驶的权重级 TTT、免权重 test-time steering、2025-2026 前沿，以及免梯度上下文适应。
 
 **本仓库特色（Features）**：
 
-- 📄 **51 篇论文全部附英文 PDF**（`papers/pdf/`）
-- 🇨🇳 **中文翻译 PDF**（`papers/zh/`，由 [SuperTranslate](https://github.com/asimfish/super_translate) 保版式翻译；51/51 全部完成；其中 5 篇（标 \* 号）为 pdf2zh-Google 备胎版，DeepSeek 充值后可运行 `scripts/translate_missing.sh` 重出高质量版）
-- 📝 **逐篇中文精读笔记**（`notes/`，含方法拆解/关键数字/局限/关联阅读）
+- 📄 **61 篇论文全部附英文 PDF**（`papers/pdf/`）
+- 🇨🇳 **中文翻译 PDF**（`papers/zh/`，由 [SuperTranslate](https://github.com/asimfish/super_translate) 保版式翻译；61/61 全部完成（SuperTranslate + DeepSeek 保版式翻译））
+- 📝 **61 篇逐篇中文精读笔记**（`notes/`，含方法拆解/关键数字/局限/关联阅读）
 - 💡 **趋势与洞见报告**（`insights/TRENDS_AND_INSIGHTS.md`，七大趋势 + 五条核心洞见 + 开放问题）
 - 📊 **汇总报告**：HTML 幻灯片（`report/robo_ttt_report.html`）与 Beamer PDF（`report/robo_ttt_report.pdf`）
 
@@ -27,7 +27,8 @@ We maintain a curated list of resources on **Test-Time Training / Test-Time Adap
 <tr><td colspan="2"><a href="#4-weight-level-ttt-for-robots--driving">4. Weight-Level TTT for Robots & Driving (机器人/驾驶的权重级 TTT)</a></td></tr>
 <tr><td colspan="2"><a href="#5-test-time-steering-without-weight-updates">5. Test-Time Steering without Weight Updates (免权重引导/搜索/验证)</a></td></tr>
 <tr><td colspan="2"><a href="#6-frontier-2025-2026">6. Frontier 2025-2026 (前沿)</a></td></tr>
-<tr><td colspan="2"><a href="#trends--insights">7. Trends & Insights (趋势与洞见)</a></td></tr>
+<tr><td colspan="2"><a href="#7-in-context-adaptation-for-robots">7. In-Context Adaptation for Robots (免梯度上下文适应)</a></td></tr>
+<tr><td colspan="2"><a href="#trends--insights">8. Trends & Insights (趋势与洞见)</a></td></tr>
 </table>
 
 **Legend / 图例**: [paper] arXiv/会议原文链接 · [pdf] 仓库内英文 PDF · [中译] 中文翻译 PDF · [解读] 中文精读笔记
@@ -72,6 +73,18 @@ TTT/TTA 的概念源头与稳定性/安全性基础。做任何机器人 TTT 前
 
     *Tong Wu, Feiran Jia, Xiangyu Qi, Jiachen T. Wang, Vikash Sehwag, Saeed Mahloujifar, Prateek Mittal*
 
+10. **Do We Really Need to Access the Source Data? Source Hypothesis Transfer for Unsupervised Domain Adaptation (SHOT).** ICML 2020. [paper](https://arxiv.org/abs/2002.08546) [pdf](papers/pdf/SHOT_2002.08546.pdf) [中译](papers/zh/SHOT_2002.08546_zh.pdf) [解读](notes/SHOT_2002.08546.md)
+
+    *Jian Liang, Dapeng Hu, Jiashi Feng*
+
+11. **MEMO: Test Time Robustness via Adaptation and Augmentation.** NeurIPS 2022. [paper](https://arxiv.org/abs/2110.09506) [pdf](papers/pdf/MEMO_2110.09506.pdf) [中译](papers/zh/MEMO_2110.09506_zh.pdf) [解读](notes/MEMO_2110.09506.md)
+
+    *Marvin Zhang, Sergey Levine, Chelsea Finn*
+
+12. **AR-TTA: A Simple Method for Real-World Continual Test-Time Adaptation.** ICCVW 2023. [paper](https://arxiv.org/abs/2309.10109) [pdf](papers/pdf/AR-TTA_2309.10109.pdf) [中译](papers/zh/AR-TTA_2309.10109_zh.pdf) [解读](notes/AR-TTA_2309.10109.md)
+
+    *Damian Sójka, Sebastian Cygert, Bartłomiej Twardowski, Tomasz Trzciński*
+
 ### [2. Deployment-Time Policy Adaptation](#content)
 
 机器人经典：部署时让策略/动力学模型持续适应的四条路线——自监督梯度（PAD）、免梯度前馈推断（RMA）、在线元学习（MOLe/Continual-MAML）、可证稳的低维适应（Neural-Fly），以及在线适应的速度边界（BayesMPC 反例）。
@@ -80,11 +93,11 @@ TTT/TTA 的概念源头与稳定性/安全性基础。做任何机器人 TTT 前
 
     *Nicklas Hansen, Rishabh Jangir, Yu Sun, Guillem Alenyà, Pieter Abbeel, Alexei A. Efros, Lerrel Pinto, Xiaolong Wang*
 
-2. **RMA: Rapid Motor Adaptation for Legged Robots.** RSS 2021. [paper](https://arxiv.org/abs/2107.04034) [pdf](papers/pdf/RMA_2107.04034.pdf) [中译\*](papers/zh/RMA_2107.04034_zh.pdf) [解读](notes/RMA_2107.04034.md)
+2. **RMA: Rapid Motor Adaptation for Legged Robots.** RSS 2021. [paper](https://arxiv.org/abs/2107.04034) [pdf](papers/pdf/RMA_2107.04034.pdf) [中译](papers/zh/RMA_2107.04034_zh.pdf) [解读](notes/RMA_2107.04034.md)
 
     *Ashish Kumar, Zipeng Fu, Deepak Pathak, Jitendra Malik*
 
-3. **Deep Online Learning via Meta-Learning: Continual Adaptation for Model-Based RL (MOLe).** arXiv 2018. [paper](https://arxiv.org/abs/1812.07671) [pdf](papers/pdf/MOLe_1812.07671.pdf) [中译\*](papers/zh/MOLe_1812.07671_zh.pdf) [解读](notes/MOLe_1812.07671.md)
+3. **Deep Online Learning via Meta-Learning: Continual Adaptation for Model-Based RL (MOLe).** arXiv 2018. [paper](https://arxiv.org/abs/1812.07671) [pdf](papers/pdf/MOLe_1812.07671.pdf) [中译](papers/zh/MOLe_1812.07671_zh.pdf) [解读](notes/MOLe_1812.07671.md)
 
     *Anusha Nagabandi, Chelsea Finn, Sergey Levine*
 
@@ -92,7 +105,7 @@ TTT/TTA 的概念源头与稳定性/安全性基础。做任何机器人 TTT 前
 
     *Michael O'Connell, Guanya Shi, Xichen Shi, Kamyar Azizzadenesheli, Anima Anandkumar, Yisong Yue, Soon-Jo Chung*
 
-5. **Online Adaptation of Learned Vehicle Dynamics Model with Meta-Learning Approach.** IROS 2024. [paper](https://arxiv.org/abs/2409.14950) [pdf](papers/pdf/ContinualMAML_2409.14950.pdf) [中译\*](papers/zh/ContinualMAML_2409.14950_zh.pdf) [解读](notes/ContinualMAML_2409.14950.md)
+5. **Online Adaptation of Learned Vehicle Dynamics Model with Meta-Learning Approach.** IROS 2024. [paper](https://arxiv.org/abs/2409.14950) [pdf](papers/pdf/ContinualMAML_2409.14950.pdf) [中译](papers/zh/ContinualMAML_2409.14950_zh.pdf) [解读](notes/ContinualMAML_2409.14950.md)
 
     *Yuki Tsuchiya, Thomas Balch, Paul Drews, Guy Rosman*
 
@@ -224,15 +237,25 @@ TTT/TTA 的概念源头与稳定性/安全性基础。做任何机器人 TTT 前
 
 15. **ADPro: A Test-time Adaptive Diffusion Policy via Manifold-constrained Denoising and Task-aware Initialization.** arXiv 2025. [paper](https://arxiv.org/abs/2508.06266) [pdf](papers/pdf/ADPro_2508.06266.pdf) [中译](papers/zh/ADPro_2508.06266_zh.pdf) [解读](notes/ADPro_2508.06266.md)
 
+16. **Generalized Trajectory Scoring for End-to-end Multimodal Planning (GTRS).** arXiv 2025 (CVPR 2025 Challenge Winner). [paper](https://arxiv.org/abs/2506.06664) [pdf](papers/pdf/GTRS_2506.06664.pdf) [中译](papers/zh/GTRS_2506.06664_zh.pdf) [解读](notes/GTRS_2506.06664.md)
+
+    *Zhenxin Li, Wenhao Yao, Zi Wang, et al. (NVIDIA)*
+
+17. **Hydra-NeXt: Robust Closed-Loop Driving with Open-Loop Training.** ICCV 2025. [paper](https://arxiv.org/abs/2503.12030) [pdf](papers/pdf/HydraNeXt_2503.12030.pdf) [中译](papers/zh/HydraNeXt_2503.12030_zh.pdf) [解读](notes/HydraNeXt_2503.12030.md)
+
+    *Zhenxin Li, Shihao Wang, Shiyi Lan, Zhiding Yu, Zuxuan Wu, Jose M. Alvarez (NVIDIA / Fudan)*
+
+18. **DriveCritic: Towards Context-Aware, Human-Aligned Evaluation for Autonomous Driving with Vision-Language Models.** arXiv 2025. [paper](https://arxiv.org/abs/2510.13108) [pdf](papers/pdf/DriveCritic_2510.13108.pdf) [中译](papers/zh/DriveCritic_2510.13108_zh.pdf) [解读](notes/DriveCritic_2510.13108.md)
+
 ### [6. Frontier 2025-2026](#content)
 
 扩展调研新增的最前沿：可靠性协议（VANE）、潜提示接口（TTT-VLA LPO）、PRM 验证器（RoVer）、具身 TTS 参考架构（E-TTS）、自适应算力调度（ELASTIC/VLA-ATTC）、轨迹级 MCTS（SAIL）。
 
 1. **VANE: Reliable Test-Time Training for Vision-Language-Action Models via Future Visual Representation Prediction.** arXiv 2026. [paper](https://arxiv.org/abs/2608.09448) [pdf](papers/pdf/VANE_2608.09448.pdf) [中译](papers/zh/VANE_2608.09448_zh.pdf) [解读](notes/VANE_2608.09448.md)
 
-2. **TTT-VLA: Test-Time Latent Prompt Optimization for Vision-Language-Action Models.** arXiv 2026. [paper](https://arxiv.org/abs/2606.03127) [pdf](papers/pdf/TTTVLA-LPO_2606.03127.pdf) [中译\*](papers/zh/TTTVLA-LPO_2606.03127_zh.pdf) [解读](notes/TTTVLA-LPO_2606.03127.md)
+2. **TTT-VLA: Test-Time Latent Prompt Optimization for Vision-Language-Action Models.** arXiv 2026. [paper](https://arxiv.org/abs/2606.03127) [pdf](papers/pdf/TTTVLA-LPO_2606.03127.pdf) [中译](papers/zh/TTTVLA-LPO_2606.03127_zh.pdf) [解读](notes/TTTVLA-LPO_2606.03127.md)
 
-3. **RoVer: Robot Reward Model as Test-Time Verifier for Vision-Language-Action Model.** arXiv 2025. [paper](https://arxiv.org/abs/2510.10975) [pdf](papers/pdf/RoVer_2510.10975.pdf) [中译\*](papers/zh/RoVer_2510.10975_zh.pdf) [解读](notes/RoVer_2510.10975.md)
+3. **RoVer: Robot Reward Model as Test-Time Verifier for Vision-Language-Action Model.** arXiv 2025. [paper](https://arxiv.org/abs/2510.10975) [pdf](papers/pdf/RoVer_2510.10975.pdf) [中译](papers/zh/RoVer_2510.10975_zh.pdf) [解读](notes/RoVer_2510.10975.md)
 
 4. **E-TTS: A New Embodied Test-Time Scaling Framework for Robotic Manipulation.** arXiv 2026. [paper](https://arxiv.org/abs/2606.27268) [pdf](papers/pdf/E-TTS_2606.27268.pdf) [中译](papers/zh/E-TTS_2606.27268_zh.pdf) [解读](notes/E-TTS_2606.27268.md)
 
@@ -242,7 +265,23 @@ TTT/TTA 的概念源头与稳定性/安全性基础。做任何机器人 TTT 前
 
 7. **VLA-ATTC: Adaptive Test-Time Compute for VLA Models with Relative Action Critic Model.** arXiv 2026. [paper](https://arxiv.org/abs/2605.01194) [pdf](papers/pdf/VLA-ATTC_2605.01194.pdf) [中译](papers/zh/VLA-ATTC_2605.01194_zh.pdf) [解读](notes/VLA-ATTC_2605.01194.md)
 
+8. **DREAM-Chunk: Reactive Action Chunking with Latent World Model.** arXiv 2026. [paper](https://arxiv.org/abs/2606.18589) [pdf](papers/pdf/DREAMChunk_2606.18589.pdf) [中译](papers/zh/DREAMChunk_2606.18589_zh.pdf) [解读](notes/DREAMChunk_2606.18589.md)
+
 *另见（README-only，未收录 PDF）：AR-TTA（arXiv:2309.10109，驾驶持续 TTA 基准）、LearnableBN（AAAI 2026，驾驶感知 BN-TTA）、Topology-Guided TTA（CVPRW 2026，「何时适应」分类器）、DIRECT / DA-SIP / τ0-VLA（自适应算力路由）。*
+
+### [7. In-Context Adaptation for Robots](#content)
+
+免梯度上下文适应：把演示直接放进上下文（或检索库），零梯度、零微调地适应新任务——与权重级 TTT 互补的「快适应」路线（另见分类③的 Algorithm Distillation）。
+
+1. **In-Context Imitation Learning via Next-Token Prediction (ICRT).** arXiv 2024. [paper](https://arxiv.org/abs/2408.15980) [pdf](papers/pdf/ICRT_2408.15980.pdf) [中译](papers/zh/ICRT_2408.15980_zh.pdf) [解读](notes/ICRT_2408.15980.md)
+
+    *Letian Fu, et al. (UC Berkeley)*
+
+2. **Instant Policy: In-Context Imitation Learning via Graph Diffusion.** ICLR 2025. [paper](https://arxiv.org/abs/2411.12633) [pdf](papers/pdf/InstantPolicy_2411.12633.pdf) [中译](papers/zh/InstantPolicy_2411.12633_zh.pdf) [解读](notes/InstantPolicy_2411.12633.md)
+
+    *Vitalis Vosylius, Edward Johns (Imperial College London)*
+
+3. **RICL: Adding In-Context Adaptability to Pre-Trained Vision-Language-Action Models.** arXiv 2025. [paper](https://arxiv.org/abs/2508.02062) [pdf](papers/pdf/RICL_2508.02062.pdf) [中译](papers/zh/RICL_2508.02062_zh.pdf) [解读](notes/RICL_2508.02062.md)
 
 ### [Trends & Insights](#content)
 
@@ -259,9 +298,9 @@ TTT/TTA 的概念源头与稳定性/安全性基础。做任何机器人 TTT 前
 awesome_robo_ttt/
 ├── README.md                  # 本文件（awesome 清单）
 ├── papers/
-│   ├── pdf/                   # 51 篇英文原文 PDF
+│   ├── pdf/                   # 61 篇英文原文 PDF
 │   └── zh/                    # 中文翻译 PDF（SuperTranslate 保版式翻译）
-├── notes/                     # 51 篇逐篇中文精读笔记（含索引 README.md）
+├── notes/                     # 61 篇逐篇中文精读笔记（含索引 README.md）
 ├── insights/                  # 趋势与洞见报告
 ├── report/                    # 汇总报告（HTML 幻灯片 + Beamer PDF）
 └── scripts/                   # 文献清单（papers.tsv）、下载与翻译脚本

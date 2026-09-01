@@ -18,7 +18,7 @@
 \newcommand{\ba}[1]{\textcolor{bad}{\textbf{#1}}}
 
 \title[awesome\_robo\_ttt]{机器人测试时训练全景}
-\subtitle{Test-Time Training for Robot Policies —— 51 篇文献调研汇总}
+\subtitle{Test-Time Training for Robot Policies —— 61 篇文献调研汇总}
 \author{awesome\_robo\_ttt}
 \date{2026-09}
 
@@ -27,7 +27,7 @@
 \begin{frame}
 \titlepage
 \begin{center}
-\small 51 篇论文 · 6 大分类 · 英文 PDF + 中文翻译 + 逐篇精读 · 7 大趋势 + 5 条洞见\\
+\small 61 篇论文 · 7 大分类 · 英文 PDF + 中文翻译 + 逐篇精读 · 7 大趋势 + 5 条洞见\\
 \texttt{github.com/asimfish/awesome\_robo\_ttt}
 \end{center}
 \end{frame}
@@ -63,18 +63,19 @@
 \end{columns}
 \end{frame}
 
-\begin{frame}{六大分类：51 篇论文的全景地图}
+\begin{frame}{七大分类：61 篇论文的全景地图}
 \small
 \begin{tabular}{p{0.24\textwidth}p{0.33\textwidth}p{0.28\textwidth}c}
 \toprule
 \textbf{分类} & \textbf{核心问题} & \textbf{代表工作} & \textbf{篇数}\\
 \midrule
-① TTA/TTT 基础 & 何时有效 / 何时崩溃 / 攻击面 & TTT · TENT · SAR · RDumb & 9\\
+① TTA/TTT 基础 & 何时有效 / 何时崩溃 / 攻击面 & TTT · TENT · SAR · SHOT · MEMO & 12\\
 ② 部署时策略适应 & 适应哪个模块、用什么信号 & PAD · RMA · Neural-Fly & 6\\
 ③ TTT 新浪潮 & TTT 变成网络层 / 测试时 RL & TTT-Layers · TTRL · TTT-E2E & 8\\
 ④ 机器人/驾驶权重级 TTT & 真机闭环 / 驾驶榜单证据 & RoboTTT · Centaur · WAM-TTT & 6\\
-⑤ 免权重 Steering & 不改权重的引导/搜索/验证 & DSRL · TOAD · Hydra-MDP & 15\\
-⑥ 2025--2026 前沿 & 可靠性协议 / 算力调度 / PRM & VANE · ELASTIC · RoVer & 7\\
+⑤ 免权重 Steering & 不改权重的引导/搜索/验证 & DSRL · TOAD · GTRS · DriveCritic & 18\\
+⑥ 2025--2026 前沿 & 可靠性协议 / 算力调度 / PRM & VANE · ELASTIC · DREAM-Chunk & 8\\
+⑦ 免梯度上下文适应 & 演示进上下文，零梯度快适应 & ICRT · InstantPolicy · RICL & 3\\
 \bottomrule
 \end{tabular}
 \vspace{6pt}

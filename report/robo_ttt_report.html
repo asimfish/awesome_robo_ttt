@@ -65,8 +65,8 @@
   <h1>机器人测试时训练全景<br>Test-Time Training for Robot Policies</h1>
   <p class="sub">训练结束之后，部署中的机器人如何继续学习？——从 TTA/TTT 基础、策略部署适应、TTT 新浪潮，到机器人/驾驶的权重级 TTT 与免权重 test-time steering 的系统梳理。</p>
   <div class="bigstat">
-    <div><b class="num">51</b><span>篇论文 · 全部附英文 PDF + 中文翻译 + 精读笔记</span></div>
-    <div><b class="num">6</b><span>大分类 · 从基础到 2026 前沿</span></div>
+    <div><b class="num">61</b><span>篇论文 · 全部附英文 PDF + 中文翻译 + 精读笔记</span></div>
+    <div><b class="num">7</b><span>大分类 · 从基础到 2026 前沿</span></div>
     <div><b class="num">7+5</b><span>大趋势 + 核心洞见</span></div>
   </div>
   <p class="sub" style="margin-top:40px">2026-09 · github.com/asimfish/awesome_robo_ttt</p>
@@ -101,15 +101,16 @@
 <!-- 3 地图 -->
 <section class="slide">
   <div class="kicker">Taxonomy</div>
-  <h2>六大分类：51 篇论文的全景地图</h2>
+  <h2>七大分类：61 篇论文的全景地图</h2>
   <table>
     <tr><th style="width:26%">分类</th><th>核心问题</th><th style="width:34%">代表工作</th><th style="width:6%">篇数</th></tr>
-    <tr><td>① TTA/TTT 基础</td><td>何时有效 / 何时崩溃 / 攻击面</td><td>TTT · TENT · SAR · RDumb · DIA</td><td class="num">9</td></tr>
+    <tr><td>① TTA/TTT 基础</td><td>何时有效 / 何时崩溃 / 攻击面</td><td>TTT · TENT · SAR · RDumb · SHOT · MEMO</td><td class="num">12</td></tr>
     <tr><td>② 部署时策略适应</td><td>适应哪个模块、用什么信号</td><td>PAD · RMA · Neural-Fly · MOLe</td><td class="num">6</td></tr>
     <tr><td>③ TTT 新浪潮</td><td>TTT 从补丁变成网络层 / 测试时 RL</td><td>TTT-Layers · TTRL · TTT-E2E · ARC-TTT</td><td class="num">8</td></tr>
     <tr><td>④ 机器人/驾驶权重级 TTT</td><td>真机闭环 / 驾驶榜单的落地证据</td><td>RoboTTT · Centaur · WAM-TTT · TT-VLA</td><td class="num">6</td></tr>
-    <tr><td>⑤ 免权重 Steering</td><td>不改权重的引导/搜索/验证</td><td>DSRL · TOAD · Hydra-MDP · RoboMonkey</td><td class="num">15</td></tr>
-    <tr><td>⑥ 2025-2026 前沿</td><td>可靠性协议 / 算力调度 / PRM 验证器</td><td>VANE · ELASTIC · RoVer · E-TTS · SAIL</td><td class="num">7</td></tr>
+    <tr><td>⑤ 免权重 Steering</td><td>不改权重的引导/搜索/验证</td><td>DSRL · TOAD · GTRS · DriveCritic</td><td class="num">18</td></tr>
+    <tr><td>⑥ 2025-2026 前沿</td><td>可靠性协议 / 算力调度 / PRM 验证器</td><td>VANE · ELASTIC · RoVer · DREAM-Chunk</td><td class="num">8</td></tr>
+    <tr><td>⑦ 免梯度上下文适应</td><td>演示进上下文，零梯度快适应</td><td>ICRT · Instant Policy · RICL</td><td class="num">3</td></tr>
   </table>
   <p class="sub">每篇均含：英文 PDF（papers/pdf）· 中文翻译（papers/zh）· 中文精读笔记（notes/）——笔记含方法拆解、关键数字、局限与关联阅读。</p>
 </section>
@@ -346,7 +347,7 @@
 ├── README.md        awesome 清单（6 分类 51 篇）
 ├── papers/pdf/      英文原文 PDF
 ├── papers/zh/       中文翻译 PDF（保版式）
-├── notes/           逐篇中文精读笔记 + 索引
+├── notes/           61 篇中文精读笔记 + 索引
 ├── insights/        趋势与洞见报告
 ├── report/          本报告（HTML + Beamer PDF）
 └── scripts/         papers.tsv + 下载/翻译脚本</pre></div>
@@ -360,7 +361,8 @@
       <div class="card"><h3>三份核心文档</h3>
         <ul><li><code>README.md</code>——按分类浏览全部论文与链接</li>
         <li><code>notes/README.md</code>——精读笔记索引</li>
-        <li><code>insights/TRENDS_AND_INSIGHTS.md</code>——七大趋势、五条洞见、开放问题</li></ul></div>
+        <li><code>insights/TRENDS_AND_INSIGHTS.md</code>——七大趋势、五条洞见、开放问题</li>
+        <li><code>insights/OUR_ROADMAP.md</code>——文献结论落到 CADI×TTT 研究方案的路线图</li></ul></div>
       <div class="card"><h3>致谢与声明</h3>
         <p class="sub">中文翻译由 SuperTranslate 保版式生成，仅供学习研究，请以英文原文为准。论文版权归原作者。清单持续维护，欢迎 PR。</p>
         <p style="margin-top:10px"><b>github.com/asimfish/awesome_robo_ttt</b></p></div>

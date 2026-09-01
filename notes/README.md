@@ -1,8 +1,8 @@
-# 逐篇解读索引（44 篇）
+# 逐篇解读索引（61 篇）
 
 按五大分类组织。每篇解读含：基本信息、一句话总结、方法拆解、关键结果、对机器人 TTT 的意义、局限与关联阅读。
 
-## ① TTA/TTT 基础（视觉时代，9 篇）
+## ① TTA/TTT 基础（视觉时代，12 篇）
 
 | 论文 | venue | 解读 |
 |---|---|---|
@@ -15,6 +15,9 @@
 | CoTTA | CVPR 2022 | [CoTTA_2203.13591.md](CoTTA_2203.13591.md) |
 | RDumb | NeurIPS 2023 | [RDumb_2306.05401.md](RDumb_2306.05401.md) |
 | DIA | ICML 2023 | [DIA_2301.12576.md](DIA_2301.12576.md) |
+| SHOT | ICML 2020 | [SHOT_2002.08546.md](SHOT_2002.08546.md) |
+| MEMO | NeurIPS 2022 | [MEMO_2110.09506.md](MEMO_2110.09506.md) |
+| AR-TTA | ICCVW 2023 | [AR-TTA_2309.10109.md](AR-TTA_2309.10109.md) |
 
 ## ② 部署时策略适应（机器人经典，6 篇）
 
@@ -51,7 +54,7 @@
 | MPA | arXiv 2025 | [MPA_2511.21584.md](MPA_2511.21584.md) |
 | Post-Training Survey | arXiv 2026 | [PostTrainSurvey_2607.08072.md](PostTrainSurvey_2607.08072.md) |
 
-## ⑤ 免权重 Test-Time Steering（15 篇）
+## ⑤ 免权重 Test-Time Steering（18 篇）
 
 | 论文 | venue | 解读 |
 |---|---|---|
@@ -70,8 +73,11 @@
 | Hydra-MDP | CVPRW 2024 | [HydraMDP_2406.06978.md](HydraMDP_2406.06978.md) |
 | Consistency Policy | RSS 2024 | [ConsistencyPolicy_2405.07503.md](ConsistencyPolicy_2405.07503.md) |
 | ADPro | arXiv 2025 | [ADPro_2508.06266.md](ADPro_2508.06266.md) |
+| GTRS | arXiv 2025 | [GTRS_2506.06664.md](GTRS_2506.06664.md) |
+| Hydra-NeXt | ICCV 2025 | [HydraNeXt_2503.12030.md](HydraNeXt_2503.12030.md) |
+| DriveCritic | arXiv 2025 | [DriveCritic_2510.13108.md](DriveCritic_2510.13108.md) |
 
-## ⑥ 2025-2026 前沿（扩展调研新增，7 篇）
+## ⑥ 2025-2026 前沿（扩展调研新增，8 篇）
 
 | 论文 | venue | 解读 |
 |---|---|---|
@@ -82,3 +88,12 @@
 | ELASTIC | arXiv 2026 | [ELASTIC_2606.31132.md](ELASTIC_2606.31132.md) |
 | SAIL | arXiv 2026 | [SAIL_2603.08269.md](SAIL_2603.08269.md) |
 | VLA-ATTC | arXiv 2026 | [VLA-ATTC_2605.01194.md](VLA-ATTC_2605.01194.md) |
+| DREAM-Chunk | arXiv 2026 | [DREAMChunk_2606.18589.md](DREAMChunk_2606.18589.md) |
+
+## ⑦ 免梯度上下文适应（3 篇）
+
+| 论文 | venue | 解读 |
+|---|---|---|
+| ICRT | arXiv 2024 | [ICRT_2408.15980.md](ICRT_2408.15980.md) |
+| Instant Policy | ICLR 2025 | [InstantPolicy_2411.12633.md](InstantPolicy_2411.12633.md) |
+| RICL | arXiv 2025 | [RICL_2508.02062.md](RICL_2508.02062.md) |
