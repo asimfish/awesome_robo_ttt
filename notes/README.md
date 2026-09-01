@@ -1,4 +1,4 @@
-# 逐篇解读索引（61 篇）
+# 逐篇解读索引（88 篇）
 
 按五大分类组织。每篇解读含：基本信息、一句话总结、方法拆解、关键结果、对机器人 TTT 的意义、局限与关联阅读。
 
@@ -19,7 +19,7 @@
 | MEMO | NeurIPS 2022 | [MEMO_2110.09506.md](MEMO_2110.09506.md) |
 | AR-TTA | ICCVW 2023 | [AR-TTA_2309.10109.md](AR-TTA_2309.10109.md) |
 
-## ② 部署时策略适应（机器人经典，6 篇）
+## ② 部署时策略适应（机器人经典，10 篇）
 
 | 论文 | venue | 解读 |
 |---|---|---|
@@ -29,8 +29,12 @@
 | Neural-Fly | Science Robotics 2022 | [NeuralFly_2205.06908.md](NeuralFly_2205.06908.md) |
 | Continual-MAML | IROS 2024 | [ContinualMAML_2409.14950.md](ContinualMAML_2409.14950.md) |
 | BayesMPC | arXiv 2024 | [BayesMPC_2411.00107.md](BayesMPC_2411.00107.md) |
+| MAML | ICML 2017 | [MAML_1703.03400.md](MAML_1703.03400.md) |
+| GrBAL/ReBAL | ICLR 2019 | [GrBAL_1803.11347.md](GrBAL_1803.11347.md) |
+| DayDreamer | CoRL 2022 | [DayDreamer_2206.14176.md](DayDreamer_2206.14176.md) |
+| ROAM | CoLLAs 2025 | [ROAM_2311.01059.md](ROAM_2311.01059.md) |
 
-## ③ TTT 新浪潮（序列层/大模型时代，8 篇）
+## ③ TTT 新浪潮（序列层/大模型时代，12 篇）
 
 | 论文 | venue | 解读 |
 |---|---|---|
@@ -42,8 +46,12 @@
 | TTT-E2E | arXiv 2025 | [TTT-E2E_2512.23675.md](TTT-E2E_2512.23675.md) |
 | Snell et al. | arXiv 2024 | [SnellTTC_2408.03314.md](SnellTTC_2408.03314.md) |
 | TTC Survey | arXiv 2025 | [TTCSurvey_2501.02497.md](TTCSurvey_2501.02497.md) |
+| Titans | NeurIPS 2025 | [Titans_2501.00663.md](Titans_2501.00663.md) |
+| LaCT | arXiv 2025 | [LaCT_2505.23884.md](LaCT_2505.23884.md) |
+| ATLAS | arXiv 2025 | [ATLAS_2505.23735.md](ATLAS_2505.23735.md) |
+| TNT | arXiv 2025 | [TNT_2511.07343.md](TNT_2511.07343.md) |
 
-## ④ 机器人/驾驶的权重级 TTT（6 篇）
+## ④ 机器人/驾驶的权重级 TTT（7 篇）
 
 | 论文 | venue | 解读 |
 |---|---|---|
@@ -53,8 +61,9 @@
 | Centaur | arXiv 2025 | [Centaur_2503.11650.md](Centaur_2503.11650.md) |
 | MPA | arXiv 2025 | [MPA_2511.21584.md](MPA_2511.21584.md) |
 | Post-Training Survey | arXiv 2026 | [PostTrainSurvey_2607.08072.md](PostTrainSurvey_2607.08072.md) |
+| TTT-Parkour | arXiv 2026 | [TTTParkour_2602.02331.md](TTTParkour_2602.02331.md) |
 
-## ⑤ 免权重 Test-Time Steering（18 篇）
+## ⑤ 免权重 Test-Time Steering（22 篇）
 
 | 论文 | venue | 解读 |
 |---|---|---|
@@ -76,6 +85,10 @@
 | GTRS | arXiv 2025 | [GTRS_2506.06664.md](GTRS_2506.06664.md) |
 | Hydra-NeXt | ICCV 2025 | [HydraNeXt_2503.12030.md](HydraNeXt_2503.12030.md) |
 | DriveCritic | arXiv 2025 | [DriveCritic_2510.13108.md](DriveCritic_2510.13108.md) |
+| GPC | ICLR 2026 | [GPC_2510.01068.md](GPC_2510.01068.md) |
+| PriGo | arXiv 2026 | [PriGo_2607.07076.md](PriGo_2607.07076.md) |
+| DCDP | arXiv 2026 | [DCDP_2603.01953.md](DCDP_2603.01953.md) |
+| ORPA | arXiv 2026 | [ORPA_2608.17323.md](ORPA_2608.17323.md) |
 
 ## ⑥ 2025-2026 前沿（扩展调研新增，8 篇）
 
@@ -90,10 +103,34 @@
 | VLA-ATTC | arXiv 2026 | [VLA-ATTC_2605.01194.md](VLA-ATTC_2605.01194.md) |
 | DREAM-Chunk | arXiv 2026 | [DREAMChunk_2606.18589.md](DREAMChunk_2606.18589.md) |
 
-## ⑦ 免梯度上下文适应（3 篇）
+## ⑦ 免梯度上下文适应（5 篇）
 
 | 论文 | venue | 解读 |
 |---|---|---|
 | ICRT | arXiv 2024 | [ICRT_2408.15980.md](ICRT_2408.15980.md) |
 | Instant Policy | ICLR 2025 | [InstantPolicy_2411.12633.md](InstantPolicy_2411.12633.md) |
 | RICL | arXiv 2025 | [RICL_2508.02062.md](RICL_2508.02062.md) |
+| LocoFormer | arXiv 2025 | [LocoFormer_2509.23745.md](LocoFormer_2509.23745.md) |
+| AnyCar | ICRA 2025 | [AnyCar_2409.15783.md](AnyCar_2409.15783.md) |
+
+## ⑧ 失败检测与适应触发（3 篇）
+
+| 论文 | venue | 解读 |
+|---|---|---|
+| Sentinel | CoRL 2024 | [Sentinel_2410.04640.md](Sentinel_2410.04640.md) |
+| FAIL-Detect | arXiv 2025 | [FAILDetect_2503.08558.md](FAILDetect_2503.08558.md) |
+| SAFE | NeurIPS 2025 | [SAFE_2506.09937.md](SAFE_2506.09937.md) |
+
+## ⑨ TTT 之前的阶段：RL 微调与平滑探索（9 篇，方案专属）
+
+| 论文 | venue | 解读 |
+|---|---|---|
+| DPPO | ICLR 2025 | [DPPO_2409.00588.md](DPPO_2409.00588.md) |
+| Q-Chunking | NeurIPS 2025 | [QChunking_2507.07969.md](QChunking_2507.07969.md) |
+| RLPD | ICML 2023 | [RLPD_2302.02948.md](RLPD_2302.02948.md) |
+| Cal-QL | NeurIPS 2023 | [CalQL_2303.05479.md](CalQL_2303.05479.md) |
+| WSRL | arXiv 2024 | [WSRL_2412.07762.md](WSRL_2412.07762.md) |
+| HIL-SERL | arXiv 2024 | [HILSERL_2410.21845.md](HILSERL_2410.21845.md) |
+| ConRFT | RSS 2025 | [ConRFT_2502.05450.md](ConRFT_2502.05450.md) |
+| gSDE | CoRL 2021 | [gSDE_2005.05719.md](gSDE_2005.05719.md) |
+| Pink Noise | ICLR 2023 | [PinkNoise_ICLR2023.md](PinkNoise_ICLR2023.md) |

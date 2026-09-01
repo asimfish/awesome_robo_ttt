@@ -60,3 +60,30 @@ DREAMChunk	2606.18589	6-frontier	arXiv 2026	DREAM-Chunk: Reactive Action Chunkin
 ICRT	2408.15980	7-in-context	arXiv 2024	In-Context Imitation Learning via Next-Token Prediction
 InstantPolicy	2411.12633	7-in-context	ICLR 2025	Instant Policy: In-Context Imitation Learning via Graph Diffusion
 RICL	2508.02062	7-in-context	arXiv 2025	RICL: Adding In-Context Adaptability to Pre-Trained Vision-Language-Action Models
+MAML	1703.03400	2-policy-adaptation	ICML 2017	Model-Agnostic Meta-Learning for Fast Adaptation of Deep Networks
+GrBAL	1803.11347	2-policy-adaptation	ICLR 2019	Learning to Adapt in Dynamic, Real-World Environments Through Meta-Reinforcement Learning
+DayDreamer	2206.14176	2-policy-adaptation	CoRL 2022	DayDreamer: World Models for Physical Robot Learning
+ROAM	2311.01059	2-policy-adaptation	CoLLAs 2025	Adapt On-the-Go: Behavior Modulation for Single-Life Robot Deployment
+Titans	2501.00663	3-new-wave	NeurIPS 2025	Titans: Learning to Memorize at Test Time
+LaCT	2505.23884	3-new-wave	arXiv 2025	Test-Time Training Done Right
+ATLAS	2505.23735	3-new-wave	arXiv 2025	ATLAS: Learning to Optimally Memorize the Context at Test Time
+TNT	2511.07343	3-new-wave	arXiv 2025	TNT: Improving Chunkwise Training for Test-Time Memorization
+TTTParkour	2602.02331	4-robot-driving-ttt	arXiv 2026	TTT-Parkour: Rapid Test-Time Training for Perceptive Robot Parkour
+GPC	2510.01068	5-test-time-steering	ICLR 2026	Compose Your Policies! Improving Diffusion-based or Flow-based Robot Policies via Test-time Distribution-level Composition
+PriGo	2607.07076	5-test-time-steering	arXiv 2026	PriGo: Test-Time Primitive Guidance to Diffusion and Flow Policies for Adaptive Robotic Manipulation
+DCDP	2603.01953	5-test-time-steering	arXiv 2026	Closed-Loop Action Chunks with Dynamic Corrections for Training-Free Diffusion Policy
+ORPA	2608.17323	5-test-time-steering	arXiv 2026	ORPA: Online Residual Policy Adaptation for Robot Manipulation Control with Human Feedback
+LocoFormer	2509.23745	7-in-context	arXiv 2025	LocoFormer: Generalist Locomotion via Long-context Adaptation
+AnyCar	2409.15783	7-in-context	ICRA 2025	AnyCar to Anywhere: Learning Universal Dynamics Model for Agile and Adaptive Mobility
+Sentinel	2410.04640	8-failure-detection	CoRL 2024	Unpacking Failure Modes of Generative Policies: Runtime Monitoring of Consistency and Progress
+FAILDetect	2503.08558	8-failure-detection	arXiv 2025	Can We Detect Failures Without Failure Data? Uncertainty-Aware Runtime Failure Detection for Imitation Learning Policies
+SAFE	2506.09937	8-failure-detection	NeurIPS 2025	SAFE: Multitask Failure Detection for Vision-Language-Action Models
+DPPO	2409.00588	9-rl-before-ttt	ICLR 2025	Diffusion Policy Policy Optimization
+RLPD	2302.02948	9-rl-before-ttt	ICML 2023	Efficient Online Reinforcement Learning with Offline Data
+CalQL	2303.05479	9-rl-before-ttt	NeurIPS 2023	Cal-QL: Calibrated Offline RL Pre-Training for Efficient Online Fine-Tuning
+WSRL	2412.07762	9-rl-before-ttt	arXiv 2024	Efficient Online Reinforcement Learning Fine-Tuning Need Not Retain Offline Data
+QChunking	2507.07969	9-rl-before-ttt	NeurIPS 2025	Reinforcement Learning with Action Chunking
+HILSERL	2410.21845	9-rl-before-ttt	arXiv 2024	Precise and Dexterous Robotic Manipulation via Human-in-the-Loop Reinforcement Learning
+ConRFT	2502.05450	9-rl-before-ttt	RSS 2025	ConRFT: A Reinforced Fine-tuning Method for VLA Models via Consistency Policy
+gSDE	2005.05719	9-rl-before-ttt	CoRL 2021	Smooth Exploration for Robotic Reinforcement Learning
+PinkNoise	ICLR2023	9-rl-before-ttt	ICLR 2023	Pink Noise Is All You Need: Colored Noise Exploration in Deep Reinforcement Learning

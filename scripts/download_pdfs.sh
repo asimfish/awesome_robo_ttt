@@ -12,6 +12,8 @@ tail -n +2 "$TSV" | while IFS=$'\t' read -r key arxiv cat venue title; do
   if [ -s "$dst" ]; then echo "[skip] $key"; continue; fi
   if [ "$arxiv" = "NEURIPS2021" ]; then
     url="https://proceedings.neurips.cc/paper/2021/file/b618c3210e934362ac261db280128c22-Paper.pdf"
+  elif [ "$arxiv" = "ICLR2023" ]; then
+    url="https://onnoeberhard.com/bib/eberhard-2023-pink/doc.pdf"
   else
     url="https://arxiv.org/pdf/${arxiv}"
   fi

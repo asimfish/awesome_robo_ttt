@@ -65,9 +65,9 @@
   <h1>机器人测试时训练全景<br>Test-Time Training for Robot Policies</h1>
   <p class="sub">训练结束之后，部署中的机器人如何继续学习？——从 TTA/TTT 基础、策略部署适应、TTT 新浪潮，到机器人/驾驶的权重级 TTT 与免权重 test-time steering 的系统梳理。</p>
   <div class="bigstat">
-    <div><b class="num">61</b><span>篇论文 · 全部附英文 PDF + 中文翻译 + 精读笔记</span></div>
-    <div><b class="num">7</b><span>大分类 · 从基础到 2026 前沿</span></div>
-    <div><b class="num">7+5</b><span>大趋势 + 核心洞见</span></div>
+    <div><b class="num">88</b><span>篇论文 · 全部附英文 PDF + 中文翻译 + 精读笔记</span></div>
+    <div><b class="num">9</b><span>大分类 · 从基础到 2026 前沿</span></div>
+    <div><b class="num">9+5</b><span>大趋势 + 核心洞见</span></div>
   </div>
   <p class="sub" style="margin-top:40px">2026-09 · github.com/asimfish/awesome_robo_ttt</p>
 </section>
@@ -101,16 +101,18 @@
 <!-- 3 地图 -->
 <section class="slide">
   <div class="kicker">Taxonomy</div>
-  <h2>七大分类：61 篇论文的全景地图</h2>
+  <h2>九大分类：88 篇论文的全景地图</h2>
   <table>
     <tr><th style="width:26%">分类</th><th>核心问题</th><th style="width:34%">代表工作</th><th style="width:6%">篇数</th></tr>
     <tr><td>① TTA/TTT 基础</td><td>何时有效 / 何时崩溃 / 攻击面</td><td>TTT · TENT · SAR · RDumb · SHOT · MEMO</td><td class="num">12</td></tr>
-    <tr><td>② 部署时策略适应</td><td>适应哪个模块、用什么信号</td><td>PAD · RMA · Neural-Fly · MOLe</td><td class="num">6</td></tr>
-    <tr><td>③ TTT 新浪潮</td><td>TTT 从补丁变成网络层 / 测试时 RL</td><td>TTT-Layers · TTRL · TTT-E2E · ARC-TTT</td><td class="num">8</td></tr>
-    <tr><td>④ 机器人/驾驶权重级 TTT</td><td>真机闭环 / 驾驶榜单的落地证据</td><td>RoboTTT · Centaur · WAM-TTT · TT-VLA</td><td class="num">6</td></tr>
-    <tr><td>⑤ 免权重 Steering</td><td>不改权重的引导/搜索/验证</td><td>DSRL · TOAD · GTRS · DriveCritic</td><td class="num">18</td></tr>
+    <tr><td>② 部署时策略适应</td><td>适应哪个模块、用什么信号</td><td>PAD · RMA · Neural-Fly · MAML · DayDreamer</td><td class="num">10</td></tr>
+    <tr><td>③ TTT 新浪潮</td><td>TTT 从补丁变成网络层 / 测试时 RL</td><td>TTT-Layers · Titans · LaCT · TTRL · TTT-E2E</td><td class="num">12</td></tr>
+    <tr><td>④ 机器人/驾驶权重级 TTT</td><td>真机闭环 / 驾驶榜单的落地证据</td><td>RoboTTT · Centaur · WAM-TTT · TTT-Parkour</td><td class="num">7</td></tr>
+    <tr><td>⑤ 免权重 Steering</td><td>不改权重的引导/搜索/验证/组合</td><td>DSRL · TOAD · GTRS · GPC · ORPA</td><td class="num">22</td></tr>
     <tr><td>⑥ 2025-2026 前沿</td><td>可靠性协议 / 算力调度 / PRM 验证器</td><td>VANE · ELASTIC · RoVer · DREAM-Chunk</td><td class="num">8</td></tr>
-    <tr><td>⑦ 免梯度上下文适应</td><td>演示进上下文，零梯度快适应</td><td>ICRT · Instant Policy · RICL</td><td class="num">3</td></tr>
+    <tr><td>⑦ 免梯度上下文适应</td><td>演示/历史进上下文，零梯度快适应</td><td>ICRT · Instant Policy · LocoFormer · AnyCar</td><td class="num">5</td></tr>
+    <tr><td>⑧ 失败检测与适应触发</td><td>什么时候该适应</td><td>Sentinel · FAIL-Detect · SAFE</td><td class="num">3</td></tr>
+    <tr><td>⑨ TTT 之前的 RL 微调与平滑探索</td><td>on-policy 为何学崩、探索噪声频谱</td><td>DPPO · Q-Chunking · Cal-QL · Pink Noise</td><td class="num">9</td></tr>
   </table>
   <p class="sub">每篇均含：英文 PDF（papers/pdf）· 中文翻译（papers/zh）· 中文精读笔记（notes/）——笔记含方法拆解、关键数字、局限与关联阅读。</p>
 </section>
@@ -276,10 +278,34 @@
   </table>
 </section>
 
+
+<!-- 10b 新增分类 -->
+<section class="slide">
+  <div class="kicker">New Categories · 8 & 9</div>
+  <h2>失败检测器与「TTT 之前的阶段」</h2>
+  <div class="cols">
+    <div class="card"><h3>⑧ 失败检测 = 适应的开关</h3>
+      <table style="font-size:14.5px">
+        <tr><th>方法</th><th>要失败数据?</th><th>信号</th></tr>
+        <tr><td>Sentinel (CoRL24)</td><td>否</td><td>动作块分布一致性 + VLM 进展</td></tr>
+        <tr><td>FAIL-Detect (RSS25)</td><td><span class="hl">否</span></td><td>成功分布密度 + 共形阈值</td></tr>
+        <tr><td>SAFE (NeurIPS25)</td><td>是（跨任务泛化）</td><td>VLA 内部特征 → 失败似然</td></tr>
+      </table>
+      <p>共同点：<b>信号来自策略内部</b>，且用共形预测给阈值统计保证。「检测 → 触发 → 验证 → 提交」闭环的零件已齐。<span class="warn">熵类信号抓不到「自信地做错」，触发器必须分层。</span></p></div>
+    <div class="card"><h3>⑨ TTT 站在 RL 管线之上</h3>
+      <ul>
+        <li><b>为何 on-policy 早期学崩</b>：价值侧 Q 尺度失配（Cal-QL）× 动作侧探索噪声放大（本仓库源头实验）——两个正交机制</li>
+        <li><b>探索噪声有最优频谱</b>：Pink Noise（β≈1）优于白噪/OU；gSDE 从生成端平滑；Q-Chunking 靠分块获得时间相关性</li>
+        <li><b>导数接口 = 频谱整形器</b>：积分一次 β+2（白→红，Arm C 崩溃），泄漏积分把颜色拉回中间（E3 恢复）——<span class="hl">泄漏系数就是噪声颜色旋钮</span></li>
+        <li>DPPO（我们的微调基座）/ RLPD / WSRL / HIL-SERL / ConRFT 标定了训练期 RL 与测试时 RL 的成本边界</li>
+      </ul></div>
+  </div>
+</section>
+
 <!-- 11 趋势1-4 -->
 <section class="slide">
   <div class="kicker">Trends 1/2</div>
-  <h2>七大趋势（上）</h2>
+  <h2>九大趋势（上）</h2>
   <div class="cols">
     <div class="card"><h3>① 接口化适应成为主流</h3>
       <p>适应对象持续缩小：全模型 → BN → 编码器 → decoder → LoRA → 初始噪声 → <b>单个潜提示</b> → 快权重层。<span class="hl">基座冻结 + 显式小接口承载全部可变性</span>：审计面小、回滚容易、不碰安全认证。</p></div>
@@ -295,7 +321,7 @@
 <!-- 12 趋势5-7 -->
 <section class="slide">
   <div class="kicker">Trends 2/2</div>
-  <h2>七大趋势（下）</h2>
+  <h2>九大趋势（下）</h2>
   <div class="cols3">
     <div class="card"><h3>⑤ 自监督目标转向任务耦合</h3>
       <p>「重建输入」退潮：TT-VLA 批评可预测性目标；TTT-VLA 用 state grounding；VANE 用已执行动作的<b>未来视觉后果</b>；TTRL 用伪奖励。机器人的独特资产：闭环里的免费任务耦合信号（跟踪误差/预测残差/任务进度）。</p></div>
@@ -303,6 +329,12 @@
       <p>WAM-TTT「看人类玩」写入快权重；ITPS 系统化人类交互引导；SAIL 成功档案检索。「部署后学习」的数据源从自身经验扩展到<b>旁观人类</b>，跨具身对齐是钥匙。</p></div>
     <div class="card"><h3>⑦ 驾驶域两派对垒</h3>
       <p>改权重（Centaur，榜首但仅开环、认证难）vs 冻结搜索（TOAD，即插即用、工业友好）。感知 TTA 趋于成熟，<b>规划/决策层 TTT 是前沿</b>；反应式闭环 + 权重级 TTT 至今无人占坑。</p></div>
+  </div>
+  <div class="cols" style="margin-top:2px">
+    <div class="card"><h3>⑧ 段级「重建世界再训练」</h3>
+      <p>TTT-Parkour（RGB-D 重建地形 → 仿真微调 → 真机，&lt;10 min）、MPA（3DGS 反事实）：高动态不可重试场景的现实 TTT 形态。时间粒度谱系补齐：帧级 → chunk 级（DREAM-Chunk/DCDP）→ <b>段级</b> → 任务级。</p></div>
+    <div class="card"><h3>⑨ 失败检测器成为标配前置件</h3>
+      <p>Sentinel / FAIL-Detect / SAFE：信号来自策略内部、共形预测给阈值保证。「什么时候该适应」独立成子领域，与 Centaur 触发式 TTT、VANE 提案-验证闭环拼成完整流程。</p></div>
   </div>
 </section>
 
@@ -347,8 +379,9 @@
 ├── README.md        awesome 清单（6 分类 51 篇）
 ├── papers/pdf/      英文原文 PDF
 ├── papers/zh/       中文翻译 PDF（保版式）
-├── notes/           61 篇中文精读笔记 + 索引
-├── insights/        趋势与洞见报告
+├── notes/           88 篇中文精读笔记 + 索引
+├── insights/        趋势与洞见 · 设计空间矩阵 · 研究路线图
+├── awesome_robo_ttt.bib  全部条目 BibTeX
 ├── report/          本报告（HTML + Beamer PDF）
 └── scripts/         papers.tsv + 下载/翻译脚本</pre></div>
       <div class="card"><h3>推荐阅读路径</h3>
@@ -362,7 +395,8 @@
         <ul><li><code>README.md</code>——按分类浏览全部论文与链接</li>
         <li><code>notes/README.md</code>——精读笔记索引</li>
         <li><code>insights/TRENDS_AND_INSIGHTS.md</code>——七大趋势、五条洞见、开放问题</li>
-        <li><code>insights/OUR_ROADMAP.md</code>——文献结论落到 CADI×TTT 研究方案的路线图</li></ul></div>
+        <li><code>insights/OUR_ROADMAP.md</code>——文献结论落到 CADI×TTT 研究方案的路线图</li>
+        <li><code>insights/DESIGN_SPACE_MATRIX.md</code>——34 个方法 × 7 维度的选型矩阵</li></ul></div>
       <div class="card"><h3>致谢与声明</h3>
         <p class="sub">中文翻译由 SuperTranslate 保版式生成，仅供学习研究，请以英文原文为准。论文版权归原作者。清单持续维护，欢迎 PR。</p>
         <p style="margin-top:10px"><b>github.com/asimfish/awesome_robo_ttt</b></p></div>

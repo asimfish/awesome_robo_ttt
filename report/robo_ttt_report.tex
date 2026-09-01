@@ -18,7 +18,7 @@
 \newcommand{\ba}[1]{\textcolor{bad}{\textbf{#1}}}
 
 \title[awesome\_robo\_ttt]{机器人测试时训练全景}
-\subtitle{Test-Time Training for Robot Policies —— 61 篇文献调研汇总}
+\subtitle{Test-Time Training for Robot Policies —— 88 篇文献调研汇总}
 \author{awesome\_robo\_ttt}
 \date{2026-09}
 
@@ -27,7 +27,7 @@
 \begin{frame}
 \titlepage
 \begin{center}
-\small 61 篇论文 · 7 大分类 · 英文 PDF + 中文翻译 + 逐篇精读 · 7 大趋势 + 5 条洞见\\
+\small 88 篇论文 · 9 大分类 · 英文 PDF + 中文翻译 + 逐篇精读 · 9 大趋势 + 5 条洞见\\
 \texttt{github.com/asimfish/awesome\_robo\_ttt}
 \end{center}
 \end{frame}
@@ -63,19 +63,21 @@
 \end{columns}
 \end{frame}
 
-\begin{frame}{七大分类：61 篇论文的全景地图}
+\begin{frame}{九大分类：88 篇论文的全景地图}
 \small
 \begin{tabular}{p{0.24\textwidth}p{0.33\textwidth}p{0.28\textwidth}c}
 \toprule
 \textbf{分类} & \textbf{核心问题} & \textbf{代表工作} & \textbf{篇数}\\
 \midrule
-① TTA/TTT 基础 & 何时有效 / 何时崩溃 / 攻击面 & TTT · TENT · SAR · SHOT · MEMO & 12\\
-② 部署时策略适应 & 适应哪个模块、用什么信号 & PAD · RMA · Neural-Fly & 6\\
-③ TTT 新浪潮 & TTT 变成网络层 / 测试时 RL & TTT-Layers · TTRL · TTT-E2E & 8\\
-④ 机器人/驾驶权重级 TTT & 真机闭环 / 驾驶榜单证据 & RoboTTT · Centaur · WAM-TTT & 6\\
-⑤ 免权重 Steering & 不改权重的引导/搜索/验证 & DSRL · TOAD · GTRS · DriveCritic & 18\\
-⑥ 2025--2026 前沿 & 可靠性协议 / 算力调度 / PRM & VANE · ELASTIC · DREAM-Chunk & 8\\
-⑦ 免梯度上下文适应 & 演示进上下文，零梯度快适应 & ICRT · InstantPolicy · RICL & 3\\
+1. TTA/TTT 基础 & 何时有效 / 何时崩溃 / 攻击面 & TTT · TENT · SAR · SHOT · MEMO & 12\\
+2. 部署时策略适应 & 适应哪个模块、用什么信号 & PAD · RMA · Neural-Fly · MAML & 10\\
+3. TTT 新浪潮 & TTT 变成网络层 / 测试时 RL & TTT-Layers · Titans · LaCT · TTRL & 12\\
+4. 机器人/驾驶权重级 TTT & 真机闭环 / 驾驶榜单证据 & RoboTTT · Centaur · TTT-Parkour & 7\\
+5. 免权重 Steering & 不改权重的引导/搜索/验证/组合 & DSRL · TOAD · GPC · ORPA & 22\\
+6. 2025--2026 前沿 & 可靠性协议 / 算力调度 / PRM & VANE · ELASTIC · DREAM-Chunk & 8\\
+7. 免梯度上下文适应 & 演示/历史进上下文，零梯度快适应 & ICRT · LocoFormer · AnyCar & 5\\
+8. 失败检测与适应触发 & 什么时候该适应 & Sentinel · FAIL-Detect · SAFE & 3\\
+9. TTT 之前的 RL 阶段 & on-policy 为何学崩 / 探索噪声频谱 & DPPO · Q-Chunking · Pink Noise & 9\\
 \bottomrule
 \end{tabular}
 \vspace{6pt}
@@ -86,7 +88,7 @@
 \begin{frame}{概念坐标：改权重 vs 不改权重（正交可叠加）}
 \begin{columns}[T]
 \column{0.48\textwidth}
-\textbf{System-1 · 权重级 TTT}（分类①②③④）
+\textbf{System-1 · 权重级 TTT}（分类 1--4）
 \begin{itemize}
 \item \textbf{裸梯度}：每帧 1--20 步 SGD（TTT/PAD/Centaur）——有效但权重漂移、验证难
 \item \textbf{结构化 TTT 层}：快权重更新是前向的一部分（TTT-Layers/RoboTTT）——\hl{延迟恒定、更新规则可预先验证}
@@ -94,7 +96,7 @@
 \item \textbf{测试时 RL}：伪奖励驱动（TTRL/TT-VLA），适合影子模式
 \end{itemize}
 \column{0.48\textwidth}
-\textbf{System-2 · 免权重 Steering}（分类⑤⑥）
+\textbf{System-2 · 免权重 Steering}（分类 5--6）
 \begin{itemize}
 \item \textbf{梯度 guidance}：Diffuser / CTG / DynaGuide
 \item \textbf{采样+重排}：IDQL / RoboMonkey / Hydra-MDP
@@ -106,7 +108,7 @@
 \end{columns}
 \end{frame}
 
-\begin{frame}{分类①基础：给机器人划下的三条红线}
+\begin{frame}{分类 1 基础：给机器人划下的三条红线}
 \begin{itemize}
 \item \textbf{成功条件——相关性定收益}：TTT++ 理论下界：收益随自监督任务与主任务的梯度相关性增大。PAD 消融：控制任务 逆动力学 $>$ 对比学习 $>$ 旋转预测；导航任务反转。\hl{选错辅助任务，适应梯度只是噪声。}
 \item \textbf{崩溃机理——batch=1 是雷区}：SAR：BN 统计在小 batch / 混合偏移 / 类不平衡下必崩，车载流式全踩中。RDumb：长时程下 SOTA 持续 TTA \ba{全部退化到不如不适应}，只有定期硬重置可靠。防护四件套：过滤 + 信任域（EATA）+ 软恢复（CoTTA）+ 重置（RDumb）。
@@ -116,7 +118,7 @@
 \footnotesize 9 篇：TTT · TTT-MAE · TTT++ · TENT · SAR · EATA · CoTTA · RDumb · DIA
 \end{frame}
 
-\begin{frame}{分类②策略适应：「适应哪个模块」的风险谱系}
+\begin{frame}{分类 2 策略适应：「适应哪个模块」的风险谱系}
 \centering
 \small
 \begin{tabular}{lllll}
@@ -134,7 +136,7 @@ RMA & Neural-Fly & TENT & PAD & CoTTA\\
 \end{itemize}
 \end{frame}
 
-\begin{frame}{分类③新浪潮：TTT 从部署补丁变成网络层}
+\begin{frame}{分类 3 新浪潮：TTT 从部署补丁变成网络层}
 \begin{columns}[T]
 \column{0.52\textwidth}
 \textbf{TTT-Layers（ICML 2025）}：隐状态本身是小模型，状态更新 = 一步自监督学习；线性复杂度，长上下文超 Mamba。\hl{TTT 变成可预先验证的网络组件。}
@@ -161,7 +163,7 @@ TTT 层前向 & $\approx$0 & 帧级闭环\\
 \end{columns}
 \end{frame}
 
-\begin{frame}{分类④机器人/驾驶 TTT：真机 30Hz 与驾驶榜首}
+\begin{frame}{分类 4 机器人/驾驶 TTT：真机 30Hz 与驾驶榜首}
 \small
 \begin{columns}[T]
 \column{0.32\textwidth}
@@ -190,7 +192,7 @@ TTT 层前向 & $\approx$0 & 帧级闭环\\
 \footnotesize 同类：TT-VLA（任务进度伪奖励，实证「重建好 $\neq$ 做得对」）· MPA（3DGS 反事实仿真 + 推理时择优）· Post-Training Survey（refinement 为后训练第四族）
 \end{frame}
 
-\begin{frame}{分类⑤免权重 Steering：设计空间与延迟账本}
+\begin{frame}{分类 5 免权重 Steering：设计空间与延迟账本}
 \begin{columns}[T]
 \column{0.5\textwidth}
 \textbf{四象限（可组合）}
@@ -219,7 +221,7 @@ Diffusion-ES 全量搜索 & \ba{秒级}\\
 \end{columns}
 \end{frame}
 
-\begin{frame}{分类⑥前沿七篇：可靠性、接口化与算力调度}
+\begin{frame}{分类 6 前沿七篇：可靠性、接口化与算力调度}
 \small
 \begin{tabular}{p{0.16\textwidth}p{0.37\textwidth}p{0.38\textwidth}}
 \toprule
@@ -236,7 +238,34 @@ VLA-ATTC & 不确定性离合器 + 相对批评家 & 平时反射、危时深思
 \end{tabular}
 \end{frame}
 
-\begin{frame}{七大趋势}
+\begin{frame}{新增分类 8/9：失败检测器与「TTT 之前的阶段」}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\textbf{8. 失败检测 = 适应的开关}
+\small
+\begin{tabular}{lll}
+\toprule
+方法 & 失败数据? & 信号\\
+\midrule
+Sentinel & 否 & 动作块一致性 + VLM\\
+FAIL-Detect & \hl{否} & 成功密度 + 共形阈值\\
+SAFE & 是(跨任务) & VLA 内部特征\\
+\bottomrule
+\end{tabular}
+\vspace{4pt}
+
+信号来自策略内部、共形预测给阈值保证；\wa{熵类信号抓不到「自信地做错」，触发器需分层。}
+\column{0.46\textwidth}
+\textbf{9. TTT 站在 RL 管线之上}
+\begin{itemize}
+\item on-policy 早期学崩的两个正交机制：价值侧 Q 尺度失配（Cal-QL）$\times$ 动作侧探索噪声放大（本仓库源头实验）
+\item 探索噪声有最优频谱：Pink Noise $\beta\approx1$；gSDE 生成端平滑；Q-Chunking 分块相关性
+\item \hl{导数接口 = 频谱整形器}：积分一次 $\beta{+}2$（白$\to$红，Arm C 崩溃），泄漏积分拉回中间（E3 恢复）——泄漏系数即噪声颜色旋钮
+\end{itemize}
+\end{columns}
+\end{frame}
+
+\begin{frame}{九大趋势}
 \small
 \begin{enumerate}
 \item \textbf{接口化适应成主流}：全模型 $\to$ BN $\to$ 编码器 $\to$ LoRA $\to$ 噪声 $\to$ 潜提示 $\to$ 快权重层；\hl{基座冻结 + 小接口承载可变性}
@@ -246,6 +275,8 @@ VLA-ATTC & 不确定性离合器 + 相对批评家 & 平时反射、危时深思
 \item \textbf{自监督目标转向任务耦合}：重建退潮；state grounding / 未来后果 / 伪奖励上位；机器人的免费信号是独特资产
 \item \textbf{人类数据成为测试时转向信号}：WAM-TTT 看人类玩、ITPS 交互引导、SAIL 档案检索
 \item \textbf{驾驶两派对垒}：改权重（Centaur）vs 冻结搜索（TOAD）；反应式闭环 + 权重级 TTT \hl{无人占坑}
+\item \textbf{段级「重建世界再训练」}：TTT-Parkour / MPA——高动态不可重试场景的现实 TTT 形态；粒度谱系补齐帧$\to$chunk$\to$段$\to$任务
+\item \textbf{失败检测器成为标配前置件}：Sentinel / FAIL-Detect / SAFE，信号来自策略内部，共形预测保证阈值
 \end{enumerate}
 \end{frame}
 

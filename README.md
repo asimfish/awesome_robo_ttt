@@ -6,14 +6,17 @@
 
 We maintain a curated list of resources on **Test-Time Training / Test-Time Adaptation / Test-Time Scaling for robot policies and autonomous driving** — how deployed embodied agents keep learning and improving after training ends.
 
-我们维护一份「机器人测试时训练」资源清单：涵盖 TTA/TTT 基础、部署时策略适应、TTT 新浪潮（TTT 层/测试时 RL）、机器人与驾驶的权重级 TTT、免权重 test-time steering、2025-2026 前沿，以及免梯度上下文适应。
+我们维护一份「机器人测试时训练」资源清单：涵盖 TTA/TTT 基础、部署时策略适应、TTT 新浪潮（TTT 层/测试时 RL）、机器人与驾驶的权重级 TTT、免权重 test-time steering、2025-2026 前沿、免梯度上下文适应、失败检测与适应触发，以及 TTT 之前的 RL 微调与平滑探索。
 
 **本仓库特色（Features）**：
 
-- 📄 **61 篇论文全部附英文 PDF**（`papers/pdf/`）
-- 🇨🇳 **中文翻译 PDF**（`papers/zh/`，由 [SuperTranslate](https://github.com/asimfish/super_translate) 保版式翻译；61/61 全部完成（SuperTranslate + DeepSeek 保版式翻译））
-- 📝 **61 篇逐篇中文精读笔记**（`notes/`，含方法拆解/关键数字/局限/关联阅读）
-- 💡 **趋势与洞见报告**（`insights/TRENDS_AND_INSIGHTS.md`，七大趋势 + 五条核心洞见 + 开放问题）
+- 📄 **88 篇论文全部附英文 PDF**（`papers/pdf/`）
+- 🇨🇳 **中文翻译 PDF**（`papers/zh/`，由 [SuperTranslate](https://github.com/asimfish/super_translate) 保版式翻译；88/88 全部完成（SuperTranslate + DeepSeek 保版式翻译））
+- 📝 **88 篇逐篇中文精读笔记**（`notes/`，含方法拆解/关键数字/局限/关联阅读）
+- 💡 **趋势与洞见报告**（`insights/TRENDS_AND_INSIGHTS.md`，九大趋势 + 五条核心洞见 + 开放问题）
+- 🧭 **设计空间矩阵**（`insights/DESIGN_SPACE_MATRIX.md`，30+ 方法按「适应对象 / 信号 / 延迟 / 安全机制 / 闭环评测」横向对比）
+- 🗺️ **研究路线图**（`insights/OUR_ROADMAP.md`，文献结论落到 CADI×TTT 方案）
+- 📚 **BibTeX**（`awesome_robo_ttt.bib`，全部条目可直接引用）
 - 📊 **汇总报告**：HTML 幻灯片（`report/robo_ttt_report.html`）与 Beamer PDF（`report/robo_ttt_report.pdf`）
 
 *Maintained by [asimfish](https://github.com/asimfish). Contributions welcome — see [Contributing](#contributing).*
@@ -28,7 +31,10 @@ We maintain a curated list of resources on **Test-Time Training / Test-Time Adap
 <tr><td colspan="2"><a href="#5-test-time-steering-without-weight-updates">5. Test-Time Steering without Weight Updates (免权重引导/搜索/验证)</a></td></tr>
 <tr><td colspan="2"><a href="#6-frontier-2025-2026">6. Frontier 2025-2026 (前沿)</a></td></tr>
 <tr><td colspan="2"><a href="#7-in-context-adaptation-for-robots">7. In-Context Adaptation for Robots (免梯度上下文适应)</a></td></tr>
-<tr><td colspan="2"><a href="#trends--insights">8. Trends & Insights (趋势与洞见)</a></td></tr>
+<tr><td colspan="2"><a href="#8-failure-detection--adaptation-triggers">8. Failure Detection & Adaptation Triggers (失败检测与适应触发)</a></td></tr>
+<tr><td colspan="2"><a href="#9-rl-fine-tuning--smooth-exploration-before-ttt">9. RL Fine-Tuning & Smooth Exploration before TTT (TTT 之前的阶段)</a></td></tr>
+<tr><td colspan="2"><a href="#benchmarks--simulators">10. Benchmarks & Simulators (基准与仿真器)</a></td></tr>
+<tr><td colspan="2"><a href="#trends--insights">11. Trends & Insights (趋势与洞见)</a></td></tr>
 </table>
 
 **Legend / 图例**: [paper] arXiv/会议原文链接 · [pdf] 仓库内英文 PDF · [中译] 中文翻译 PDF · [解读] 中文精读笔记
@@ -113,6 +119,22 @@ TTT/TTA 的概念源头与稳定性/安全性基础。做任何机器人 TTT 前
 
     *Alexander Davydov, Franck Djeumou, Marcus Greiff, Makoto Suminaka, et al. (Stanford / Toyota Research Institute)*
 
+7. **Model-Agnostic Meta-Learning for Fast Adaptation of Deep Networks (MAML).** ICML 2017. [paper](https://arxiv.org/abs/1703.03400) [pdf](papers/pdf/MAML_1703.03400.pdf) [中译](papers/zh/MAML_1703.03400_zh.pdf) [解读](notes/MAML_1703.03400.md)
+
+    *Chelsea Finn, Pieter Abbeel, Sergey Levine*
+
+8. **Learning to Adapt in Dynamic, Real-World Environments Through Meta-Reinforcement Learning (GrBAL/ReBAL).** ICLR 2019. [paper](https://arxiv.org/abs/1803.11347) [pdf](papers/pdf/GrBAL_1803.11347.pdf) [中译](papers/zh/GrBAL_1803.11347_zh.pdf) [解读](notes/GrBAL_1803.11347.md)
+
+    *Anusha Nagabandi, Ignasi Clavera, Simin Liu, Ronald S. Fearing, Pieter Abbeel, Sergey Levine, Chelsea Finn*
+
+9. **DayDreamer: World Models for Physical Robot Learning.** CoRL 2022. [paper](https://arxiv.org/abs/2206.14176) [pdf](papers/pdf/DayDreamer_2206.14176.pdf) [中译](papers/zh/DayDreamer_2206.14176_zh.pdf) [解读](notes/DayDreamer_2206.14176.md)
+
+    *Philipp Wu, Alejandro Escontrela, Danijar Hafner, Pieter Abbeel, Ken Goldberg*
+
+10. **Adapt On-the-Go: Behavior Modulation for Single-Life Robot Deployment (ROAM).** CoLLAs 2025. [paper](https://arxiv.org/abs/2311.01059) [pdf](papers/pdf/ROAM_2311.01059.pdf) [中译](papers/zh/ROAM_2311.01059_zh.pdf) [解读](notes/ROAM_2311.01059.md)
+
+    *Annie S. Chen, Govind Chada, Laura Smith, Archit Sharma, Zipeng Fu, Sergey Levine, Chelsea Finn*
+
 ### [3. The New Wave of TTT](#content)
 
 2024-2026 的范式跃迁：TTT 从「部署补丁」变成「网络层」（TTT-Layers），从视觉扩展到少样本推理（ARC）、视频生成、测试时 RL（TTRL），并与 test-time scaling 汇流。
@@ -147,6 +169,22 @@ TTT/TTA 的概念源头与稳定性/安全性基础。做任何机器人 TTT 前
 
 8. **A Survey of Test-Time Compute: From Intuitive Inference to Deliberate Reasoning.** arXiv 2025. [paper](https://arxiv.org/abs/2501.02497) [pdf](papers/pdf/TTCSurvey_2501.02497.pdf) [中译](papers/zh/TTCSurvey_2501.02497_zh.pdf) [解读](notes/TTCSurvey_2501.02497.md)
 
+9. **Titans: Learning to Memorize at Test Time.** NeurIPS 2025. [paper](https://arxiv.org/abs/2501.00663) [pdf](papers/pdf/Titans_2501.00663.pdf) [中译](papers/zh/Titans_2501.00663_zh.pdf) [解读](notes/Titans_2501.00663.md)
+
+    *Ali Behrouz, Peilin Zhong, Vahab Mirrokni (Google Research)*
+
+10. **Test-Time Training Done Right (LaCT).** arXiv 2025. [paper](https://arxiv.org/abs/2505.23884) [pdf](papers/pdf/LaCT_2505.23884.pdf) [中译](papers/zh/LaCT_2505.23884_zh.pdf) [解读](notes/LaCT_2505.23884.md)
+
+    *Tianyuan Zhang, Sai Bi, Yicong Hong, Kai Zhang, Fujun Luan, et al. (MIT / Adobe)*
+
+11. **Atlas: Learning to Optimally Memorize the Context at Test Time.** arXiv 2025. [paper](https://arxiv.org/abs/2505.23735) [pdf](papers/pdf/ATLAS_2505.23735.pdf) [中译](papers/zh/ATLAS_2505.23735_zh.pdf) [解读](notes/ATLAS_2505.23735.md)
+
+    *Ali Behrouz, Zeman Li, Praneeth Kacham, et al. (Google Research)*
+
+12. **TNT: Improving Chunkwise Training for Test-Time Memorization.** arXiv 2025. [paper](https://arxiv.org/abs/2511.07343) [pdf](papers/pdf/TNT_2511.07343.pdf) [中译](papers/zh/TNT_2511.07343_zh.pdf) [解读](notes/TNT_2511.07343.md)
+
+    *Zeman Li, Ali Behrouz, et al. (USC / Google Research)*
+
 ### [4. Weight-Level TTT for Robots & Driving](#content)
 
 本仓库的核心：在部署中更新权重（或快权重）的机器人/驾驶工作。RoboTTT 与 Centaur 分别是操作与驾驶域的里程碑。
@@ -174,6 +212,8 @@ TTT/TTA 的概念源头与稳定性/安全性基础。做任何机器人 TTT 前
 6. **Post-Training in End-to-End Autonomous Driving: A Unified View.** arXiv 2026 (Survey). [paper](https://arxiv.org/abs/2607.08072) [pdf](papers/pdf/PostTrainSurvey_2607.08072.pdf) [中译](papers/zh/PostTrainSurvey_2607.08072_zh.pdf) [解读](notes/PostTrainSurvey_2607.08072.md)
 
     *Ruining Yang, et al. (Northeastern / Purdue)*
+
+7. **TTT-Parkour: Rapid Test-Time Training for Perceptive Robot Parkour.** arXiv 2026. [paper](https://arxiv.org/abs/2602.02331) [pdf](papers/pdf/TTTParkour_2602.02331.pdf) [中译](papers/zh/TTTParkour_2602.02331_zh.pdf) [解读](notes/TTTParkour_2602.02331.md)
 
 ### [5. Test-Time Steering without Weight Updates](#content)
 
@@ -247,6 +287,14 @@ TTT/TTA 的概念源头与稳定性/安全性基础。做任何机器人 TTT 前
 
 18. **DriveCritic: Towards Context-Aware, Human-Aligned Evaluation for Autonomous Driving with Vision-Language Models.** arXiv 2025. [paper](https://arxiv.org/abs/2510.13108) [pdf](papers/pdf/DriveCritic_2510.13108.pdf) [中译](papers/zh/DriveCritic_2510.13108_zh.pdf) [解读](notes/DriveCritic_2510.13108.md)
 
+19. **Compose Your Policies! Improving Diffusion-based or Flow-based Robot Policies via Test-time Distribution-level Composition (GPC).** ICLR 2026. [paper](https://arxiv.org/abs/2510.01068) [pdf](papers/pdf/GPC_2510.01068.pdf) [中译](papers/zh/GPC_2510.01068_zh.pdf) [解读](notes/GPC_2510.01068.md)
+
+20. **PriGo: Test-Time Primitive Guidance to Diffusion and Flow Policies for Adaptive Robotic Manipulation.** arXiv 2026. [paper](https://arxiv.org/abs/2607.07076) [pdf](papers/pdf/PriGo_2607.07076.pdf) [中译](papers/zh/PriGo_2607.07076_zh.pdf) [解读](notes/PriGo_2607.07076.md)
+
+21. **Closed-Loop Action Chunks with Dynamic Corrections for Training-Free Diffusion Policy (DCDP).** arXiv 2026. [paper](https://arxiv.org/abs/2603.01953) [pdf](papers/pdf/DCDP_2603.01953.pdf) [中译](papers/zh/DCDP_2603.01953_zh.pdf) [解读](notes/DCDP_2603.01953.md)
+
+22. **ORPA: Online Residual Policy Adaptation for Robot Manipulation Control with Human Feedback.** arXiv 2026. [paper](https://arxiv.org/abs/2608.17323) [pdf](papers/pdf/ORPA_2608.17323.pdf) [中译](papers/zh/ORPA_2608.17323_zh.pdf) [解读](notes/ORPA_2608.17323.md)
+
 ### [6. Frontier 2025-2026](#content)
 
 扩展调研新增的最前沿：可靠性协议（VANE）、潜提示接口（TTT-VLA LPO）、PRM 验证器（RoVer）、具身 TTS 参考架构（E-TTS）、自适应算力调度（ELASTIC/VLA-ATTC）、轨迹级 MCTS（SAIL）。
@@ -283,9 +331,90 @@ TTT/TTA 的概念源头与稳定性/安全性基础。做任何机器人 TTT 前
 
 3. **RICL: Adding In-Context Adaptability to Pre-Trained Vision-Language-Action Models.** arXiv 2025. [paper](https://arxiv.org/abs/2508.02062) [pdf](papers/pdf/RICL_2508.02062.pdf) [中译](papers/zh/RICL_2508.02062_zh.pdf) [解读](notes/RICL_2508.02062.md)
 
+4. **LocoFormer: Generalist Locomotion via Long-context Adaptation.** arXiv 2025 (CoRL 2025). [paper](https://arxiv.org/abs/2509.23745) [pdf](papers/pdf/LocoFormer_2509.23745.pdf) [中译](papers/zh/LocoFormer_2509.23745_zh.pdf) [解读](notes/LocoFormer_2509.23745.md)
+
+5. **AnyCar to Anywhere: Learning Universal Dynamics Model for Agile and Adaptive Mobility.** ICRA 2025. [paper](https://arxiv.org/abs/2409.15783) [pdf](papers/pdf/AnyCar_2409.15783.pdf) [中译](papers/zh/AnyCar_2409.15783_zh.pdf) [解读](notes/AnyCar_2409.15783.md)
+
+    *Wenli Xiao, Haoru Xue, Tony Tao, Dvij Kalaria, John M. Dolan, Guanya Shi (CMU)*
+
+### [8. Failure Detection & Adaptation Triggers](#content)
+
+「什么时候该适应」的传感器：运行时失败检测 / OOD 检测给 TTT 提供触发与回滚信号（另见 Centaur 的 Cluster Entropy、VLA-ATTC 的认知离合器）。
+
+1. **Unpacking Failure Modes of Generative Policies: Runtime Monitoring of Consistency and Progress (Sentinel).** CoRL 2024. [paper](https://arxiv.org/abs/2410.04640) [pdf](papers/pdf/Sentinel_2410.04640.pdf) [中译](papers/zh/Sentinel_2410.04640_zh.pdf) [解读](notes/Sentinel_2410.04640.md)
+
+    *Christopher Agia, Rohan Sinha, Jingyun Yang, Zi-ang Cao, Rika Antonova, Marco Pavone, Jeannette Bohg (Stanford)*
+
+2. **Can We Detect Failures Without Failure Data? Uncertainty-Aware Runtime Failure Detection for Imitation Learning Policies (FAIL-Detect).** RSS 2025. [paper](https://arxiv.org/abs/2503.08558) [pdf](papers/pdf/FAILDetect_2503.08558.pdf) [中译](papers/zh/FAILDetect_2503.08558_zh.pdf) [解读](notes/FAILDetect_2503.08558.md)
+
+    *Chen Xu, Tony Khuong Nguyen, Emma Dixon, et al. (Toyota Research Institute / Columbia)*
+
+3. **SAFE: Multitask Failure Detection for Vision-Language-Action Models.** NeurIPS 2025. [paper](https://arxiv.org/abs/2506.09937) [pdf](papers/pdf/SAFE_2506.09937.pdf) [中译](papers/zh/SAFE_2506.09937_zh.pdf) [解读](notes/SAFE_2506.09937.md)
+
+    *Qiao Gu, Yuanliang Ju, Shengxiang Sun, Igor Gilitschenski, Haruki Nishimura, Masha Itkina, Florian Shkurti*
+
+### [9. RL Fine-Tuning & Smooth Exploration before TTT](#content)
+
+方案专属：TTT 站在「DP 初始化 → 离线 RL → 在线 RL」管线之上。这里收录离线→在线 RL 稳定性、动作分块 RL 与平滑探索噪声的关键工作——它们解释了 on-policy 早期为何学崩、以及为何高阶导数动作接口能滤掉探索噪声。
+
+1. **Diffusion Policy Policy Optimization (DPPO).** ICLR 2025. [paper](https://arxiv.org/abs/2409.00588) [pdf](papers/pdf/DPPO_2409.00588.pdf) [中译](papers/zh/DPPO_2409.00588_zh.pdf) [解读](notes/DPPO_2409.00588.md)
+
+    *Allen Z. Ren, Justin Lidard, Lars L. Ankile, Anthony Simeonov, Pulkit Agrawal, Anirudha Majumdar, Benjamin Burchfiel, Hongkai Dai, Max Simchowitz*
+
+2. **Reinforcement Learning with Action Chunking (Q-Chunking).** NeurIPS 2025. [paper](https://arxiv.org/abs/2507.07969) [pdf](papers/pdf/QChunking_2507.07969.pdf) [中译](papers/zh/QChunking_2507.07969_zh.pdf) [解读](notes/QChunking_2507.07969.md)
+
+    *Qiyang Li, Zhiyuan Zhou, Sergey Levine (UC Berkeley)*
+
+3. **Efficient Online Reinforcement Learning with Offline Data (RLPD).** ICML 2023. [paper](https://arxiv.org/abs/2302.02948) [pdf](papers/pdf/RLPD_2302.02948.pdf) [中译](papers/zh/RLPD_2302.02948_zh.pdf) [解读](notes/RLPD_2302.02948.md)
+
+    *Philip J. Ball, Laura Smith, Ilya Kostrikov, Sergey Levine*
+
+4. **Cal-QL: Calibrated Offline RL Pre-Training for Efficient Online Fine-Tuning.** NeurIPS 2023. [paper](https://arxiv.org/abs/2303.05479) [pdf](papers/pdf/CalQL_2303.05479.pdf) [中译](papers/zh/CalQL_2303.05479_zh.pdf) [解读](notes/CalQL_2303.05479.md)
+
+    *Mitsuhiko Nakamoto, Yuexiang Zhai, Anikait Singh, Max Sobol Mark, Yi Ma, Chelsea Finn, Aviral Kumar, Sergey Levine*
+
+5. **Efficient Online Reinforcement Learning Fine-Tuning Need Not Retain Offline Data (WSRL).** ICLR 2025. [paper](https://arxiv.org/abs/2412.07762) [pdf](papers/pdf/WSRL_2412.07762.pdf) [中译](papers/zh/WSRL_2412.07762_zh.pdf) [解读](notes/WSRL_2412.07762.md)
+
+    *Zhiyuan Zhou, Andy Peng, Qiyang Li, Sergey Levine, Aviral Kumar*
+
+6. **Precise and Dexterous Robotic Manipulation via Human-in-the-Loop Reinforcement Learning (HIL-SERL).** Science Robotics 2025. [paper](https://arxiv.org/abs/2410.21845) [pdf](papers/pdf/HILSERL_2410.21845.pdf) [中译](papers/zh/HILSERL_2410.21845_zh.pdf) [解读](notes/HILSERL_2410.21845.md)
+
+    *Jianlan Luo, Charles Xu, Jeffrey Wu, Sergey Levine (UC Berkeley)*
+
+7. **ConRFT: A Reinforced Fine-tuning Method for VLA Models via Consistency Policy.** RSS 2025. [paper](https://arxiv.org/abs/2502.05450) [pdf](papers/pdf/ConRFT_2502.05450.pdf) [中译](papers/zh/ConRFT_2502.05450_zh.pdf) [解读](notes/ConRFT_2502.05450.md)
+
+    *Yuhui Chen, Shuai Tian, Shugao Liu, Yingting Zhou, Haoran Li, Dongbin Zhao (CASIA)*
+
+8. **Smooth Exploration for Robotic Reinforcement Learning (gSDE).** CoRL 2021. [paper](https://arxiv.org/abs/2005.05719) [pdf](papers/pdf/gSDE_2005.05719.pdf) [中译](papers/zh/gSDE_2005.05719_zh.pdf) [解读](notes/gSDE_2005.05719.md)
+
+    *Antonin Raffin, Jens Kober, Freek Stulp (DLR / TU Delft)*
+
+9. **Pink Noise Is All You Need: Colored Noise Exploration in Deep Reinforcement Learning.** ICLR 2023 (Oral). [paper](https://openreview.net/forum?id=hQ9V5QN27eS) [pdf](papers/pdf/PinkNoise_ICLR2023.pdf) [中译](papers/zh/PinkNoise_ICLR2023_zh.pdf) [解读](notes/PinkNoise_ICLR2023.md)
+
+    *Onno Eberhard, Jakob Hollenstein, Cristina Pinneri, Georg Martius (MPI-IS)*
+
+### [Benchmarks & Simulators](#content)
+
+本仓库论文常用的评测平台（按域分组，便于复现与对标）：
+
+| 域 | 基准 / 仿真器 | 用途与相关论文 |
+|---|---|---|
+| 驾驶（非反应式） | [NAVSIM](https://github.com/autonomousvision/navsim) navtest / navhard (PDMS, EPDMS) | Centaur · Hydra-MDP · GTRS · TOAD |
+| 驾驶（反应式闭环） | [Bench2Drive](https://github.com/Thinklab-SJTU/Bench2Drive) (CARLA) · [HUGSIM](https://github.com/hyzhou404/HUGSIM) (3DGS) · [nuPlan](https://github.com/motional/nuplan-devkit) | Hydra-NeXt · TOAD · PDM-Closed · Diffusion-ES |
+| 驾驶（持续 TTA 流） | CLAD-C · SHIFT · nuScenes-C | AR-TTA · LearnableBN |
+| 操作（仿真） | [robomimic](https://robomimic.github.io/) · [LIBERO](https://libero-project.github.io/) · [SimplerEnv](https://simpler-env.github.io/) · CALVIN · RLBench · PushT · [OGBench](https://seohong.me/projects/ogbench/) | DPPO · Q-Chunking · TTT-VLA · VANE · SAFE · ADPro · GPC |
+| 操作（真机） | ALOHA · Franka / UR 系 · WidowX (Bridge) · Google Robot | HIL-SERL · ConRFT · ORPA · RoboMonkey |
+| 腿足 | Isaac Gym/Lab 地形 · Go1/Go2 · 人形 parkour | RMA · LocoFormer · ROAM · TTT-Parkour |
+| 持续 TTA（视觉） | CIFAR-10/100-C · ImageNet-C · CCC (RDumb) | TENT · SAR · EATA · CoTTA · RDumb |
+| 长上下文 / 序列 | Pile / Books · 大海捞针 · ARC | TTT-Layers · Titans · TTT-E2E · ARC-TTT |
+
 ### [Trends & Insights](#content)
 
-→ **[insights/TRENDS_AND_INSIGHTS.md](insights/TRENDS_AND_INSIGHTS.md)**：七大趋势（接口化适应 / 验证式准入 / verifier 军备 / 算力调度学习化 / 任务耦合自监督 / 人类数据转向信号 / 驾驶两派对垒）+ 五条核心洞见 + 开放问题清单。
+→ **[insights/TRENDS_AND_INSIGHTS.md](insights/TRENDS_AND_INSIGHTS.md)**：九大趋势（接口化适应 / 验证式准入 / verifier 军备 / 算力调度学习化 / 任务耦合自监督 / 人类数据转向信号 / 驾驶两派对垒 / 段级「重建再训练」TTT / 失败检测器成为触发标配）+ 五条核心洞见 + 开放问题清单。
+
+→ **[insights/DESIGN_SPACE_MATRIX.md](insights/DESIGN_SPACE_MATRIX.md)**：30+ 代表方法的设计空间矩阵。
+
+→ **[insights/OUR_ROADMAP.md](insights/OUR_ROADMAP.md)**：从文献到方案（CADI × TTT）的研究路线图。
 
 ### [Reports 汇总报告](#content)
 
@@ -298,10 +427,11 @@ TTT/TTA 的概念源头与稳定性/安全性基础。做任何机器人 TTT 前
 awesome_robo_ttt/
 ├── README.md                  # 本文件（awesome 清单）
 ├── papers/
-│   ├── pdf/                   # 61 篇英文原文 PDF
+│   ├── pdf/                   # 88 篇英文原文 PDF
 │   └── zh/                    # 中文翻译 PDF（SuperTranslate 保版式翻译）
-├── notes/                     # 61 篇逐篇中文精读笔记（含索引 README.md）
-├── insights/                  # 趋势与洞见报告
+├── notes/                     # 88 篇逐篇中文精读笔记（含索引 README.md）
+├── insights/                  # 趋势与洞见 · 设计空间矩阵 · 研究路线图
+├── awesome_robo_ttt.bib       # 全部条目 BibTeX
 ├── report/                    # 汇总报告（HTML 幻灯片 + Beamer PDF）
 └── scripts/                   # 文献清单（papers.tsv）、下载与翻译脚本
 ```

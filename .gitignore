@@ -8,3 +8,6 @@ report/*.snm
 report/*.toc
 report/*.out
 report/*.log
+papers/zh/.*.tmp
+papers/zh/.*checkpoint*
+papers/pdf/.*.tmp
