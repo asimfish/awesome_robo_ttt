@@ -16,6 +16,7 @@ A curated list of resources on **Test-Time Training / Test-Time Adaptation / Tes
 - 🇨🇳 Layout-preserving **Chinese translations** (`papers/zh/`, via [SuperTranslate](https://github.com/asimfish/super_translate))
 - 📝 **Per-paper reading notes** in Chinese (`notes/`): method breakdown, key numbers, relevance to robot TTT, limitations, related reading
 - 💡 [Trends & Insights](insights/TRENDS_AND_INSIGHTS.md) (9 trends · 5 core insights · open problems), a [Design-Space Matrix](insights/DESIGN_SPACE_MATRIX.md) (34 methods × 7 dimensions) and a [Research Roadmap](insights/OUR_ROADMAP.md)
+- 📐 [Research proposal v2](proposal/CADI_TTT_PROPOSAL_v2.md) ([HTML](proposal/CADI_TTT_PROPOSAL_v2.html), in Chinese): structured action interfaces as the safety shell for deployment-time adaptation — formal method, four propositions with numerical checks, pre-registered experiments and kill criteria
 - 📊 Summary reports: [HTML slides](report/robo_ttt_report.html) · [Beamer PDF](report/robo_ttt_report.pdf)
 - 📚 [BibTeX for all entries](awesome_robo_ttt.bib)
 

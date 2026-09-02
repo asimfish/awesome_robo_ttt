@@ -20,6 +20,7 @@ We maintain a curated list of resources on **Test-Time Training / Test-Time Adap
 - 💡 **趋势与洞见报告**（`insights/TRENDS_AND_INSIGHTS.md`，九大趋势 + 五条核心洞见 + 开放问题）
 - 🧭 **设计空间矩阵**（`insights/DESIGN_SPACE_MATRIX.md`，30+ 方法按「适应对象 / 信号 / 延迟 / 安全机制 / 闭环评测」横向对比）
 - 🗺️ **研究路线图**（`insights/OUR_ROADMAP.md`，文献结论落到 CADI×TTT 方案）
+- 📐 **研究方案 v2**（`proposal/CADI_TTT_PROPOSAL_v2.md` / [HTML](proposal/CADI_TTT_PROPOSAL_v2.html)：结构化动作接口作为部署期适应的安全壳——方法形式化、四个理论命题（含数值验证）、预注册实验协议与 kill 判据、论文骨架）
 - 📚 **BibTeX**（`awesome_robo_ttt.bib`，全部条目可直接引用）
 - 📊 **汇总报告**：HTML 幻灯片（`report/robo_ttt_report.html`）与 Beamer PDF（`report/robo_ttt_report.pdf`）
 
@@ -420,6 +421,8 @@ TTT/TTA 的概念源头与稳定性/安全性基础。做任何机器人 TTT 前
 
 → **[insights/OUR_ROADMAP.md](insights/OUR_ROADMAP.md)**：从文献到方案（CADI × TTT）的研究路线图。
 
+→ **[proposal/CADI_TTT_PROPOSAL_v2.md](proposal/CADI_TTT_PROPOSAL_v2.md)**（[HTML 版](proposal/CADI_TTT_PROPOSAL_v2.html)）：完整研究方案 v2——基于七臂实验的 kill-test 裁决重新定位，含 P1–P4 理论命题、预注册实验与证伪条件。
+
 ### [Reports 汇总报告](#content)
 
 - **HTML 幻灯片**：[report/robo_ttt_report.html](report/robo_ttt_report.html)（浏览器打开，方向键翻页）
@@ -435,6 +438,7 @@ awesome_robo_ttt/
 │   └── zh/                    # 中文翻译 PDF（SuperTranslate 保版式翻译）
 ├── notes/                     # 88 篇逐篇中文精读笔记（含索引 README.md）
 ├── insights/                  # 趋势与洞见 · 设计空间矩阵 · 研究路线图
+├── proposal/                  # 研究方案 v2（MD + 自包含 HTML + 图源码）
 ├── awesome_robo_ttt.bib       # 全部条目 BibTeX
 ├── report/                    # 汇总报告（HTML 幻灯片 + Beamer PDF）
 └── scripts/                   # 文献清单（papers.tsv）、下载与翻译脚本
