@@ -63,3 +63,15 @@
 5. 长时程流评测：10 万步连续漂移，报告衰减曲线 + 重置策略消融。
 6. **（新增）触发式 vs 常开式 TTT**：接入 FAIL-Detect/Sentinel 信号做门控，对比适应增益与误触发代价。
 7. **（新增）价值侧 vs 动作侧稳定性剥离**：Cal-QL 校准 × 泄漏接口 的 2×2，量化两个机制各自对 on-policy 早期崩溃的贡献。
+
+## 六、P0 之后的第一个适应实验（P1'，已具体化，待执行）
+
+P0b 显示接口在执行器增益漂移下零适应即占优，这给了一个最干净的首个 TTT 测试床：
+
+- **信号**：跟踪残差 $r_t$ —— 用 `psd_E4_det` 的无漂移 rollout 回归「执行指令 $c_t$ → 末端位移 $\Delta x_{t+1}$」得到名义映射 $\hat{K}$（需从 `normalization.npz` 反归一化 eef_pos）；部署期用滑窗最小二乘在线估计增益比 $\hat g_t = \langle \Delta x, \hat K c\rangle / \|\hat K c\|^2$。
+- **适应对象（TTT-I 最小版）**：接口参数 $s_{\text{eff}} = s/\hat g_t$（裁到 [0.5, 2]），λ 不动 —— 这是 Neural-Fly 式「末端低维增益适应」，P2 的界直接适用。
+- **公平对照（关键）**：对原版 E5 施加同样的输出增益补偿 $u \leftarrow u/\hat g_t$。接口的结构性价值 = 两者都补偿之后仍剩下的差距；若差距归零 → 接口在增益漂移上的收益只是「更容易估计 $\hat g$」（仍是结果，但主张要降级）。
+- **漂移**：增益 ×{0.8, 0.7}、延迟 {2, 3}（残差法对延迟应无效——这是 P4 专一性的一个负控制）。
+- **指标**：成功率恢复曲线（按 episode）、$\hat g_t$ 收敛时间、执行 jerk/最大单步变化在适应期间的峰值（vs P2 界）。
+- **实现**：在 `DriftWrapper` 与 `DerivativeActionWrapper` 之间加 `AdaptiveGainWrapper`（含残差估计器）；rollout 脚本加 `--adapt {none,interface,raw}`；每格 100 episodes × 3 评测 seed。预计 1 天。
+- **之后**：神经版 TTT-I（更新接口头 θ_a 的逐维仿射）与 PAD 式编码器 IDM 更新（M1）进入 P2 主对比。
