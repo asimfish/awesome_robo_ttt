@@ -11,3 +11,4 @@ report/*.log
 papers/zh/.*.tmp
 papers/zh/.*checkpoint*
 papers/pdf/.*.tmp
+proposal/p0_out/
