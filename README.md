@@ -20,7 +20,7 @@ We maintain a curated list of resources on **Test-Time Training / Test-Time Adap
 - 💡 **趋势与洞见报告**（`insights/TRENDS_AND_INSIGHTS.md`，九大趋势 + 五条核心洞见 + 开放问题）
 - 🧭 **设计空间矩阵**（`insights/DESIGN_SPACE_MATRIX.md`，30+ 方法按「适应对象 / 信号 / 延迟 / 安全机制 / 闭环评测」横向对比）
 - 🗺️ **研究路线图**（`insights/OUR_ROADMAP.md`，文献结论落到 CADI×TTT 方案）
-- 📐 **研究方案 v2**（`proposal/CADI_TTT_PROPOSAL_v2.md` / [HTML](proposal/CADI_TTT_PROPOSAL_v2.html)：结构化动作接口作为部署期适应的安全壳——方法形式化、四个理论命题（含数值验证）、预注册实验协议与 kill 判据、论文骨架）
+- 📐 **研究方案 v2**（`proposal/CADI_TTT_PROPOSAL_v2.md` / [HTML](proposal/CADI_TTT_PROPOSAL_v2.html)：结构化动作接口作为部署期适应的安全壳——方法形式化、四个理论命题（含数值验证）、预注册实验协议与 kill 判据、论文骨架；**已含 P0/P1'/P1'' 实验结果与机理复核**：七臂 kill-test 裁决、执行动作频谱实测、零适应漂移基线、残差驱动的接口增益适应 vs 原版公平对照、延迟感知估计器、以及一次诚实的自我修正——「积分补偿」机理假说被补偿比检验推翻，σ=0.10 训练的原版在增益漂移下反而最稳健）
 - 📚 **BibTeX**（`awesome_robo_ttt.bib`，全部条目可直接引用）
 - 📊 **汇总报告**：HTML 幻灯片（`report/robo_ttt_report.html`）与 Beamer PDF（`report/robo_ttt_report.pdf`）
 

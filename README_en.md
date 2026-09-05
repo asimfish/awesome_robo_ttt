@@ -16,7 +16,7 @@ A curated list of resources on **Test-Time Training / Test-Time Adaptation / Tes
 - 🇨🇳 Layout-preserving **Chinese translations** (`papers/zh/`, via [SuperTranslate](https://github.com/asimfish/super_translate))
 - 📝 **Per-paper reading notes** in Chinese (`notes/`): method breakdown, key numbers, relevance to robot TTT, limitations, related reading
 - 💡 [Trends & Insights](insights/TRENDS_AND_INSIGHTS.md) (9 trends · 5 core insights · open problems), a [Design-Space Matrix](insights/DESIGN_SPACE_MATRIX.md) (34 methods × 7 dimensions) and a [Research Roadmap](insights/OUR_ROADMAP.md)
-- 📐 [Research proposal v2](proposal/CADI_TTT_PROPOSAL_v2.md) ([HTML](proposal/CADI_TTT_PROPOSAL_v2.html), in Chinese): structured action interfaces as the safety shell for deployment-time adaptation — formal method, four propositions with numerical checks, pre-registered experiments and kill criteria
+- 📐 [Research proposal v2](proposal/CADI_TTT_PROPOSAL_v2.md) ([HTML](proposal/CADI_TTT_PROPOSAL_v2.html), in Chinese): structured action interfaces as the safety shell for deployment-time adaptation — formal method, four propositions with numerical checks, pre-registered experiments and kill criteria; includes first results (P0 spectra & drift baselines, P1' residual-driven interface adaptation vs. a fair raw-policy control, P1'' delay-aware estimator) and an honest mechanism audit: the "integral-action" explanation was refuted by a direct compensation-ratio test, and the raw policy trained with larger exploration noise (σ=0.10) turns out to be the most gain-robust arm
 - 📊 Summary reports: [HTML slides](report/robo_ttt_report.html) · [Beamer PDF](report/robo_ttt_report.pdf)
 - 📚 [BibTeX for all entries](awesome_robo_ttt.bib)
 
