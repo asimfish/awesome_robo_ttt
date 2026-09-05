@@ -17,6 +17,7 @@ mk() {  # POINT LAM SCL TAG
 mk F1 0.9  0.3 s030_leak09
 mk F2 0.7  1.0 s100_leak07
 mk F3 0.95 0.5 s050_leak095
+mk F5 0.8  0.2 s020_leak08
 sed -e "s/_ft_diffusion_mlp_armB_/_ft_diffusion_mlp_ds_F4_/" $B_T > finetune/square/ft_ppo_diffusion_mlp_ds_F4.yaml
 echo "[F4] $(grep -m1 'name:' finetune/square/ft_ppo_diffusion_mlp_ds_F4.yaml)"
 ls finetune/square/ft_ppo_diffusion_mlp_ds_*.yaml pretrain/square/pre_diffusion_mlp_derivcl_s030* pretrain/square/pre_diffusion_mlp_derivcl_s100_leak07* pretrain/square/pre_diffusion_mlp_derivcl_s050*

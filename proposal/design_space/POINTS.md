@@ -20,3 +20,8 @@ Five evaluation axes (frozen deploy, 3 eval seeds � 100 ep unless noted):
 3. Execution smoothness (jerk, max step, ??)
 4. Deploy robustness (gain �0.7, obs noise ?=0.05)
 5. Signal quality (calib corr, delay fooled cost)
+
+| **F5** | 0.8 | 0.2 | integrate | 0.03 | yes | **train** | same filter as B; isolates retrained prior + observable state from DC gain |
+
+BC-gate readings (09-06 07:40, seed 42, 200 ep): F1 58.5, F2 54.0, F3 59.5 (E4 49.0, E1 43.5, A/E5 38.0, B/F4 23.5 stock prior).
+Smaller s -> better prior (label range utilization), opposite to the pre-registered Q1 direction.

@@ -33,7 +33,10 @@ POINTS = {
 }
 if os.path.exists("design_space_manual.json"):   # {"F1": {"bc": 41.0, "final": 93.5}, ...} maintained from training logs
     for k, v in json.load(open("design_space_manual.json")).items():
-        POINTS.setdefault(k, {}).update(v)
+        if k.startswith("_") or not isinstance(v, dict):
+            continue
+        POINTS.setdefault(k, dict(lam=None, s=None, sig=0.03, obs=True, bc=None, final=None, frozen="ds_%s_frozen_{c}_s{s}" % k,
+                                  trig="ds_%s_trig_{c}_s{s}" % k, calib="ds_%s_calib" % k)).update({kk: vv for kk, vv in v.items() if vv is not None or kk in ("bc", "final")})
 
 
 def load(name):

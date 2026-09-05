@@ -2,6 +2,7 @@
 # Train one design-space point: dataset (integrate only) -> pretrain -> BC gate -> PPO finetune (sigma=0.03).
 # Usage: POINT=F1 GPU=2 bash run_point_chain.sh
 #   F1=(lam .9, s .3)  F2=(lam .7, s 1.0)  F3=(lam .95, s .5)  F4=lowpass B refit with sigma=.03 (stock prior, no pretrain)
+#   F5=(lam .8, s .2) integrate+obs_cmd: the low-pass filter with a retrained prior and observable state
 set -o pipefail
 source /home/dataset-local/liyufeng/cadi/env.sh
 cd /home/dataset-local/liyufeng/cadi/dppo
@@ -18,6 +19,7 @@ case $POINT in
   F1) LAM=0.9;  SCL=0.3; TAG=s030_leak09 ;;
   F2) LAM=0.7;  SCL=1.0; TAG=s100_leak07 ;;
   F3) LAM=0.95; SCL=0.5; TAG=s050_leak095 ;;
+  F5) LAM=0.8;  SCL=0.2; TAG=s020_leak08 ;;   # same filter as low-pass B, but relabeled prior + observable state (DC gain 1)
   F4)
     echo "=== [$(date)] F4: lowpass B finetune only (sigma=$SIGMA, stock prior) ===" | tee -a $LOG
     python script/run.py --config-name=ft_ppo_diffusion_mlp_ds_F4 --config-dir=cfg/robomimic/finetune/square \

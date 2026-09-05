@@ -1,0 +1,9 @@
+{
+  "F1": {"bc": 58.5, "final": null},
+  "F2": {"bc": 54.0, "final": null},
+  "F3": {"bc": 59.5, "final": null},
+  "F4": {"bc": 23.5, "final": null},
+  "F5": {"lam": 0.8, "s": 0.2, "sig": 0.03, "obs": true, "bc": null, "final": null,
+         "frozen": "ds_F5_frozen_{c}_s{s}", "trig": "ds_F5_trig_{c}_s{s}", "calib": "ds_F5_calib"},
+  "_note": "bc = BC-gate success (itr 0, 200 ep, train seed 42); final = itr-200 eval. Filled from design_space/log_F*.log as chains finish. F5 = (0.8,0.2) integrate+obs_cmd, same filter as low-pass B."
+}
