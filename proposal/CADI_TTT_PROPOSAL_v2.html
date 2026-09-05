@@ -1049,67 +1049,84 @@ s=1 是为了 BC 先验对齐（§1.2 的 scale
 有效而 E4-up
 仍无效，则结论是：<strong>让滤波器状态可观测是先验可辨识的必要条件（§1.2），但它同时使接口参数无法从上游适应</strong>——P2
 保护与可适应性在这一设计上互斥。这会成为设计空间图的一个轴。</p>
-<p><strong>重跑首个 seed（<code>p1v_*</code>，全部 6 维缩放，seed
-1000；其余 seed 在跑）证实了 (ii)</strong>：</p>
-<table>
+<p><strong>重跑（<code>p1v_*</code>，全部 6 维缩放，3 评测 seed × 100
+ep）证实了 (ii)</strong>：</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+</colgroup>
 <thead>
 <tr>
 <th>臂</th>
 <th>补偿位置</th>
 <th>无漂移</th>
 <th>增益 ×0.7</th>
-<th>延迟 2</th>
+<th>延迟 2（被骗）</th>
+<th>jerk 倍数 ×0.7</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>B 低通（状态不可观测）</td>
 <td>冻结</td>
-<td>95</td>
-<td>42</td>
-<td>87</td>
+<td>95.3</td>
+<td>41.0</td>
+<td>87.0</td>
+<td>—</td>
 </tr>
 <tr>
 <td></td>
-<td>下游（触发）</td>
-<td>93</td>
-<td>98</td>
-<td>85</td>
-</tr>
-<tr>
-<td></td>
-<td><strong>上游（常开）</strong></td>
-<td>94</td>
-<td><strong>93</strong></td>
-<td>待</td>
-</tr>
-<tr>
-<td>E4 积分（状态可观测）</td>
-<td>冻结</td>
-<td>95</td>
-<td>29</td>
-<td>87</td>
-</tr>
-<tr>
-<td></td>
-<td>下游（触发）</td>
-<td>88</td>
-<td>88</td>
-<td>76</td>
+<td>下游（常开 / 触发）</td>
+<td>91.3 / 92.7</td>
+<td>94.0 / 96.7</td>
+<td>71.7 / 81.7</td>
+<td>1.44 / 1.39</td>
 </tr>
 <tr>
 <td></td>
 <td><strong>上游（常开 / 触发）</strong></td>
-<td>90 / 88</td>
-<td><strong>29 / 43</strong></td>
-<td>63 / 86</td>
+<td>90.7 / 96.0</td>
+<td><strong>92.3 / 93.0</strong></td>
+<td>72.0 / 74.3</td>
+<td>1.40 / 1.35</td>
+</tr>
+<tr>
+<td>E4 积分（状态可观测）</td>
+<td>冻结</td>
+<td>97.0</td>
+<td>28.3</td>
+<td>87.3</td>
+<td>—</td>
+</tr>
+<tr>
+<td></td>
+<td>下游（常开 / 触发）</td>
+<td>82.3 / 88.0</td>
+<td>87.0 / 91.0</td>
+<td>62.0 / 76.3</td>
+<td>1.48 / 1.40</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>上游（常开 / 触发）</strong></td>
+<td>88.7 / 92.7</td>
+<td><strong>26.7 / 36.3</strong></td>
+<td>63.7 / 80.3</td>
+<td><strong>2.28 / 1.73</strong></td>
 </tr>
 </tbody>
 </table>
-<p>低通的上游补偿与下游一样有效（93 vs
-98）；积分接口的上游补偿几乎无效（29–43 vs 下游 88）。机制如 (ii)
-所述：E4 的策略以 <span class="math inline">\(c_{t-1}\)</span>
-为观测、以 <span class="math inline">\(c\)</span> 为被控量，上游改 <span class="math inline">\(s_{\text{eff}}\)</span>
+<p>低通的上游补偿与下游等效（92–93 vs
+94–97）；积分接口的上游补偿几乎无效（27–36 vs 下游 87–91），<strong>且
+jerk 更差</strong>（×1.7–2.3 vs
+×1.4）——策略与上游缩放互相拉扯产生抖动，「adapt upstream, execute
+smoothly」对状态可观测的接口是双重错误。机制如 (ii) 所述：E4 的策略以
+<span class="math inline">\(c_{t-1}\)</span> 为观测、以 <span class="math inline">\(c\)</span> 为被控量，上游改 <span class="math inline">\(s_{\text{eff}}\)</span>
 只是改了它的执行器增益，它在下一个决策点就补回来。<strong>推论</strong>：对状态可观测的接口，「接口级参数适应」只能装在下游，而下游没有
 P2 保护——§3.2(a) 与 §1.8f 开头设想的「上游适应享受 P2
 界」在这类接口上不可实现。反过来，状态不可观测的低通（B）既能上游适应又享受
@@ -1311,11 +1328,11 @@ seed；「高/低/≈」指接口相对该对照）：</p>
 <td>§1.8h</td>
 </tr>
 <tr>
-<td>接口参数的上游可适应性（×0.7 上游补偿）</td>
+<td>接口参数的上游可适应性（×0.7 上游补偿，3 seed）</td>
 <td>—</td>
 <td>—</td>
-<td><strong>低</strong>（29–43 vs
-93；状态可观测使策略抵消上游缩放）</td>
+<td><strong>低</strong>（27–36 vs 92–93，jerk ×1.7–2.3 vs
+×1.4；状态可观测使策略抵消上游缩放）</td>
 <td>§1.8f</td>
 </tr>
 </tbody>
@@ -2198,8 +2215,8 @@ the protocol, and the drift and misadaptation suites.</p>
 增益低通，s 在先验对齐与执行空间信任域之间的权衡有闭式表达；(c)
 滤波器状态可观测是先验可辨识的必要条件、同时使接口参数无法上游适应——观测
 <span class="math inline">\(c\)</span>
-的策略把上游缩放当偏差纠正掉（E4-up ×0.7：29–43% vs 低通 B-up
-93%，§1.8f，首 seed 已证实）；(d)
+的策略把上游缩放当偏差纠正掉，还因拉扯而更抖（E4-up ×0.7：27–36%、jerk
+×1.7–2.3 vs 低通 B-up 92–93%、×1.4，§1.8f，3 seed）；(d)
 命令谱颜色决定自监督残差信号对增益与延迟的可辨识性。</p>
 <p><strong>章节</strong>：1 引言 → 2 相关工作（TTA/TTT
 基础；机器人部署适应；免权重 steering；接口/残差/约束动作空间）→ 3

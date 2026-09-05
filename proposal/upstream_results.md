@@ -3,29 +3,29 @@
 | 臂 | 模式 | 条件 | 位置 | 成功率 | Δ vs 冻结 | jerk 倍数 | 最大单步倍数 |
 |---|---|---|---|---|---|---|---|
 | E4 | always-on | nodrift | down | 82.3 ± 5.2 (n=3) | -14.7 | ×1.01 | ×1.05 |
-| E4 | always-on | nodrift | up | 92.0 ± 0.8 (n=3) | -5.0 | ×1.00 | ×1.00 |
+| E4 | always-on | nodrift | up | 88.7 ± 2.6 (n=3) | -8.3 | ×1.01 | ×1.02 |
 | E4 | always-on | gain0.7 | down | 87.0 ± 4.3 (n=3) | +58.7 | ×1.48 | ×1.50 |
-| E4 | always-on | gain0.7 | up | 19.3 ± 2.1 (n=3) | -9.0 | ×1.73 | ×1.47 |
+| E4 | always-on | gain0.7 | up | 26.7 ± 4.0 (n=3) | -1.7 | ×2.28 | ×1.56 |
 | E4 | always-on | delay2 | down | 62.0 ± 3.7 (n=3) | -25.3 | ×1.11 | ×1.16 |
-| E4 | always-on | delay2 | up | 80.0 ± 3.7 (n=3) | -7.3 | ×1.23 | ×1.14 |
+| E4 | always-on | delay2 | up | 63.7 ± 6.5 (n=3) | -23.7 | ×1.77 | ×1.19 |
 | E4 | triggered | nodrift | down | 88.0 ± 2.9 (n=3) | -9.0 | ×0.98 | ×1.00 |
-| E4 | triggered | nodrift | up | 93.7 ± 0.9 (n=3) | -3.3 | ×1.00 | ×1.01 |
+| E4 | triggered | nodrift | up | 92.7 ± 3.3 (n=3) | -4.3 | ×1.01 | ×1.02 |
 | E4 | triggered | gain0.7 | down | 91.0 ± 2.9 (n=3) | +62.7 | ×1.40 | ×1.40 |
-| E4 | triggered | gain0.7 | up | 23.3 ± 3.9 (n=3) | -5.0 | ×1.56 | ×1.37 |
+| E4 | triggered | gain0.7 | up | 36.3 ± 4.8 (n=3) | +8.0 | ×1.73 | ×1.46 |
 | E4 | triggered | delay2 | down | 76.3 ± 1.9 (n=3) | -11.0 | ×1.07 | ×1.07 |
-| E4 | triggered | delay2 | up | 83.0 ± 6.5 (n=3) | -4.3 | ×1.13 | ×1.07 |
+| E4 | triggered | delay2 | up | 80.3 ± 4.5 (n=3) | -7.0 | ×1.25 | ×1.14 |
 | B | always-on | nodrift | down | 91.3 ± 1.2 (n=3) | -4.0 | ×1.09 | ×1.05 |
-| B | always-on | nodrift | up | 93.0 ± 0.8 (n=3) | -2.3 | ×1.05 | ×0.99 |
+| B | always-on | nodrift | up | 90.7 ± 2.9 (n=3) | -4.7 | ×1.04 | ×0.95 |
 | B | always-on | gain0.7 | down | 94.0 ± 0.8 (n=3) | +53.0 | ×1.44 | ×1.88 |
-| B | always-on | gain0.7 | up | 40.7 ± 3.4 (n=3) | -0.3 | ×1.61 | ×1.48 |
+| B | always-on | gain0.7 | up | 92.3 ± 1.7 (n=3) | +51.3 | ×1.40 | ×1.60 |
 | B | always-on | delay2 | down | 71.7 ± 3.4 (n=3) | -15.3 | ×1.31 | ×1.33 |
-| B | always-on | delay2 | up | 74.7 ± 1.2 (n=3) | -12.3 | ×1.18 | ×1.12 |
+| B | always-on | delay2 | up | 72.0 ± 2.9 (n=3) | -15.0 | ×1.24 | ×1.14 |
 | B | triggered | nodrift | down | 92.7 ± 2.1 (n=3) | -2.7 | ×1.04 | ×1.02 |
-| B | triggered | nodrift | up | 96.3 ± 2.4 (n=3) | +1.0 | ×1.02 | ×1.00 |
+| B | triggered | nodrift | up | 96.0 ± 0.8 (n=3) | +0.7 | ×1.02 | ×1.01 |
 | B | triggered | gain0.7 | down | 96.7 ± 1.2 (n=3) | +55.7 | ×1.39 | ×1.82 |
-| B | triggered | gain0.7 | up | 44.7 ± 2.1 (n=3) | +3.7 | ×1.51 | ×1.42 |
+| B | triggered | gain0.7 | up | 93.0 ± 0.8 (n=3) | +52.0 | ×1.35 | ×1.59 |
 | B | triggered | delay2 | down | 81.7 ± 3.4 (n=3) | -5.3 | ×1.11 | ×1.11 |
-| B | triggered | delay2 | up | 81.7 ± 0.9 (n=3) | -5.3 | ×1.07 | ×1.05 |
+| B | triggered | delay2 | up | 74.3 ± 2.4 (n=3) | -12.7 | ×1.16 | ×1.11 |
 
 ### 受控适应噪声（1+ε，白、乘性），冻结、无漂移
 
