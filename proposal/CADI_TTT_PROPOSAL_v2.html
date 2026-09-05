@@ -150,17 +150,22 @@ seed）</strong>：残差驱动的接口增益适应把增益 ×0.7 下的成功
 回到 <strong>91.0%</strong>（触发式），而施加完全相同补偿的匹配原版只从
 3.7% 到 44.3%，且它在无漂移时被误适应打到 40.0%（接口 82.3%）。H1/H2
 获支持，K1/K2 不触发；触发式适应从可选升为必需。</p>
-<p><strong>09-05 机理复核改写了两处解释（§1.7–1.8）</strong>：(i)
+<p><strong>09-05
+机理复核与强对照改写了结论（§1.7–1.8）</strong>。三件事：(i)
 「积分作用抵消增益漂移」（原
 H7）被补偿比检验<strong>推翻</strong>——两臂的执行幅度都按 g
-等比缩小、策略输出不变；接口相对孪生的优势是真实但未解释的现象，最简约的候选解释是接口臂训练期的等效执行噪声更大（0.069
-vs 0.03）。(ii) 对照臂 A（原版、σ=0.10）在增益 ×0.7 下
+等比缩小、策略输出不变。(ii) 对照臂 A（原版、σ=0.10）在增益 ×0.7 下
 <strong>81.3%</strong>，是所有臂里最稳健的（接口
-28.3%）：训练噪声水平的效应（+54/+78 pp）远大于接口效应（+36/+25
-pp），而 P1 的噪声放大恰恰把接口锁在低噪声 regime。由此 P1’
-的「原版用不起补偿」结论降为待验证：对 A 的适应对照（36 组）与延迟感知
-v2（24 组）在跑；延迟感知 v1 已把负控制修复到 89%（触发式
-76.3%）但硬否决在 ×0.7 下损失 20 pp。</p>
+28.3%）：训练噪声水平的效应远大于接口效应，而 P1
+的噪声放大恰恰把接口锁在低噪声 regime。(iii) <strong>A
+自己就能用残差补偿</strong>（×0.7：81→99%，误适应代价 −0.3 pp），P1’
+的「原版用不起补偿」是 E5 脆弱所致，<strong>撤回</strong>。</p>
+<p><strong>存活下来的、也是唯一该写进论文的主张</strong>：当适应信号出错时（延迟被误读为增益、两臂被喂同样错误的
+1/ĝ），A 掉 37–42 pp、jerk 翻倍，E4 只掉 11–25 pp、jerk 不变——这是 A
+强于 E4 的所有条件之外<strong>唯一一组 E4 反超 A 的条件</strong>（76 vs
+54）。接口不买性能、不买鲁棒性、不买可适应性，它买的是<strong>错误适应的伤害上界</strong>（P2/P3
+的经验形态）。评测协议随之改写：「估计器被骗」从负控制升为主指标。延迟感知估计器的第一批结果因实现
+bug 作废，修复后重跑中。</p>
 <p><strong>证伪条件</strong>（§5.5）：若 TTT-on-interface
 在动力学漂移上不优于零适应 ≥10 pp，信号主张死；若 TTT-on-raw
 的瞬态伤害不高于 TTT-on-interface，结构性安全主张死；若 DSRL
@@ -632,23 +637,21 @@ pp）在接口上成立（+10.6 /
 <span class="math inline">\(\tau\in\{0,\ldots,3\}\)</span> 扫描对齐度
 <span class="math inline">\(\mathrm{corr}(K\!\cdot\! c_{t-\tau}, \Delta
 x_t)\)</span> 选 <span class="math inline">\(\tau^\star\)</span>；<strong>仅当 <span class="math inline">\(\tau^\star=0\)</span></strong> 且 <span class="math inline">\(|\hat g-1|\)</span> 过触发阈值时才补偿，<span class="math inline">\(\tau^\star&gt;0\)</span> 一律不补偿。</p>
-<p><strong>v1 预注册预测与中期读数</strong>（E4 两个评测 seed、E5 一个
-seed；剩余 seed 在跑）：</p>
+<p><strong>v2
+对齐读数规则（<code>adapt=5</code>）</strong>。不否决，而是<strong>在最佳对齐
+lag 上读增益</strong>：<span class="math inline">\(\hat g\leftarrow\hat
+g_{\tau^\star}\)</span>，lag 0 优先（其他 lag 的对齐度须高出 5%
+才切换）。纯延迟下 <span class="math inline">\(\hat
+g_{\tau^\star}\approx1\)</span>，自动落入死区不补偿；纯增益或「增益+延迟」复合漂移仍被补偿（<span class="math inline">\(\hat g_{\tau^\star}\approx g\)</span>）。</p>
+<p><strong>预注册预测</strong>（3 评测 seed × 100 ep，与 P1’ 同网格；对
+v1 与 v2 同样适用）：</p>
 <table>
-<colgroup>
-<col style="width: 20%" />
-<col style="width: 20%" />
-<col style="width: 20%" />
-<col style="width: 20%" />
-<col style="width: 20%" />
-</colgroup>
 <thead>
 <tr>
 <th>条件</th>
 <th>P1’ 触发式 E4</th>
-<th>v1 预测</th>
-<th><strong>v1 实测</strong></th>
-<th>判定</th>
+<th>预测</th>
+<th>判据</th>
 </tr>
 </thead>
 <tbody>
@@ -656,52 +659,36 @@ seed；剩余 seed 在跑）：</p>
 <td>无漂移</td>
 <td>88.0</td>
 <td>≥ 92（接近冻结 97）</td>
-<td><strong>95.0</strong>（94/96）</td>
-<td>通过：误适应代价 −9 → −2 pp</td>
-</tr>
-<tr>
-<td>增益 ×0.8</td>
-<td>90.3</td>
-<td>—</td>
-<td>85.5（85/86）</td>
-<td>−5 pp</td>
+<td>误适应代价 ≤ 5 pp</td>
 </tr>
 <tr>
 <td>增益 ×0.7</td>
 <td>91.0</td>
 <td>≥ 88（≤3 pp 损失）</td>
-<td><strong>71.0</strong>（72/70）</td>
-<td><strong>未通过</strong>：−20 pp</td>
+<td>灵敏度保住（H1 仍成立）</td>
 </tr>
 <tr>
 <td>延迟 2（负控制）</td>
 <td>76.3</td>
 <td>≥ 84（接近冻结 87.3）</td>
-<td><strong>89.0</strong></td>
-<td>通过：负控制完全修复</td>
+<td>专一性修复 ≥ 8 pp</td>
 </tr>
 </tbody>
 </table>
-<p>原版 E5 同规则（1 seed）：无漂移 69（触发式 50.3）、×0.8 46、×0.7
-16（触发式 44.3）、延迟 78（触发式
-60.7）——同样的模式：延迟修好、增益补偿被削。</p>
-<p><strong>诊断（<code>analyze_h7_mech.py</code>）</strong>。补偿激活率（ĝ≠1
-的控制步占比）在增益 ×0.7 下从触发式的 94.6% 掉到
-66.7%：泄漏接口的指令是强自相关的红噪声，lag 0 与 lag 1
-的对齐度几乎打平，噪声让 <span class="math inline">\(\tau^\star\)</span>
-频繁误判为 1 并触发否决。硬否决用<strong>专一性换灵敏度</strong>，代价是
-20 pp——不可接受。</p>
-<p><strong>v2
-对齐读数规则（<code>adapt=5</code>，在跑）</strong>。不再否决，而是<strong>在最佳对齐
-lag 上读增益</strong>：<span class="math inline">\(\hat g\leftarrow\hat
-g_{\tau^\star}\)</span>，且 lag 0 优先（其他 lag 的对齐度须高出 5%
-才切换）。纯延迟下 <span class="math inline">\(\hat
-g_{\tau^\star}\approx1\)</span>，自动落入死区不补偿；纯增益或「增益+延迟」复合漂移仍被补偿（<span class="math inline">\(\hat g_{\tau^\star}\approx g\)</span>）；<span class="math inline">\(\tau^\star\)</span> 在 0/1 间抖动时 <span class="math inline">\(\hat g_1\approx\rho(1)\hat g_0\)</span>
-只带来轻微过补偿。预注册判据与 v1 相同（无漂移 ≥92、×0.7 ≥88、延迟
-≥84）。</p>
-<p><strong>脚本</strong>：<code>run_p1_delay.sh</code>（v1，24
-rollouts）、<code>run_p1_aligned.sh</code>（v2，24 rollouts）；分析
-<code>analyze_p1_delay.py</code>。</p>
+<p><strong>第一批 v1/v2 结果作废（实现 bug，09-05 20:40
+发现）</strong>。第一版代码在每个 episode 重置时清空了 lag 扫描用的
+(cmd, dx) 历史，而触发器用的滑窗统计量是跨 episode 持久的；结果
+delay-aware 路径在每个 episode 开头的前 40 个自由运动步里读到 <span class="math inline">\(\hat
+g=1\)</span>、把触发器关掉——恰好是接近抓取的阶段。表面现象是「负控制修好了（89%）但
+×0.7 掉了 20 pp」，实为补偿被周期性关断（激活率 94.6% →
+66.7%），与延迟判别无关。已修复（历史随触发统计量一起持久），三批重跑在进行：E4/E5
+v2（24 组）、A v2（12 组）、E4 v1 硬否决参考（12 组），前缀
+<code>p1f_</code>。<strong>教训写入
+§7</strong>：任何新的估计器路径必须先在无漂移条件下与旧路径做等价性检查（激活率、ĝ
+轨迹逐步对比），再进入漂移网格。</p>
+<p><strong>脚本</strong>：<code>run_p1_fixed.sh</code>（<code>ARMS</code>/<code>MODES</code>
+环境变量选臂与模式）；分析 <code>analyze_p1_all.py</code>（三臂 ×
+五模式统一表 + lag 分布诊断）。</p>
 <h3 id="h7-机理复核积分补偿假说被推翻对照臂需要更换2026-09-05">1.8 H7
 机理复核：积分补偿假说被推翻，对照臂需要更换（2026-09-05）</h3>
 <p>这一节记录三项对已有数据的复核（脚本
@@ -832,6 +819,108 @@ pp。更糟的是两者不独立：P1 的噪声放大意味着接口<strong>只�
 σ 下训练（σ=0.10 的 C/E3 崩溃），于是接口间接把策略锁进了不稳健的低噪声
 regime。在 Square 上，「想要增益稳健性，用 σ=0.10
 训原版」严格优于「用接口」。</p>
+<p><strong>(e)
+P1’-on-A：强原版能用补偿，「接口让补偿可用」的主张死；接口剩下的是「适应出错时的伤害上界」</strong>（09-05，A
+臂 K 自校准 = (0.01299, 0.02029, 0.02155)，触发式 2 评测 seed、常开 1
+seed，其余在跑）：</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr>
+<th>臂</th>
+<th>模式</th>
+<th>无漂移</th>
+<th>增益 ×0.7</th>
+<th>延迟 2（估计器被骗）</th>
+<th>jerk 延迟 2 / 冻结</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A 原版 σ=0.10</strong></td>
+<td>冻结</td>
+<td>99.3</td>
+<td>81.3</td>
+<td>91.0</td>
+<td>0.188</td>
+</tr>
+<tr>
+<td></td>
+<td>触发式</td>
+<td>99.0（−0.3）</td>
+<td><strong>99.0（+17.7）</strong></td>
+<td><strong>54.0（−37.0）</strong></td>
+<td>0.369（<strong>×1.96</strong>）</td>
+</tr>
+<tr>
+<td></td>
+<td>常开</td>
+<td>99.0（−0.3）</td>
+<td>97.0（+15.7）</td>
+<td>49.0（−42.0）</td>
+<td>0.455（×2.42）</td>
+</tr>
+<tr>
+<td><strong>E4 接口</strong></td>
+<td>冻结</td>
+<td>97.0</td>
+<td>28.3</td>
+<td>87.3</td>
+<td>0.137</td>
+</tr>
+<tr>
+<td></td>
+<td>触发式</td>
+<td>88.0（−9.0）</td>
+<td>91.0（+62.7）</td>
+<td><strong>76.3（−11.0）</strong></td>
+<td>0.147（<strong>×1.07</strong>）</td>
+</tr>
+<tr>
+<td></td>
+<td>常开</td>
+<td>82.3（−14.7）</td>
+<td>87.0（+58.7）</td>
+<td>62.0（−25.3）</td>
+<td>0.152（×1.11）</td>
+</tr>
+</tbody>
+</table>
+<p>三条读法： 1. <strong>§1.8 后果 2 的预注册死亡条件触发</strong>：A
+在触发式补偿下 ×0.7 达 99%（≥95）、无漂移误适应代价 −0.3 pp（≤5）。E5
+用不起补偿是因为它是脆弱的低噪声策略，不是因为它缺接口。§1.6 读法
+1「同一个补偿信号，接口能用、原版用不起」<strong>撤回</strong>；读法 2
+的「双向耐受」在<strong>增益方向</strong>上不是接口独有（A 的 ĝ 同样在
+0.93–0.99 间抖动却无代价）。 2. <strong>唯一让 E4 反超 A
+的条件是估计器被骗的负控制</strong>。延迟 2 步下残差法把 ĝ 误估为
+0.63–0.65（A）/ 0.80（E4），两臂都被喂了错误的 1/ĝ 补偿：A 的成功率掉
+37–42 pp、jerk 翻倍；E4 掉 11–25 pp、jerk 几乎不变。A
+在其他所有条件（无漂移、增益、以及 P0b 的全部漂移）都强于
+E4，<strong>只在这里输</strong>——而且是绝对成功率上输（54 vs 76，49 vs
+62）。这正是 v2
+的核心主张（结构性安全壳：上游更新出错时执行伤害有界，P2/P3），第一次在<strong>强对照</strong>下得到支持；也正是
+H2 的形态：不是「接口更好」，而是「接口更不容易被搞坏」。 3.
+<strong>它改写了论文的卖点</strong>。接口不买性能（§1.3）、不买鲁棒性（§1.8d）、不买可适应性（本节）；它买的是<strong>错误适应的伤害上界</strong>——成功率损失小
+3 倍、jerk 增幅小 10
+倍以上。相应地，评测协议必须把「估计器被骗」作为标准条件（不是负控制而是主指标），并把
+jerk 增幅与最坏 episode 偏差与 P2 的界并列。候选机制（待 P2
+分辨）：导数域里错误增益只改变执行<strong>速度</strong>、不改变 4
+步动作块内的<strong>轨迹形状</strong>，再规划时的修正是对 <span class="math inline">\(c_t\)</span> 的平缓改动；位置增量域里 1/ĝ
+误差让每个动作块超调 50% 并在再规划时反向修正，形成块频率上的极限环（P0a
+的 0.25 cyc/step 尖峰、jerk ×2）。 4.
+<strong>这条存活主张自己也要过一次滤波器等价性 kill
+test</strong>（在跑，<code>run_p1_armB.sh</code>）：低通臂 B 与 A
+同训练配方（σ=0.10），只多一个执行侧一阶滤波。预注册：若 B
+在「估计器被骗」下的成功率损失与 jerk 增幅落在 E4 一侧（≤ −20 pp、jerk ≤
+×1.3），则伤害上界归于<strong>任何执行侧线性平滑</strong>，论文主张再降一档为「执行侧平滑结构对误适应的保护」（仍可发，但导数参数化不再是卖点）；若
+B 落在 A 一侧，导数参数化 + 可观测积分状态才是关键，主张保留。</p>
 <p><strong>对方案的后果</strong>： 1. §0/§1.5/§1.6
 中「积分作用」的解释全部撤回；§5.4 的 H7 改为
 <strong>H7’（机理待定）</strong>——候选解释：(i) 策略看见意图指令 <span class="math inline">\(c_{t-1}\)</span> 从而能察觉执行偏差；(ii)
@@ -841,16 +930,15 @@ regime。在 Square 上，「想要增益稳健性，用 σ=0.10
 P0b 里 E1（λ=1，等效噪声无界）在 ×0.7 下比 E4 更稳（43 vs
 25）一致——<strong>这是当前最简约的解释</strong>。 2.
 §1.6「同一补偿信号原版用不起」的对照用的是脆弱的 E5。<strong>公平的
-TTT-raw 对照必须是最强原版 A</strong>：已启动
-<code>run_p1_armA.sh</code>（对 A 自校准 <span class="math inline">\(K\)</span>，常开/触发/对齐读数 × 4 条件 × 3
-seed，36 组）。预注册：若 A 在补偿下 ×0.7 ≥ 95% 且无漂移误适应代价 ≤ 5
-pp，则「接口让补偿可用」的主张死，接口的价值只能在伤害/平滑指标上证明；若
-A 的误适应代价像 E5 一样大（≈ −48 pp）而接口只有 −2～−9
-pp，结构性耐受主张在伤害维度上存活。 3. 训练噪声水平进入 §7
-风险登记，作为所有「接口 vs 原版」比较的<strong>首要混杂</strong>；P2
-主对比里原版臂一律用 σ=0.10 训练的 A 型策略，而不是匹配预算的 E5 型。 4.
-<span class="math inline">\(K\)</span> 的逐臂校准值相差近 2 倍（E4 的
-x/z 分量 ≈ E5 的 2 倍），原因是 OSC 跟踪有一步以上的滞后，回归系数 <span class="math inline">\(K_{\text{eff}}=K_0+K_1\rho(1)\)</span>
+TTT-raw 对照必须是最强原版 A</strong>（<code>run_p1_armA.sh</code>：对 A
+自校准 <span class="math inline">\(K\)</span>，常开/触发 × 4 条件 × 3
+seed）。预注册：若 A 在补偿下 ×0.7 ≥ 95% 且无漂移误适应代价 ≤ 5
+pp，则「接口让补偿可用」的主张死，接口的价值只能在伤害/平滑指标上证明。<strong>结果见
+(e)：死亡条件触发；伤害维度的主张存活并加强。</strong> 3.
+训练噪声水平进入 §7 风险登记，作为所有「接口 vs
+原版」比较的<strong>首要混杂</strong>；P2 主对比里原版臂一律用 σ=0.10
+训练的 A 型策略，而不是匹配预算的 E5 型。 4. <span class="math inline">\(K\)</span> 的逐臂校准值相差近 2 倍（E4 的 x/z 分量
+≈ E5 的 2 倍），原因是 OSC 跟踪有一步以上的滞后，回归系数 <span class="math inline">\(K_{\text{eff}}=K_0+K_1\rho(1)\)</span>
 依赖指令自相关 <span class="math inline">\(\rho(1)\)</span>——这既解释了
 v1 lag 扫描的误判，也说明 <span class="math inline">\(\hat g\)</span>
 的名义映射必须逐策略校准（<code>calib_K.py</code>）。</p>
@@ -1454,39 +1542,56 @@ seed，含原版公平对照 → §1.6</td>
 结束时判定。</p>
 <hr />
 <h2 id="论文骨架">6. 论文骨架</h2>
-<p><strong>标题候选</strong> 1. <em>Structured Action Interfaces as a
-Safety Shell for Test-Time Training of Robot Policies</em> 2. <em>Adapt
-Upstream, Execute Smoothly: Bounded-Harm Test-Time Training via
-Leaky-Integrator Action Interfaces</em> 3. <em>When TTT Meets the
-Controller: Spectrum Shaping and Harm Bounds for Deployment-Time Policy
-Adaptation</em></p>
-<p><strong>摘要草稿</strong>（英） &gt; Deployed robot policies must
-keep learning, yet test-time training (TTT) of a policy’s weights is
-fragile: updates can collapse over long horizons, compete with real-time
-control, and change executed behavior by amounts no one can bound. We
-show that <em>where</em> a policy is allowed to change matters as much
-as <em>how</em>. We freeze the perception and generative prior, adapt
-only a low-dimensional interface head, and route its derivative-domain
-output through a leaky integrator tracked by a low-level controller.
-This structure yields (i) a closed-form bound on how far any bounded
-upstream update can move the executed trajectory, independent of the
-parameter change; (ii) an implicit trust region in execution space; and
-(iii) a free, task-coupled self-supervised signal—the tracking
-residual—whose drift both detects dynamics shift and drives adaptation.
-The same interface also colors exploration noise with a single knob λ,
-recovering the known pink-noise optimum. On robomimic tasks under
-deployment-time dynamics and perception shifts, interface-level TTT
-recovers most of the lost performance while incurring substantially less
-transient harm than TTT on the raw policy, and remains stable over
-100k-step drift streams where unshielded TTT collapses. We release a
-deployment-shift benchmark and the design equations for choosing λ.</p>
-<p><strong>贡献三条</strong> 1. 分层动作接口作为 TTT
-安全壳的形式化：P1–P3（谱整形、有界传播、执行空间信任域）与 <span class="math inline">\(\lambda\)</span> 设计方程。 2.
-任务耦合的两路自监督 TTT（残差 +
-聚类熵）与触发-验证-提交协议，在反应式闭环上首个权重级 TTT
-系统研究（含与 DSRL/best-of-N/RMA 的同接口公平对比）。 3. 部署漂移基准 +
-「适应伤害」评测协议（瞬态偏差、违规、长流衰减曲线），以及一个诚实的负结果：接口不提升准静态任务的名义
-RL 微调成功率。</p>
+<blockquote>
+<p><strong>09-05 改写</strong>。§1.8
+之后，论文不能再承诺「接口让适应恢复性能」：强原版 A
+自己就能恢复，且在无漂移、增益漂移和 P0b
+的全部漂移上都强于接口。可以承诺的只有一件事，而且要用最强对照来证明：<strong>当适应信号出错时，接口把执行伤害封在界内</strong>。三个负结果（不提升
+RL
+微调、不提升零适应鲁棒性、不提升可适应性）作为主张收窄的证据链一并发表。</p>
+</blockquote>
+<p><strong>标题候选</strong> 1. <em>Bounded Harm, Not Better
+Performance: What a Derivative Action Interface Buys for Deployment-Time
+Adaptation</em> 2. <em>When the Adaptation Signal Is Wrong:
+Leaky-Integrator Action Interfaces Bound the Damage of Test-Time
+Adaptation</em> 3. <em>Adapt Upstream, Execute Smoothly: Harm Bounds for
+Misadaptation via Structured Action Interfaces</em></p>
+<p><strong>摘要草稿</strong>（英，09-05 版） &gt; Deployed robot
+policies must keep adapting, yet every adaptation mechanism—weight
+updates, gain estimators, steering—will sometimes be wrong: a
+self-supervised signal misreads a control delay as an actuator loss, a
+shift is over-estimated, an update is poisoned. We ask what a policy’s
+<em>action interface</em> can guarantee when that happens. We route a
+frozen generative policy’s derivative-domain output through a leaky
+integrator tracked by a low-level controller and adapt only
+low-dimensional interface parameters. This structure gives (i) a
+closed-form bound on how far any bounded upstream change can move the
+executed trajectory, independent of the size of the parameter change,
+(ii) an implicit trust region in execution space, and (iii) a free,
+task-coupled residual signal for detecting dynamics shift. We then
+report what the interface does <em>not</em> buy, against the strongest
+raw baseline we could train: it does not improve RL fine-tuning on
+quasi-static tasks, does not improve zero-shot robustness to actuator or
+sensor drift (a raw policy trained with larger exploration noise is far
+more robust), and does not make residual-driven adaptation more
+effective (the raw policy recovers 81→99% under a 30% gain loss). What
+it buys is a <em>bound on misadaptation harm</em>: when the same
+residual estimator is fooled by a two-step control delay and both
+systems receive the same wrong compensation, the raw policy loses 37–42
+success points and doubles its executed jerk, while the interface loses
+11–25 points and its jerk is unchanged—the only condition in which the
+interface outperforms the raw policy in absolute terms. We propose
+“estimator fooled” as a standard evaluation condition for adaptive
+policies, release the deployment-shift suite, and give design equations
+for λ.</p>
+<p><strong>贡献三条（09-05 版）</strong> 1.
+分层动作接口的形式化与界：P1–P3（谱整形、有界传播、执行空间信任域）与
+<span class="math inline">\(\lambda\)</span>
+设计方程；界与实测（jerk、最大单步变化、最坏 episode 偏差）并列报告。 2.
+<strong>误适应伤害</strong>作为部署期适应的一等指标与「估计器被骗」标准条件；在此条件下接口相对最强原版的伤害上界（成功率损失
+~1/3、jerk 增幅 ~1/10），以及低通滤波臂（B）的等价性对照结果（在跑）。
+3. 三个用强对照与直接机理测量确立的负结果：接口不提升准静态任务的 RL
+微调、不提升零适应漂移鲁棒性（训练噪声水平主导）、不提升残差驱动适应的有效性；附「积分补偿」假说被补偿比检验推翻的过程。</p>
 <p><strong>章节</strong>：1 引言 → 2 相关工作（TTA/TTT
 基础；机器人部署适应；免权重 steering；接口/残差/约束动作空间）→ 3
 方法（§3）→ 4 理论（§4）→ 5 实验（§5）→ 6 讨论（负结果、λ 的选择、与
@@ -1556,6 +1661,18 @@ mini-batch（TTT-E2E）；实在不稳则去掉预埋作为消融项报告</td>
 <td>机理解释先于检验（H7 教训）</td>
 <td>已发生</td>
 <td>任何机理主张必须附带一个直接测量（如补偿比），不能只靠成功率差推断</td>
+</tr>
+<tr>
+<td>弱对照造成的假阳性（E5 教训）</td>
+<td>已发生</td>
+<td>「接口 vs
+原版」的原版一律取该任务上最强的原版训练配方；匹配预算孪生只用于分离机理</td>
+</tr>
+<tr>
+<td>新估计器路径的实现 bug 冒充「结果」（P1’’ 第一批教训）</td>
+<td>已发生</td>
+<td>新路径上线前先在无漂移条件做与旧路径的逐步等价性检查（激活率、ĝ
+轨迹），再进漂移网格</td>
 </tr>
 <tr>
 <td>审稿人：「这就是低通滤波/残差策略」</td>
