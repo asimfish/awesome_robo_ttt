@@ -160,12 +160,13 @@ H7）被补偿比检验<strong>推翻</strong>——两臂的执行幅度都按 
 的噪声放大恰恰把接口锁在低噪声 regime。(iii) <strong>A
 自己就能用残差补偿</strong>（×0.7：81→99%，误适应代价 −0.3 pp），P1’
 的「原版用不起补偿」是 E5 脆弱所致，<strong>撤回</strong>。</p>
-<p><strong>存活下来的、也是唯一该写进论文的主张</strong>：当适应信号出错时（延迟被误读为增益、两臂被喂同样错误的
-1/ĝ），A 掉 37–42 pp、jerk 翻倍，E4 只掉 11–25 pp、jerk 不变——这是 A
-强于 E4 的所有条件之外<strong>唯一一组 E4 反超 A 的条件</strong>（76 vs
-54）。接口不买性能、不买鲁棒性、不买可适应性，它买的是<strong>错误适应的伤害上界</strong>（P2/P3
-的经验形态）。评测协议随之改写：「估计器被骗」从负控制升为主指标。延迟感知估计器的第一批结果因实现
-bug 作废，修复后重跑中。</p>
+<p><strong>当晚的后续实验又杀掉了「伤害上界」的强形式（§1.8g–h、§1.9）</strong>：在<strong>相同</strong>的错误补偿因子下（×1.4/×1.6），A
+的成功率最稳（93/74）、E4 在强臂中最差（64/36）；此前
+E4「反超」是因为延迟把 A 的估计器骗得更狠。接口唯一稳定赢过所有对照的是
+jerk <strong>增幅</strong>（谱整形），而普通一阶低通的绝对 jerk 比它低 4
+倍——泄漏积分器与低通本是同一族滤波器。§1.9
+给出十维度的总账与三条路线：<strong>推荐把这项工作写成受控的负结果研究</strong>（评价动作接口主张的协议
++ 训练噪声主导鲁棒性 + 积分器≡高增益低通），由你决定。</p>
 <p><strong>证伪条件</strong>（§5.5）：若 TTT-on-interface
 在动力学漂移上不优于零适应 ≥10 pp，信号主张死；若 TTT-on-raw
 的瞬态伤害不高于 TTT-on-interface，结构性安全主张死；若 DSRL
@@ -954,6 +955,229 @@ A（结构对下游无保护）；(ii) B-up 优于 B-down 但弱于 E4-up；(iii
 中的下游补偿（−11/−25 pp）。<strong>Kill</strong>：E4-up ≈ E4-down → P2
 对适应噪声没有经验效力，结构主张彻底死亡；E4-up ≈ B-up →
 保护是通用滤波，导数参数化不是卖点。</p>
+<p><strong>首批读数（<span class="math inline">\(\sigma_\varepsilon=0.25\)</span>，seed
+1000）</strong>：成功率四种配置都在无漂移 ±3 pp
+内（噪声太小，看不出成功率差异；等 0.5）；jerk
+上上游注入明显更平滑——E4-up ×1.02 vs E4-down ×1.48，B-up ×1.11 vs B-down
+×3.20（B 的基线 jerk 0.031 极低，比值放大；绝对值 0.034 vs 0.099，仍低于
+E4 的任何配置）。方向与 (f) 的预测一致，幅度待 <span class="math inline">\(\sigma_\varepsilon=0.5\)</span> 与 3 seed。</p>
+<p><strong>(g) 受控静态错误补偿：(e)
+的强形式也死了</strong>（<code>run_overgain.sh</code>，冻结策略、执行增益
+×1.2/1.4/1.6，seed 1000；×0.7/0.8 为 3 seed 的 P0b/ctrl 数据）：</p>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr>
+<th>臂</th>
+<th>×0.7</th>
+<th>×0.8</th>
+<th>×1.0</th>
+<th>×1.2</th>
+<th>×1.4</th>
+<th>×1.6</th>
+<th>jerk 倍数 ×1.4 / ×1.6</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A 原版 σ=0.10</strong></td>
+<td>81.3</td>
+<td>97.7</td>
+<td>99.3</td>
+<td>95</td>
+<td><strong>93</strong></td>
+<td><strong>74</strong></td>
+<td>1.56 / 2.09</td>
+</tr>
+<tr>
+<td>B 原版+低通</td>
+<td>41.0</td>
+<td>80.7</td>
+<td>95.3</td>
+<td>89</td>
+<td>75</td>
+<td>待</td>
+<td>1.69 / —</td>
+</tr>
+<tr>
+<td>E4 接口</td>
+<td>28.3</td>
+<td>79.7</td>
+<td>97.0</td>
+<td>90</td>
+<td>64</td>
+<td>36</td>
+<td><strong>1.21 / 1.31</strong></td>
+</tr>
+<tr>
+<td>E5 原版 σ=0.03</td>
+<td>3.7</td>
+<td>43.3</td>
+<td>88.0</td>
+<td>66</td>
+<td>45</td>
+<td>待</td>
+<td>1.78 / —</td>
+</tr>
+</tbody>
+</table>
+<p>在<strong>相同</strong>的错误补偿因子下，A 的成功率两个方向都最稳，E4
+在强臂中最差（×1.4：64 vs 93；×1.6：36 vs 74）。(e) 里
+E4「反超」A，是因为延迟把 A 的估计器骗得更狠（ĝ 0.63 → 施加 ×1.55）而 E4
+只被骗到 ĝ
+0.80–0.88（×1.14–1.25）——<strong>是估计器被骗的程度不同，不是结构保护</strong>。(e)
+的读法 2/3 撤回。接口在这张表上唯一稳定的优势是 <strong>jerk
+增幅</strong>（×1.31 vs A ×2.09、B ×1.69），但 B 的绝对 jerk
+在每个格子都比 E4 低约 4 倍。</p>
+<p><strong>(h) 修复后的延迟感知估计器（3 seed E4；A 2–3
+seed）</strong>：v1 硬否决——无漂移 92.0（代价 −5）、×0.7 86.0（灵敏度 −5
+pp）、延迟 80.5（代价 −6.8，触发式
+−11）：专一性略升、灵敏度略降，三条预注册阈值只过一条（无漂移）。v2
+对齐读数——对 E4 <strong>无效</strong>（延迟下 <span class="math inline">\(\hat g_{\tau^\star}=0.87\)</span> 而非 ≈1，代价
+−13.8 与触发式持平）；对 A <strong>非常有效</strong>（代价 −39.3 →
+−5.5，成功率 95）。原因是命令谱：原版的白噪声指令让 lag 结构干净、对齐后
+<span class="math inline">\(\hat g\to1\)</span>；接口的红噪声指令让
+lag-0 校准的 <span class="math inline">\(K_{\text{eff}}\)</span>
+已吸收滞后响应，对齐也无法复原。<strong>接口的平滑性损害了自监督信号的延迟可辨识性</strong>——与
+P4「接口产生更干净的信号」方向相反（增益可辨识性确实更好：校准相关 0.82
+vs 0.70，但 B 更好：0.91–0.95）。</p>
+<h3 id="综合裁决2026-09-05-深夜导数接口在-square-上到底买到了什么">1.9
+综合裁决（2026-09-05 深夜）：导数接口在 Square 上到底买到了什么</h3>
+<p>把 09-02 到 09-05 的全部对照放在一张表里（单训练 seed、3 评测
+seed；「高/低/≈」指接口相对该对照）：</p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>维度</th>
+<th>vs 匹配孪生 E5（σ=.03）</th>
+<th>vs 强原版 A（σ=.10）</th>
+<th>vs 低通 B（σ=.10）</th>
+<th>出处</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BC 先验成功率</td>
+<td>高（49 vs 38）</td>
+<td>高（49 vs 38）</td>
+<td>高（49 vs 23.5）</td>
+<td>§1.2</td>
+</tr>
+<tr>
+<td>RL 微调终值（匹配预算）</td>
+<td>≈（95 vs 93）</td>
+<td>低（95 vs 99.5）</td>
+<td>≈（95 vs 96）</td>
+<td>§1.1</td>
+</tr>
+<tr>
+<td>零适应漂移鲁棒性（增益 ×0.7）</td>
+<td>高（28 vs 4）</td>
+<td><strong>低</strong>（28 vs 81）</td>
+<td>低（28 vs 41）</td>
+<td>§1.5/§1.8d</td>
+</tr>
+<tr>
+<td>残差补偿可用性（×0.7 触发式）</td>
+<td>高（91 vs 44）</td>
+<td><strong>低</strong>（91 vs 99）</td>
+<td>低（91 vs 98）</td>
+<td>§1.6/§1.8e</td>
+</tr>
+<tr>
+<td>相同错误补偿下的成功率（×1.4）</td>
+<td>高（64 vs 45）</td>
+<td><strong>低</strong>（64 vs 93）</td>
+<td>低（64 vs 75）</td>
+<td>§1.8g</td>
+</tr>
+<tr>
+<td>错误补偿下的 jerk <strong>增幅</strong></td>
+<td>低（1.21 vs 1.78）</td>
+<td><strong>低</strong>（1.31 vs 2.09）</td>
+<td>低（1.21 vs 1.69）</td>
+<td>§1.8g</td>
+</tr>
+<tr>
+<td>绝对执行 jerk（所有条件）</td>
+<td>低</td>
+<td>低</td>
+<td><strong>高约 4×</strong></td>
+<td>§1.5/§1.8</td>
+</tr>
+<tr>
+<td>上游适应噪声的 jerk 增幅</td>
+<td>—</td>
+<td>低</td>
+<td>≈（1.02 vs 1.11）</td>
+<td>§1.8f</td>
+</tr>
+<tr>
+<td>残差信号：增益可辨识（校准相关）</td>
+<td>高（.82 vs .70）</td>
+<td>?</td>
+<td>低（vs .91–.95）</td>
+<td>§1.6/§1.8h</td>
+</tr>
+<tr>
+<td>残差信号：延迟可辨识</td>
+<td>?</td>
+<td><strong>低</strong></td>
+<td>低</td>
+<td>§1.8h</td>
+</tr>
+</tbody>
+</table>
+<p><strong>三句话结论</strong>。(1) 接口几乎全面优于它的匹配孪生
+E5——因为 E5 是个被低探索噪声训坏的策略，不是因为接口；(2)
+接口在<strong>每一个成功率指标</strong>上都输给用 σ=0.10 训练的原版
+A，而接口自身的噪声放大（P1）正是它不能用 σ=0.10 训练的原因；(3)
+接口唯一稳定赢过所有对照的是<strong>扰动到执行的 jerk
+增幅</strong>（谱整形，P1），但一个普通的一阶低通在绝对 jerk 上比它好 4
+倍。结构上，泄漏积分器 <span class="math inline">\(c_t=\lambda c_{t-1}+s
+u_t\)</span> 与低通 <span class="math inline">\(e_t=\alpha
+e_{t-1}+(1-\alpha)u_t\)</span>
+是<strong>同一族一阶滤波器</strong>，差别只是 DC 增益（<span class="math inline">\(s=1\)</span> vs <span class="math inline">\(s=1-\alpha\)</span>）和策略被重训成输出「增量」；P2/P3
+的界对两者同样成立。「导数动作空间」这个概念在本任务上有经验支撑的独有效应只有两个：更好的
+BC 先验（+11 pp）和 RL 探索噪声的谱整形——而后者是一把双刃剑。</p>
+<p><strong>尚未落地、可能改变上表的实验</strong>（在跑）：<span class="math inline">\(\sigma_\varepsilon=0.5\)</span>
+的上下游适应噪声（若 E4-up 在成功率上显著优于 E4-down 与 B-up，P2
+保住一条经验支撑）；上游补偿的 P1’；过补偿 seed 2–3；B 的常开延迟；5
+训练 seed。</p>
+<p><strong>路线建议</strong>（需要你决定）： - <strong>路线
+A（推荐）</strong>：把这项工作写成一篇<strong>受控的负结果研究</strong>——「一个导数动作接口为扩散策略的
+RL 微调和部署期适应买到了什么？」贡献：(i)
+一套评价动作接口主张的实验协议（匹配预算孪生 + 最强原版 + 滤波器零假设 +
+直接机理测量），本方案的每一次自我修正都是协议条目；(ii)
+训练探索噪声水平主导部署鲁棒性、而积分型接口结构性地压低可用噪声这一发现；(iii)
+泄漏积分 ≡ 高 DC
+增益低通的等价性及其对「导数/速度/加速度动作空间」类主张的含义；(iv)
+命令谱与自监督残差信号可辨识性的关系。可在现有数据 + 5 seed 复现基础上
+2–3 周成稿；目标 RA-L / CoRL 或 ICRA workshop（负结果友好）。 -
+<strong>路线 B</strong>：回到 CADI
+第二幕（液体/易碎接触等<strong>平滑度即约束</strong>的任务），以违规/jerk
+为主指标——但必须把低通 B 作为基线，而 B 目前在 jerk
+上更好；接口要赢只能靠 BC 先验质量与约束任务上的 RL
+可训性，需要新任务与新训练（≥4 周，风险高）。 - <strong>路线
+C（不推荐）</strong>：继续 TTT 安全壳（神经头级
+TTT-I）。结构界对低通同样成立，差异化已不存在；文献坐标（§2）里的空位仍在，但填空的方法不必是导数接口。</p>
+<hr />
 <p><strong>对方案的后果</strong>： 0. §3.2(a) 参数级 TTT-I
 的默认实现改为<strong>上游补偿</strong>；(e)
 中的下游结果保留为「策略鲁棒性」基线。 1. §0/§1.5/§1.6
