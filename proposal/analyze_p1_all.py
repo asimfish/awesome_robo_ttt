@@ -15,18 +15,18 @@ D = "p0_out"
 SEEDS = [1000, 2000, 3000]
 CONDS = [("nodrift", "no drift"), ("gain0.8", "gain x0.8"), ("gain0.7", "gain x0.7"), ("delay2", "delay 2 (neg. ctrl)")]
 MODES = [(0, "frozen"), (1, "always-on"), (2, "triggered"), (3, "delay-aware v1 (veto)"), (5, "lag-aligned v2")]
-ARMS = [("E4", "interface (leak .9, s=.03)"), ("E5", "raw, matched s=.03"), ("A", "raw, s=.10")]
-COL = {"E4": "#16a085", "E5": "#2c3e50", "A": "#c0392b"}
+ARMS = [("E4", "interface (leak .9, s=.03)"), ("E5", "raw, matched s=.03"), ("A", "raw, s=.10"), ("B", "raw + lowpass, s=.10")]
+COL = {"E4": "#16a085", "E5": "#2c3e50", "A": "#c0392b", "B": "#8e44ad"}
 ALP = {0: 0.30, 1: 0.50, 2: 0.70, 3: 0.85, 5: 1.0}
 
 
 def fname(arm, ad, c, s):
-    if arm == "A":
+    if arm in ("A", "B"):
         if ad == 0:
-            return f"ctrl_A_{c}_s{s}"
+            return f"ctrl_{arm}_{c}_s{s}"
         if ad in (3, 5):
-            return f"p1f_A_ad{ad}_{c}_s{s}"
-        return f"p1_A_ad{ad}_{c}_s{s}"
+            return f"p1f_{arm}_ad{ad}_{c}_s{s}"
+        return f"p1_{arm}_ad{ad}_{c}_s{s}"
     if ad in (3, 5):
         # fixed reruns only (history-reset bug in the first P1'' batches: p1d_/p1a_/p1_A_ad5 are invalid)
         return f"p1f_{arm}_ad{ad}_{c}_s{s}"
@@ -102,7 +102,7 @@ for arm, _ in ARMS:
         print(f"{arm:<4}{mn:<24} recovery x0.7 {rec:+6.1f}   cost nodrift {mis0:+6.1f}   cost delay2 {misd:+6.1f}")
 
 # ---------------------------------------------------------------- figure
-fig, axes = plt.subplots(1, 3, figsize=(16, 4.2), sharey=True)
+fig, axes = plt.subplots(1, 4, figsize=(21, 4.2), sharey=True)
 x = np.arange(len(CONDS)); w = 0.16
 for k, (arm, desc) in enumerate(ARMS):
     ax = axes[k]
