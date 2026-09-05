@@ -26,7 +26,9 @@ date: 2026-09-02
 
 **09-05 机理复核与强对照改写了结论（§1.7–1.8）**。三件事：(i) 「积分作用抵消增益漂移」（原 H7）被补偿比检验**推翻**——两臂的执行幅度都按 g 等比缩小、策略输出不变。(ii) 对照臂 A（原版、σ=0.10）在增益 ×0.7 下 **81.3%**，是所有臂里最稳健的（接口 28.3%）：训练噪声水平的效应远大于接口效应，而 P1 的噪声放大恰恰把接口锁在低噪声 regime。(iii) **A 自己就能用残差补偿**（×0.7：81→99%，误适应代价 −0.3 pp），P1' 的「原版用不起补偿」是 E5 脆弱所致，**撤回**。
 
-**当晚的后续实验又杀掉了「伤害上界」的强形式（§1.8g–h、§1.9）**：在**相同**的错误补偿因子下（×1.4/×1.6），A 的成功率最稳（93/74）、E4 在强臂中最差（64/36）；此前 E4「反超」是因为延迟把 A 的估计器骗得更狠。接口唯一稳定赢过所有对照的是 jerk **增幅**（谱整形），而普通一阶低通的绝对 jerk 比它低 4 倍——泄漏积分器与低通本是同一族滤波器。§1.9 给出十维度的总账与三条路线：**推荐把这项工作写成受控的负结果研究**（评价动作接口主张的协议 + 训练噪声主导鲁棒性 + 积分器≡高增益低通），由你决定。
+**当晚的后续实验又杀掉了「伤害上界」的强形式（§1.8g–h、§1.9）**：在**相同**的错误补偿因子下（×1.4/×1.6，3 seed），A 的成功率最稳（88/67）、E4 与低通 B 几乎重合（68/33 vs 71/39）；此前 E4「反超」是因为延迟把 A 的估计器骗得更狠。接口唯一稳定赢过所有对照的是 jerk **增幅**（谱整形），而普通一阶低通的绝对 jerk 比它低 4 倍——泄漏积分器与低通本是同一族滤波器。§1.9 给出十维度的总账与三条路线。
+
+**决定（09-06 01:00）：路线 A**——把工作重构为一阶动作滤波器 $(\lambda,s)$ 设计空间的受控实证图（§1.10）。四个新训练点（F1 (0.9,0.3)、F2 (0.7,1.0)、F3 (0.95,0.5)、F4 = 低通 B 的 σ=0.03 孪生）已于 01:32 启动，与 5 训练 seed 复现并行；论文骨架（§6）已按此重写。
 
 **证伪条件**（§5.5）：若 TTT-on-interface 在动力学漂移上不优于零适应 ≥10 pp，信号主张死；若 TTT-on-raw 的瞬态伤害不高于 TTT-on-interface，结构性安全主张死；若 DSRL 同预算全面持平，权重级 TTT 主张降级。三条判据在实验前写死。
 
@@ -207,28 +209,30 @@ date: 2026-09-02
 
 **预注册**：(i) E4-up 在 $\sigma_\varepsilon=0.5$ 下的成功率损失 ≤ E4-down 的 1/3、jerk 倍数 ≤ 1.2，而 E4-down ≈ A（结构对下游无保护）；(ii) B-up 优于 B-down 但弱于 E4-up；(iii) 上游补偿下 E4 在「估计器被骗」条件的损失显著小于 (e) 中的下游补偿（−11/−25 pp）。**Kill**：E4-up ≈ E4-down → P2 对适应噪声没有经验效力，结构主张彻底死亡；E4-up ≈ B-up → 保护是通用滤波，导数参数化不是卖点。
 
-**读数（seed 1000；3 seed 在跑）**：
+**受控适应噪声读数（3 评测 seed × 100 ep，冻结、无漂移）**：
 
 | 配置 | σ_ε | 成功率（Δ vs 无漂移） | jerk（倍数） | 最大单步变化（倍数） |
 |---|---|---|---|---|
-| A 原版 | 0.25 / 0.5 | 99 (−1) / 99 (−1) | 0.197 (×1.10) / 0.241 (×1.35) | 0.77 (×1.09) / 1.11 (×1.55) |
-| E4 下游 | 0.25 / 0.5 | 92 (−3) / 88 (−7) | 0.191 (×1.48) / 0.276 (×2.14) | 0.87 (×1.17) / 1.19 (×1.59) |
-| **E4 上游** | 0.25 / 0.5 | 92 (−3) / 90 (−5) | 0.131 (**×1.02**) / 0.136 (**×1.05**) | 0.82 (×1.11) / 0.93 (×1.25) |
-| B 下游 | 0.25 / 0.5 | 97 (+2) / 93 (−2) | 0.099 (×3.20) / 0.180 (×5.83) | 0.60 (×3.2) / 1.07 (×5.8) |
-| **B 上游** | 0.25 / 0.5 | 95 (0) / 98 (+3) | 0.034 (×1.11) / **0.042** (×1.36) | 0.19 (×1.01) / **0.21** (×1.14) |
+| A 原版 | 0.25 / 0.5 | 98.3 (−1.0) / 98.0 (−1.3) | 0.195 (×1.12) / 0.239 (×1.37) | 0.78 (×1.14) / 1.11 (×1.63) |
+| E4 下游 | 0.25 / 0.5 | 94.3 (−2.7) / 93.0 (−4.0) | 0.195 (×1.46) / 0.282 (×2.12) | 0.88 (×1.12) / 1.20 (×1.52) |
+| **E4 上游** | 0.25 / 0.5 | 91.7 (−5.3) / 91.0 (−6.0) | 0.136 (**×1.02**) / 0.140 (**×1.05**) | 0.86 (×1.09) / 0.94 (×1.20) |
+| B 下游 | 0.25 / 0.5 | 95.3 (0) / 94.3 (−1.0) | 0.103 (×3.33) / 0.189 (×6.11) | 0.59 (×3.0) / 1.07 (×5.5) |
+| **B 上游** | 0.25 / 0.5 | 95.7 (+0.3) / 92.0 (−3.3) | 0.035 (×1.14) / **0.043** (×1.40) | 0.20 (×1.01) / **0.22** (×1.13) |
 
-三条读法：(1) **P1/P2 对平滑度有经验效力**：上游注入的白噪声被滤平——E4 jerk 倍数 1.05 vs 下游 2.14，B 1.36 vs 5.83；E4-up 的相对增幅最小，(f) 的幅度比红利成立（预注册 ii 通过）。(2) **对成功率没有**：零均值白噪声在 σ_ε=0.5 下几乎不伤任何臂（A −1、B −2/+3、E4 −5/−7）；伤成功率的是**偏差**（(g) 的静态错误增益），而对偏差上下游等价。预注册 (i) 的成功率部分不成立（E4-up −5 vs E4-down −7，都在噪声内），且 E4 仍是对噪声最敏感的强臂。(3) **P3 的量上低通完胜**：B-up 的最大单步变化绝对值 0.21，是 E4-up（0.93）的 1/4——低通 α=0.8 的结构界 2(1−α)=0.4，接口 s=1 的界 (1−λ)C_max+s=1.1（P0a 已指出）。**接口选 s=1 是为了 BC 先验对齐（§1.2 的 scale 教训），代价恰恰是安全壳的松紧**；把 s 调小等价于向 B 靠拢。
+三条读法：(1) **P1/P2 对平滑度有经验效力**：上游注入的白噪声被滤平——E4 jerk 倍数 1.05 vs 下游 2.12，B 1.40 vs 6.11；E4-up 的相对增幅最小，(f) 的幅度比红利成立（预注册 ii 通过）。(2) **对成功率没有**：零均值白噪声在 σ_ε=0.5 下几乎不伤任何臂（A −1.3、B −3.3/−1.0、E4 −6.0/−4.0）；伤成功率的是**偏差**（(g) 的静态错误增益），而对偏差上下游等价。预注册 (i) 的成功率部分不成立（E4-up 甚至比 E4-down 差 2 pp，在噪声内），且 E4 仍是对噪声最敏感的强臂。(3) **P3 的量上低通完胜**：B-up 的最大单步变化绝对值 0.22，是 E4-up（0.94）的 1/4——低通 α=0.8 的结构界 2(1−α)=0.4，接口 s=1 的界 (1−λ)C_max+s=1.1（P0a 已指出）。**接口选 s=1 是为了 BC 先验对齐（§1.2 的 scale 教训），代价恰恰是安全壳的松紧**；把 s 调小等价于向 B 靠拢——这正是路线 A 的 F1 点 (0.9, 0.3) 要量的东西。
 
-**(g) 受控静态错误补偿：(e) 的强形式也死了**（`run_overgain.sh`，冻结策略、执行增益 ×1.2/1.4/1.6，seed 1000；×0.7/0.8 为 3 seed 的 P0b/ctrl 数据）：
+**上游补偿的 P1'（第一批作废，重跑中）**。第一批 `p1u_*`（36 组）显示上游补偿对增益漂移**无效**（E4-up ×0.7：19–23%，冻结 28%；B-up：41–45%，冻结 41%），而下游补偿有效（87–97%）。诊断（执行幅度比：下游恢复到冻结的 0.92–1.01，上游只到 0.83–0.86；策略输出幅度与 ĝ 正常、无饱和）指向两个原因：(i) **实现缺陷**——`UpstreamCompWrapper` 只缩放了位置 3 维，而漂移与下游补偿作用于全部 6 个非夹爪维，旋转增益未补偿 → 抓取对准失败；已修复，重跑为 `p1v_*`。(ii) **一个真实的结构效应，待重跑分离**：E4 的策略通过 obs_cmd 观测积分器状态 $c_{t-1}$，它调节的是 $c$ 而不是 $u$——上游对 $u$ 的缩放在下一个决策点就被策略当作偏差纠正回去（E4-up 的 $|u|$ 与冻结持平、$|c|$ 只涨 13% 而非 47%）。若重跑后 B-up 有效而 E4-up 仍无效，则结论是：**让滤波器状态可观测是先验可辨识的必要条件（§1.2），但它同时使接口参数无法从上游适应**——P2 保护与可适应性在这一设计上互斥。这会成为设计空间图的一个轴。
+
+**(g) 受控静态错误补偿：(e) 的强形式也死了**（`run_overgain.sh`，冻结策略、执行增益 ×0.7…×1.6，全部 3 评测 seed）：
 
 | 臂 | ×0.7 | ×0.8 | ×1.0 | ×1.2 | ×1.4 | ×1.6 | jerk 倍数 ×1.4 / ×1.6 |
 |---|---|---|---|---|---|---|---|
-| **A 原版 σ=0.10** | 81.3 | 97.7 | 99.3 | 95 | **93** | **74** | 1.56 / 2.09 |
-| B 原版+低通 | 41.0 | 80.7 | 95.3 | 89 | 75 | 待 | 1.69 / — |
-| E4 接口 | 28.3 | 79.7 | 97.0 | 90 | 64 | 36 | **1.21 / 1.31** |
-| E5 原版 σ=0.03 | 3.7 | 43.3 | 88.0 | 66 | 45 | 待 | 1.78 / — |
+| **A 原版 σ=0.10** | 81.3 | 97.7 | 99.3 | 95.3 | **88.0** | **67.0** | 1.60 / 2.28 |
+| B 原版+低通 | 41.0 | 80.7 | 95.3 | 88.0 | 70.7 | 39.3 | 1.67 / 2.03 |
+| E4 接口 | 28.3 | 79.7 | 97.0 | 91.0 | 68.0 | 33.3 | **1.21 / 1.27** |
+| E5 原版 σ=0.03 | 3.7 | 43.3 | 88.0 | 64.7 | 35.0 | 12.7 | 1.81 / 2.33 |
 
-在**相同**的错误补偿因子下，A 的成功率两个方向都最稳，E4 在强臂中最差（×1.4：64 vs 93；×1.6：36 vs 74）。(e) 里 E4「反超」A，是因为延迟把 A 的估计器骗得更狠（ĝ 0.63 → 施加 ×1.55）而 E4 只被骗到 ĝ 0.80–0.88（×1.14–1.25）——**是估计器被骗的程度不同，不是结构保护**。(e) 的读法 2/3 撤回。接口在这张表上唯一稳定的优势是 **jerk 增幅**（×1.31 vs A ×2.09、B ×1.69），但 B 的绝对 jerk 在每个格子都比 E4 低约 4 倍。
+在**相同**的错误补偿因子下，A 的成功率两个方向都最稳，E4 与 B 在过补偿侧几乎重合（×1.4：68 vs 71；×1.6：33 vs 39），欠补偿侧 E4 更差（×0.7：28 vs 41）。(e) 里 E4「反超」A，是因为延迟把 A 的估计器骗得更狠（ĝ 0.63 → 施加 ×1.55）而 E4 只被骗到 ĝ 0.80–0.88（×1.14–1.25）——**是估计器被骗的程度不同，不是结构保护**。(e) 的读法 2/3 撤回。接口在这张表上唯一稳定的优势是 **jerk 增幅**（×1.31 vs A ×2.09、B ×1.69），但 B 的绝对 jerk 在每个格子都比 E4 低约 4 倍。
 
 **(h) 修复后的延迟感知估计器（3 seed E4；A 2–3 seed）**：v1 硬否决——无漂移 92.0（代价 −5）、×0.7 86.0（灵敏度 −5 pp）、延迟 80.5（代价 −6.8，触发式 −11）：专一性略升、灵敏度略降，三条预注册阈值只过一条（无漂移）。v2 对齐读数——对 E4 **无效**（延迟下 $\hat g_{\tau^\star}=0.87$ 而非 ≈1，代价 −13.8 与触发式持平）；对 A **非常有效**（代价 −39.3 → −5.5，成功率 95）。原因是命令谱：原版的白噪声指令让 lag 结构干净、对齐后 $\hat g\to1$；接口的红噪声指令让 lag-0 校准的 $K_{\text{eff}}$ 已吸收滞后响应，对齐也无法复原。**接口的平滑性损害了自监督信号的延迟可辨识性**——与 P4「接口产生更干净的信号」方向相反（增益可辨识性确实更好：校准相关 0.82 vs 0.70，但 B 更好：0.91–0.95）。
 
@@ -259,6 +263,44 @@ date: 2026-09-02
 - **路线 A（推荐）**：把这项工作写成**一阶动作滤波器 (λ, s) 设计空间的受控实证图**——「导数/速度动作空间为扩散策略买到了什么？」现有臂已是这张图上的点：A = 无滤波、B = (0.8, 0.2)、E1/C = (1, 1)、E3/E4 = (0.9, 1)；再补 4–6 个点（如 (0.9, 0.3)、(0.7, 1)、(0.95, 0.5)、B 的 σ=0.03 孪生）就能把「先验对齐 / RL 可训性 / 执行平滑 / 部署鲁棒性 / 自监督信号质量」五个轴画在同一张图上。贡献：(i) 图本身（多数论文只选一个点且不报告对照）；(ii) 一套评价动作接口主张的实验协议（匹配预算孪生 + 最强原版 + 滤波器零假设 + 直接机理测量 + 上下游注入），本方案的每一次自我修正都是协议条目；(iii) 训练探索噪声水平主导部署鲁棒性、而高 DC 增益的积分型接口结构性地压低可用噪声；(iv) 泄漏积分 ≡ 高 DC 增益低通，s 的选择在先验对齐与安全壳松紧之间的权衡（P3 的量上 B 比 E4 好 4 倍）；(v) 命令谱与残差信号可辨识性（增益 vs 延迟）的关系。新增训练约 6 × (预训练 + 微调) ≈ 6 × 20 h，与 5 seed 复现并行；3–4 周成稿；目标 CoRL / RA-L，或 ICRA workshop 先发负结果部分。
 - **路线 B**：回到 CADI 第二幕（液体/易碎接触等**平滑度即约束**的任务），以违规/jerk 为主指标——但必须把低通 B 作为基线，而 B 目前在 jerk 上更好；接口要赢只能靠 BC 先验质量与约束任务上的 RL 可训性，需要新任务与新训练（≥4 周，风险高）。
 - **路线 C（不推荐）**：继续 TTT 安全壳（神经头级 TTT-I）。结构界对低通同样成立，差异化已不存在；文献坐标（§2）里的空位仍在，但填空的方法不必是导数接口。
+
+### 1.10 路线 A 执行计划（2026-09-06 01:00 锁定）
+
+**统一记号**。所有臂都是策略输出 $u_t$ 与执行指令之间的一阶滤波器 $c_t=\lambda c_{t-1}+s\,u_t$：原版 = 无滤波；低通 α ⇔ $(\lambda,s)=(\alpha,1-\alpha)$，DC 增益 1；「导数接口」 = DC 增益 $s/(1-\lambda)>1$ 且策略重训为输出增量、滤波器状态进观测。图的横轴是 $(\lambda, s)$，第三个离散维度是训练探索噪声 σ 与滤波器状态是否可观测。
+
+**图上的点**（`design_space/POINTS.md`；F 系列 09-06 01:32 启动，`design_space/run_point_chain.sh`）：
+
+| 点 | λ | s | 模式 | σ_train | 状态可观测 | 状态 |
+|---|---|---|---|---|---|---|
+| A | — | — | 原版 | 0.10 | — | 完成 |
+| E5 | — | — | 原版 | 0.03 | — | 完成（匹配预算孪生） |
+| B | 0.8 | 0.2 | 低通 | 0.10 | 否 | 完成 |
+| **F4** | 0.8 | 0.2 | 低通 | **0.03** | 否 | 训练中（B 的匹配预算孪生，无需预训练） |
+| E1/C | 1.0 | 1.0 | 积分 | 0.03 / 0.10 | 是 | 完成 |
+| E3/E4 | 0.9 | 1.0 | 积分 | 0.03 / 0.10 | 是 | 完成 |
+| **F1** | 0.9 | **0.3** | 积分 | 0.03 | 是 | 训练中（P3 界收紧 3.7×，同 λ 的 s 消融；数据集裁剪率 0.8%） |
+| **F2** | **0.7** | 1.0 | 积分 | 0.03 | 是 | 训练中（P1 的粉噪 λ；可训性假说 H3） |
+| **F3** | **0.95** | 0.5 | 积分 | 0.03 | 是 | 训练中（高 λ 中等 s） |
+
+每个积分点：闭环重标注数据集 → 3000 epoch 预训练 → BC 门（≥10%，否则「先验对齐失败」本身作为数据点记录、不微调）→ 200 itr PPO 微调（σ=0.03）。预计每点 14–20 h（服务器共享）。5 训练 seed 复现（E4/E5 seed 43–46）并行进行。
+
+**五个评测轴**（对每个点，冻结部署，3 评测 seed × 100 ep）：
+1. **先验对齐**：BC 起点成功率（itr 0）；数据集裁剪率。
+2. **RL 可训性**：200 itr 终值；崩溃与否；到 80% 的迭代数。
+3. **执行平滑**：无漂移下的 jerk、最大单步变化、执行谱 β̂；与 P1/P3 理论值并列。
+4. **部署鲁棒性**：增益 ×0.7、观测噪声 σ=0.05、延迟 2（P0b 协议）。
+5. **信号与适应**：校准相关（增益可辨识）、延迟 2 下的 ĝ 偏差（延迟可辨识）、下游触发式补偿的恢复量与「估计器被骗」代价、上游适应噪声 σ_ε=0.5 的 jerk/最大单步倍数。
+
+**评测脚本**：现有 `rollout_record.py` 全部适用（F 点只需换 `--run-dir` 与逐点校准 `K`）；新增 `design_space/eval_point.sh`（P0b 漂移网格 + 校准 + 触发式补偿 + 适应噪声，每点约 40 组 rollout）与 `analyze_design_space.py`（五轴雷达/散点图，λ–s 平面着色）。
+
+**主图规格**（论文 Fig. 1）：λ–s 平面，每点一个五角星形（五轴归一化），颜色 = σ_train；等值线为 P1 谱指数 β(λ) 与 P3 界 $(1-\lambda)+s$；A/E5 画在平面外的「无滤波」列。附图：每轴一张 (λ, s) 热图。
+
+**这张图要回答的三个问题**（预注册）：
+- Q1 s 的权衡：固定 λ=0.9，s 从 1.0 降到 0.3，P3 界收紧 3.7×，先验对齐（轴 1）与执行平滑（轴 3）如何交换？预测：BC 起点下降 ≤ 10 pp、最大单步变化下降 ≥ 2×、无漂移成功率持平。
+- Q2 λ 的权衡：固定 s=1，λ 从 0.9 降到 0.7，β̂ 从 ≈2 降到 ≈1（粉噪），RL 可训性（轴 2）是否如 H3 预测改善、鲁棒性（轴 4）是否随等效执行噪声 $s\sigma/\sqrt{1-\lambda^2}$ 下降而变差？
+- Q3 匹配预算下低通 vs 积分：F4 (0.8, 0.2, σ=.03) vs E4 (0.9, 1.0, σ=.03)——去掉训练噪声混杂后，DC 增益 >1 与状态可观测这两项「导数接口」特有设计在五轴上各买到什么？这是 §1.3 kill test 的匹配预算版。
+
+**时间表**：F 系列训练 09-06 → 09-07；评测 09-07 → 09-08；5 seed 链 09-06 → 09-09；图与初稿 09-08 → 09-15；补实验与定稿 → 09-25。目标：CoRL 2027 / RA-L；ICRA 2027 workshop 先投负结果部分（截稿视 CFP）。
 
 ---
 
@@ -484,20 +526,20 @@ K0 在 P0 结束时判定；K1/K2 在 P2 结束时判定；K3 在 P3 结束时�
 
 ## 6. 论文骨架
 
-> **09-05 改写**。§1.8 之后，论文不能再承诺「接口让适应恢复性能」：强原版 A 自己就能恢复，且在无漂移、增益漂移和 P0b 的全部漂移上都强于接口。可以承诺的只有一件事，而且要用最强对照来证明：**当适应信号出错时，接口把执行伤害封在界内**。三个负结果（不提升 RL 微调、不提升零适应鲁棒性、不提升可适应性）作为主张收窄的证据链一并发表。
+> **09-06 改写（路线 A 锁定）**。09-05 版的「伤害上界」主张当晚即被受控过补偿实验（§1.8g）杀死。论文不再围绕任何一个「接口买到 X」的正主张组织，而是围绕**一张图**：一阶动作滤波器 $(\lambda, s)$ 设计空间上五个评测轴的受控实证，以及得到这张图所需的评测协议。三个负结果与积分器 ≡ 低通的等价性是图的注脚而非卖点。
 
 **标题候选**
-1. *Bounded Harm, Not Better Performance: What a Derivative Action Interface Buys for Deployment-Time Adaptation*
-2. *When the Adaptation Signal Is Wrong: Leaky-Integrator Action Interfaces Bound the Damage of Test-Time Adaptation*
-3. *Adapt Upstream, Execute Smoothly: Harm Bounds for Misadaptation via Structured Action Interfaces*
+1. *What Does a Derivative Action Space Buy a Diffusion Policy? A Controlled Map of First-Order Action Filters*
+2. *Integrators Are Low-Pass Filters: Prior Alignment, Trainability, Smoothness, and Robustness Across the (λ, s) Design Space of Action Interfaces*
+3. *Before You Reparameterize the Action Space: A Protocol and a Map for Evaluating Action-Interface Claims*
 
-**摘要草稿**（英，09-05 版）
-> Deployed robot policies must keep adapting, yet every adaptation mechanism—weight updates, gain estimators, steering—will sometimes be wrong: a self-supervised signal misreads a control delay as an actuator loss, a shift is over-estimated, an update is poisoned. We ask what a policy's *action interface* can guarantee when that happens. We route a frozen generative policy's derivative-domain output through a leaky integrator tracked by a low-level controller and adapt only low-dimensional interface parameters. This structure gives (i) a closed-form bound on how far any bounded upstream change can move the executed trajectory, independent of the size of the parameter change, (ii) an implicit trust region in execution space, and (iii) a free, task-coupled residual signal for detecting dynamics shift. We then report what the interface does *not* buy, against the strongest raw baseline we could train: it does not improve RL fine-tuning on quasi-static tasks, does not improve zero-shot robustness to actuator or sensor drift (a raw policy trained with larger exploration noise is far more robust), and does not make residual-driven adaptation more effective (the raw policy recovers 81→99% under a 30% gain loss). What it buys is a *bound on misadaptation harm*: when the same residual estimator is fooled by a two-step control delay and both systems receive the same wrong compensation, the raw policy loses 37–42 success points and doubles its executed jerk, while the interface loses 11–25 points and its jerk is unchanged—the only condition in which the interface outperforms the raw policy in absolute terms. We propose "estimator fooled" as a standard evaluation condition for adaptive policies, release the deployment-shift suite, and give design equations for λ.
+**摘要草稿**（英，09-06 版）
+> Reparameterizing a robot policy's action space—velocities instead of positions, accelerations instead of velocities, or a learned "derivative" command integrated by a low-level controller—is a recurring proposal with recurring claims: smoother execution, easier RL fine-tuning, better robustness, safer adaptation. We show that every such interface is a first-order filter $c_t=\lambda c_{t-1}+s\,u_t$ between the policy and the plant, differing from a plain low-pass filter only in DC gain and in whether the filter state is exposed to the policy, and we map this $(\lambda,s)$ space on a diffusion-policy RL-fine-tuning pipeline (robomimic Square, DPPO) along five axes: prior alignment, RL trainability, execution smoothness, deployment robustness, and self-supervised signal quality. The map is built with a protocol we found necessary to avoid false positives: a matched-exploration-budget twin, the strongest raw baseline we could train, a low-pass null hypothesis, direct mechanistic measurements, and upstream-vs-downstream perturbation injection. On this map the "derivative interface" (high DC gain, observable state) buys a better behavior-cloning prior and spectral shaping of exploration noise—and nothing else: it does not improve fine-tuning, zero-shot drift robustness, or adaptation, because the same spectral shaping that smooths exploration forces training at low exploration noise, and training noise level dominates deployment robustness. A plain low-pass filter is 4× tighter on the execution-space trust region the interface is supposed to provide. We release the map, the protocol, and the drift and misadaptation suites.
 
-**贡献三条（09-05 版）**
-1. 分层动作接口的形式化与界：P1–P3（谱整形、有界传播、执行空间信任域）与 $\lambda$ 设计方程；界与实测（jerk、最大单步变化、最坏 episode 偏差）并列报告。
-2. **误适应伤害**作为部署期适应的一等指标与「估计器被骗」标准条件；在此条件下接口相对最强原版的伤害上界（成功率损失 ~1/3、jerk 增幅 ~1/10），以及低通滤波臂（B）的等价性对照结果（在跑）。
-3. 三个用强对照与直接机理测量确立的负结果：接口不提升准静态任务的 RL 微调、不提升零适应漂移鲁棒性（训练噪声水平主导）、不提升残差驱动适应的有效性；附「积分补偿」假说被补偿比检验推翻的过程。
+**贡献三条（09-06 版）**
+1. **图**：$(\lambda,s)$ × σ_train × 状态可观测性上 9 个训练点的五轴受控测量（≥3 评测 seed；主点 5 训练 seed），与 P1/P3 的理论等值线并列——多数动作空间论文只报告图上一个点且不报告对照。
+2. **协议**：评价动作接口主张的五条对照（匹配预算孪生 / 最强原版 / 滤波器零假设 / 直接机理测量 / 上下游注入），每条附一个本项目中若缺失就会得出错误结论的实例（H7 积分补偿、E5 假阳性、伤害上界、下游补偿从未测试结构）。
+3. **发现**：(a) 训练探索噪声水平主导部署鲁棒性，而高 DC 增益接口结构性地压低可用噪声（P1 的双刃剑）；(b) 泄漏积分 ≡ 高 DC 增益低通，s 在先验对齐与执行空间信任域之间的权衡有闭式表达；(c) 滤波器状态可观测是先验可辨识的必要条件、同时使接口参数无法上游适应（待 §1.8f 重跑确认）；(d) 命令谱颜色决定自监督残差信号对增益与延迟的可辨识性。
 
 **章节**：1 引言 → 2 相关工作（TTA/TTT 基础；机器人部署适应；免权重 steering；接口/残差/约束动作空间）→ 3 方法（§3）→ 4 理论（§4）→ 5 实验（§5）→ 6 讨论（负结果、λ 的选择、与 RoboTTT/DSRL 的组合、驾驶延伸）→ 7 局限。
 
