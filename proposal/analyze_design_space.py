@@ -136,6 +136,46 @@ ax.text(0.0, 0.95, "Design space of first-order action filters\n  c_t = lambda *
         "points: A E5 B E1 E4 measured (3 eval seeds, 1 train seed)\n        F1 F2 F3 F4 = Route-A points, training", fontsize=9, family="monospace", va="top")
 plt.tight_layout(); os.makedirs("figures", exist_ok=True); plt.savefig("figures/DS_map.png", dpi=150); plt.close()
 
+# ---------------------------------------------------------------- H9: executed exploration noise vs trainability / robustness
+def sigma_exec(r, T=400):
+    """Stationary executed exploration std s*sigma/sqrt(1-lam^2); for the pure integrator (lam=1) the
+    random walk never becomes stationary, so use its end-of-episode std s*sigma*sqrt(T) (T = 400 env steps)."""
+    if r["lam"] is None:
+        return np.nan
+    if r["lam"] >= 1.0:
+        return r["s"] * r["sig"] * np.sqrt(T)
+    return r["s"] * r["sig"] / np.sqrt(1 - r["lam"] ** 2)
+
+
+# collapsed arms from the seven-arm study (final success only; no deployment evals)
+EXTRA = {"E3": dict(lam=0.9, s=1.0, sig=0.10, final=12.5, gain07=None), "C": dict(lam=1.0, s=1.0, sig=0.10, final=24.5, gain07=None)}
+H9_PRED = {"F5": (0, 5), "F1": (5, 15), "F2": (25, 40), "F3": (30, 45)}   # pre-registered gain x0.7 ranges (proposal §1.10, 09-06 17:50)
+fig, ax = plt.subplots(1, 2, figsize=(12, 4.4))
+pts = {k: dict(r, sx=sigma_exec(r)) for k, r in table.items()}
+pts.update({k: dict(v, sx=sigma_exec(v), obs=True, bc=None) for k, v in EXTRA.items()})
+for k, r in pts.items():
+    if r["sx"] is None or (isinstance(r["sx"], float) and np.isnan(r["sx"])):
+        continue
+    x = r["sx"]
+    col = "#c0392b" if r["sig"] >= 0.1 else "#2c3e50"
+    mk = "o" if r.get("obs") else ("s" if r["lam"] > 0 else "D")
+    if r.get("final") is not None:
+        ax[0].scatter(x, r["final"], s=90, c=col, marker=mk, zorder=3); ax[0].annotate(k, (x, r["final"]), xytext=(5, 4), textcoords="offset points", fontsize=8)
+    if r.get("gain07") is not None:
+        ax[1].scatter(x, r["gain07"], s=90, c=col, marker=mk, zorder=3); ax[1].annotate(k, (x, r["gain07"]), xytext=(5, 4), textcoords="offset points", fontsize=8)
+    elif k in H9_PRED:
+        lo, hi = H9_PRED[k]
+        ax[1].plot([x, x], [lo, hi], color="#7f8c8d", lw=6, alpha=0.35, solid_capstyle="butt", zorder=2)
+        ax[1].annotate(f"{k} pred.", (x, hi), xytext=(4, 3), textcoords="offset points", fontsize=7.5, color="#7f8c8d")
+for a, ttl, yl in ((ax[0], "H9a  RL trainability vs executed exploration noise", "final success after 200 itr (%)"),
+                   (ax[1], "H9b  gain x0.7 robustness vs executed exploration noise", "frozen success under gain x0.7 (%)")):
+    a.set_xscale("log"); a.set_xlim(0.007, 3.0); a.set_ylim(0, 105); a.set_xlabel("sigma_exec = s*sigma/sqrt(1-lambda^2)   (lambda=1: s*sigma*sqrt(T), T=400)"); a.set_ylabel(yl); a.set_title(ttl, fontsize=9.5)
+    a.axvspan(0.03, 0.10, color="#2ecc71", alpha=0.08)
+fig.text(0.5, 0.005, "red = sigma_train 0.10, dark = 0.03;  o = observable filter state, s = low-pass, D = raw;  grey bars = pre-registered ranges for pending points;  green band = trainability sweet spot",
+         ha="center", fontsize=7.5)
+plt.tight_layout(rect=(0, 0.04, 1, 1)); plt.savefig("figures/DS_h9.png", dpi=150); plt.close()
+print("saved figures/DS_h9.png")
+
 with open("design_space_table.md", "w", encoding="utf-8") as fo:
     fo.write("| point | lam | s | sigma | DC gain | BC | final | no-drift | jerk | max step | gain x0.7 | delay 2 | recover x0.7 | fooled cost | calib corr |\n|" + "---|" * 15 + "\n")
     for k, r in table.items():
