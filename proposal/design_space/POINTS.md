@@ -25,3 +25,7 @@ Five evaluation axes (frozen deploy, 3 eval seeds � 100 ep unless noted):
 
 BC-gate readings (09-06 07:40, seed 42, 200 ep): F1 58.5, F2 54.0, F3 59.5 (E4 49.0, E1 43.5, A/E5 38.0, B/F4 23.5 stock prior).
 Smaller s -> better prior (label range utilization), opposite to the pre-registered Q1 direction.
+
+| **F6** | 0.9 | 0.3 | integrate | **0.07** | yes | **train** (09-07 02:56) | F1's prior fine-tuned at sigma .07 (sigma_exec .048): candidate recommended configuration |
+
+Finals: F1 94.0, F2 98.0, F3 99.0, F4 77.5. Gain x0.7 frozen: F1 15.0, F2 38.7, F3 45.7, F4 1.0 (H9 ranges hit 3/3; E4/E5 below trend).
