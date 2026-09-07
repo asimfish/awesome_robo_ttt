@@ -1968,9 +1968,11 @@ s 排：s=.2 F5 73、s=.3 F1 75、s=.5 F3 84、s=1.0 E4 87/F2
 <p><strong>H9 残差：训练 seed 方差已排除，E5 可由噪声颜色解释，E4
 仍是唯一异常点</strong>（09-07 19:00）。seed 43/44 的 E4/E5 checkpoint
 在 ×0.7 下的冻结评测（<code>run_seed_robust.sh</code>）：E4 seed 43 →
-26.7、seed 44 → 33.7（seed 42：28.3；三 seed 均值 29.6 ± 3.7）；E5 seed
-43 → 8.7、seed 44 → 3.3（seed 42：3.7；均值 5.2 ±
-3.0）。两臂的偏低<strong>跨训练 seed 稳定</strong>，不是运气。</p>
+26.7、seed 44 → 33.7、seed 45 → 13.3（seed 42：28.3；四 seed 均值
+<strong>25.5 ± 8.6</strong>）；E5 seed 43 → 8.7、seed 44 → 3.3、seed 45
+→ 1.3（seed 42：3.7；均值 <strong>4.2 ±
+3.1</strong>）。两臂的偏低<strong>跨训练 seed
+稳定</strong>，不是运气。</p>
 <p>接着检验噪声<strong>颜色</strong>：σ_exec 是稳态
 std，但对策略有意义的扰动是<strong>一个动作块（4
 步）内累积的位移误差</strong>——白噪声（原版）4 步只累积 <span class="math inline">\(2\sigma\)</span>，红噪声（λ=0.8–0.95）4
