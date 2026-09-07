@@ -46,7 +46,7 @@
   "sig": 0.07,
   "obs": true,
   "bc": 58.5,
-  "final": null,
+  "final": 99.5,
   "frozen": "ds_F6_frozen_{c}_s{s}",
   "trig": "ds_F6_trig_{c}_s{s}",
   "calib": "ds_F6_calib"
