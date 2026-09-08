@@ -1971,11 +1971,10 @@ s 排：s=.2 F5 73、s=.3 F1 75、s=.5 F3 84、s=1.0 E4 87/F2
 的第二个子轴，不再合并进「鲁棒性」。</p>
 <p><strong>H9 残差：训练 seed 方差已排除，E5 可由噪声颜色解释，E4
 仍是唯一异常点</strong>（09-07 19:00）。seed 43/44 的 E4/E5 checkpoint
-在 ×0.7 下的冻结评测（<code>run_seed_robust.sh</code>）：E4 seed 43 →
-26.7、seed 44 → 33.7、seed 45 → 13.3（seed 42：28.3；四 seed 均值
-<strong>25.5 ± 8.6</strong>）；E5 seed 43 → 8.7、seed 44 → 3.3、seed 45
-→ 1.3（seed 42：3.7；均值 <strong>4.2 ±
-3.1</strong>）。两臂的偏低<strong>跨训练 seed
+在 ×0.7 下的冻结评测（<code>run_seed_robust.sh</code>）：E4 seed 43–46 →
+26.7 / 33.7 / 13.3 / 27.7（seed 42：28.3；五 seed 均值 <strong>25.9 ±
+7.5</strong>）；E5 → 8.7 / 3.3 / 1.3 / 4.7（seed 42：3.7；均值
+<strong>4.3 ± 2.7</strong>）。两臂的偏低<strong>跨训练 seed
 稳定</strong>，不是运气。</p>
 <p>接着检验噪声<strong>颜色</strong>：σ_exec 是稳态
 std，但对策略有意义的扰动是<strong>一个动作块（4
@@ -2136,11 +2135,10 @@ B；<strong>低于趋势</strong>）、延迟 2 86.7、最大单步 0.29、jerk
 <p><strong>5 训练 seed 复现完成（09-08 14:12）</strong>：E4 = 95.0 /
 98.0 / 77.5 / 97.0 / 95.0（<strong>92.5 ± 8.5</strong>），E5 = 93.0 /
 92.5 / 90.5 / 91.0 / 93.5（<strong>92.1 ±
-1.3</strong>）。终值均值持平、方差差 6.5 倍；增益 ×0.7 鲁棒性四个
-seed（seed 46 评测中）E4 25.5 ± 8.6 vs E5 4.2 ± 3.1——两者都稳定低于 H9
-趋势线，且 F7（另一个可观测状态 + 大 σ 的点）也低于趋势（28.7 vs B
-41）。<strong>轴 4 的第二因子有了新候选</strong>：可观测状态的策略依赖
-<span class="math inline">\(c\)</span>，增益漂移下 <span class="math inline">\((c, \text{eef})\)</span>
+1.3</strong>）。终值均值持平、方差差 6.5 倍；增益 ×0.7 鲁棒性五个 seed
+E4 25.9 ± 7.5 vs E5 4.3 ± 2.7——两者都稳定低于 H9 趋势线，且
+F7（另一个可观测状态 + 大 σ 的点）也低于趋势（28.7 vs B 41）。<strong>轴
+4 的第二因子有了新候选</strong>：可观测状态的策略依赖 <span class="math inline">\(c\)</span>，增益漂移下 <span class="math inline">\((c, \text{eef})\)</span>
 的一致性被破坏，属分布外——这在 obs_cmd 点里应普遍成立，但 F2/F3/F6
 在趋势上、E4/F7 在趋势下，还差一个能区分它们的变量（候选：|u|
 的相对幅度——E4 0.09、F2 0.10 极小，F7 0.40
