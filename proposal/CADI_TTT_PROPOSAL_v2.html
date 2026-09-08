@@ -2200,6 +2200,43 @@ pp，则「接口让补偿可用」的主张死，接口的价值只能在伤害
 依赖指令自相关 <span class="math inline">\(\rho(1)\)</span>——这既解释了
 v1 lag 扫描的误判，也说明 <span class="math inline">\(\hat g\)</span>
 的名义映射必须逐策略校准（<code>calib_K.py</code>）。</p>
+<h3 id="论文初稿-v0.1-v0.2-与-iclr-口径审稿2026-09-08">1.11 论文初稿
+v0.1 → v0.2 与 ICLR 口径审稿（2026-09-08）</h3>
+<p><strong>初稿</strong>：<code>paper/main.tex</code>（IEEEtran，8
+页）。<strong>审稿</strong>（子
+agent，只评故事不评实验规模，<code>paper/REVIEW_iclr_story_v0.1.md</code>）：故事分
+<strong>5/10</strong>（ICLR 主会边缘以下），按建议重构后预期
+6–7。核心意见：<strong>论文的真命题已在公式里但从未说出</strong>——把重标注
+<span class="math inline">\(u_t=(a_t-\lambda c_{t-1})/s\)</span> 代回
+<span class="math inline">\(c_t=\lambda c_{t-1}+s u_t\)</span> 得 <span class="math inline">\(c_t=a_t\)</span>（不触发裁剪时恒等）。状态可观测的导数接口是位置策略的<strong>精确重参数化</strong>（条件于上一步指令、目标按
+<span class="math inline">\(1/s\)</span>
+缩放），对意图是恒等映射，只对加在 <span class="math inline">\(u\)</span>
+上的扰动（探索噪声、模型误差、适应修正）做滤波。全部实测现象都是它的推论：先验提升
+= 上一步指令条件 + 目标归一化；「白化」= 示教按 λ 预白化（闭式 lag-1
+自相关 <span class="math inline">\((\phi-\lambda)(1-\lambda\phi)/(1+\lambda^2-2\lambda\phi)\)</span>）；上游修正被当作扰动抵消；<strong>平滑意图与可训练的导数先验互斥</strong>。</p>
+<p><strong>三处事实错误（已在 v0.2 修正）</strong>：摘要的
+ρ=0.92「十点」实为去掉 E4 的九点（十点 0.76）；贡献 3(a) 与 §VI-D 就 E4
+脆弱性是否被解释自相矛盾；「不比示教更平滑」未测示教谱。<strong>补测</strong>（数据集，零
+rollout）：示教位置指令 φ=0.91、β=1.93、jerk 0.107；重标注标签 ac1
+在训练前已是 −0.08（λ=.9）/ +0.35（λ=.7，预测 0.354）/ −0.14（λ=.95）/
++0.24（λ=.8），微调后策略复现之——「不是 RL
+学出来的」有了直接证据；可观测接口的执行 jerk 0.07–0.13 ≈ 示教
+0.107，原版 0.16–0.18
+比示教更抖（模型误差未滤），只有不可观测低通（0.03）平滑了意图本身。</p>
+<p><strong>v0.2 已做</strong>：命题 1（恒等式）+ 四条推论进入
+§III；摘要/贡献/§VI-C/§VI-D
+按实测改写；「谱指数」改为带限拟合并给出转折频率。<strong>未做（需决定）</strong>：按审稿
+§5 的 ICLR 版重构——标题改为陈述式（<em>The Policy Inverts the Filter:
+Derivative Action Spaces Reshape Exploration, Not
+Behaviour</em>），结果按「意图通道 vs
+扰动通道」而非五轴组织，协议与自我修正史压入附录，相关工作补动作空间/平滑正则/有色探索/噪声注入/因果混淆/残差修正六条线。</p>
+<p><strong>补的逻辑缺口实验（09-08 21:05 启动，仅 BC）</strong>：λ=0 处
+2×2 角点——C1 (0,1) 无 obs（重训本身）、C2
+(0,1)+obs（上一步指令条件）、C3 (0,0.6) 无 obs（目标缩放，裁剪
+2.7%）、C4 (0,0.6)+obs（两者）。预注册：若 C2 ≈ F 系列（≈55–60）而 C1 ≈
+原版（38），先验提升归于条件；若 C3 明显高于 C1，缩放独立起作用；C4
+应最高。审稿建议的另两个检验待排：BC 期 c_{t-1} 随机丢弃（检验 E4/F7 的
+copycat 型因果混淆）、改变动作块长度 H（检验块尺度噪声机制）。</p>
 <hr />
 <h2 id="重新定位问题与文献坐标">2. 重新定位：问题与文献坐标</h2>
 <h3 id="问题陈述">2.1 问题陈述</h3>
