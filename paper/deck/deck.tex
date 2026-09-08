@@ -26,10 +26,10 @@
 \newcommand{\sexec}{\sigma_{\mathrm{exec}}}
 \newcommand{\schunk}{\sigma_{\mathrm{chunk}}}
 
-\title[The Policy Inverts the Filter]{The Policy Inverts the Filter}
-\subtitle{导数动作空间重塑的是探索，不是行为：故事、问题、形式化与实验计划}
+\title[What an Action Interface Can Change]{What an Action Interface Can Change}
+\subtitle{一个恒等式、一个噪声汇率、一个条件代价：故事、问题、形式化与实验计划}
 \author{项目汇报 · 2026-09-08}
-\date{论文初稿 v0.3（ICLR 形态）· \texttt{awesome\_robo\_ttt/paper}}
+\date{论文初稿 v0.4（ICLR 形态）· \texttt{awesome\_robo\_ttt/paper}}
 
 \begin{document}
 
@@ -39,31 +39,29 @@
 
 \begin{frame}{一句话}
 \begin{block}{论点}
-所有「导数 / 速度 / 低通」动作接口都是策略与执行器之间的同一族一阶滤波器
-\[
-c_t=\lambda\,c_{t-1}+s\,u_t .
-\]
-只要策略能看见滤波器状态 $c_{t-1}$（导数标签可辨识的必要条件），接口就是位置策略的\hl{精确重参数化}：
-它不能改变意图轨迹，只能改变\textbf{加在输出上的扰动}（探索噪声、模型误差、适应修正）如何到达执行器。
+所有「导数 / 速度 / 低通」动作接口都是同一族一阶滤波器 $c_t=\lambda\,c_{t-1}+s\,u_t$。
+只要策略能看见滤波器状态（导数标签可辨识的必要条件），接口就是位置策略的\hl{精确换坐标}，改不了意图轨迹。
+于是接口能改的只剩\textbf{三件事}，图给每一件定价：
 \end{block}
-\vspace{2mm}
+\vspace{1mm}
 \begin{columns}[T]
-\column{0.48\textwidth}
-\textbf{于是被反复宣称的收益变成：}
-\begin{itemize}
-\item 更好的 BC 先验：\hl{成立}，但来自「条件于上一步指令 + 目标归一化」
-\item 有色探索噪声：\hl{成立}（双刃剑）
-\item 更平滑的执行：\ba{只对扰动成立}，意图不变
-\item 更易微调 / 更鲁棒：\ba{由执行端探索噪声决定}，与结构无关
-\item 更安全的适应位点：\ba{不存在}（上游修正被策略抵消）
-\end{itemize}
-\column{0.48\textwidth}
-\textbf{证据}：12 个训练配置、5 个评测轴、每格 3 评测 seed、主臂 5 训练 seed；
-以及一套让我们自己的先导实验\ba{三次得出相反结论}的评价协议。
-\vspace{2mm}
-
-\textbf{形态}：负结果 + 设计指南（ICLR 分析型论文）。
+\column{0.33\textwidth}
+\textbf{1. 目标缩放 $s$}\\
+决定导数标签相对生成模型输出噪声底的信噪比 $\Rightarrow$ 先验。\\
+$s$: 1 $\to$ 0.3，先验 49 $\to$ \hl{58.5}。
+\column{0.33\textwidth}
+\textbf{2. 噪声汇率}\\
+策略侧 $\sigma$ $\to$ 一个决策周期内执行器看见的位移 $\schunk$。\\
+可训性与\textbf{增益漂移}鲁棒性沿\hl{同一条曲线}（原版、低通、导数）。\\
+\ba{必须匹配 $\schunk$ 再比}：匹配 $\sigma$ 曾虚报 +25–37 pp。
+\column{0.33\textwidth}
+\textbf{3. 条件于上一步指令}\\
+抬先验 +11–21 pp；\\
+同 $\schunk$ 下\ba{损}增益漂移鲁棒性：0.035 处 0、0.12 处 12、0.18–0.26 处 30–53 pp。\\
+平滑意图与可训练导数先验\textbf{互斥}。
 \end{columns}
+\vspace{2mm}
+\small \textbf{证据}：12 个训练配置 + 2 个崩溃先导点、5 个评测轴、每格 3 评测 seed、主臂 5 训练 seed；预注册 6 项中 4 中 1 贴边 1 失手（失手的正是条件代价）。
 \end{frame}
 
 \begin{frame}{问题：动作接口的主张为什么难比较}
@@ -234,69 +232,86 @@ $\lambda$ & 数据集标签 ac$_1$ & AR(1) 预测 & 微调后策略 \\
 \end{columns}
 \end{frame}
 
-\begin{frame}{结果 II：扰动通道，可训性与鲁棒性由执行端噪声决定}
+\begin{frame}{结果 II：噪声汇率，两类点、一条曲线}
 \begin{columns}[T]
 \column{0.58\textwidth}
-\includegraphics[width=\textwidth]{../figures/DS_h9.png}
+\includegraphics[width=\textwidth]{../figures/DS_h9_chunk.png}
 \column{0.42\textwidth}
 \begin{itemize}
-\item \textbf{可训性倒 U}：$\sexec\in[0.02,0.10]$ 时 94--99.5\%；低通 $\sigma$=.03（0.010）77.5\%；导数接口 $\sigma$=.10（0.23）崩溃
-\item \textbf{鲁棒性单调}：Spearman 0.76（10 点）/ \hl{0.92}（去 E4 的 9 点）
-\item 块尺度解释了原版 $\sigma$=.03 为何与低通一样脆（3.7\% vs 1--4\%）：白噪声一个块内只累积 0.06，策略看不见
-\item \ba{匹配执行噪声时没有接口赢过原版}；先导实验里的 +25 pp 是两个都在曲线之下的点之差
-\item 训练 seed：接口 92.5$\pm$8.5 vs 原版 92.1$\pm$1.3（终值）；鲁棒性 25.9$\pm$7.5 vs 4.3$\pm$2.7
+\item \textbf{可训性是平台}：$\schunk\in[0.035,0.26]$ 且先验 $\ge$38 时 92–99.5\%；低边由先验决定（F4 77.5 vs F5 94，同噪声）；高边崩溃（$\schunk\approx0.9$：12.5\%）
+\item \textbf{增益漂移鲁棒性随 $\schunk$ 上升}：Spearman 0.74（11 点）/ 0.90（去 E4）；原版、低通、导数共用上升段（1.0, 4.0, 3.7, 12, 41, 39）
+\item 块尺度修正了稳态噪声排错的两对：原版 $\sigma$=.03 一个块只累积 0.06，与低通 $\sigma$=.03 一样脆
+\item \ba{延迟鲁棒性不随 $\schunk$}（训练噪声扰动的是位移不是时序），作为陈述性负结果
 \end{itemize}
 \end{columns}
 \end{frame}
 
-\begin{frame}{结果 III：适应位点与残差}
+\begin{frame}{结果 III：条件代价与适应位点}
 \begin{columns}[T]
-\column{0.55\textwidth}
-\includegraphics[width=\textwidth]{../figures/P1_upstream.png}
-\column{0.45\textwidth}
-\textbf{修正装在哪一侧决定一切}
+\column{0.5\textwidth}
+\textbf{同 $\schunk$ 下，看见滤波器状态要付鲁棒性}
+\begin{center}\small
+\begin{tabular}{lccc}
+\toprule
+点 & $\schunk$ & ×0.7 & 相对不可观测参照 \\
+\midrule
+F5 & 0.035 & 4.0 & +3 \\
+F1 & 0.078 & 12.0 & $-$6 \\
+\textbf{F7 vs B} & 0.117 & 28.7 vs 41.0 & \ba{$-$12} \\
+F2 & 0.138 & 38.7 & $-$15 \\
+F6 & 0.181 & 38.3 & $-$35 \\
+F3 & 0.186 & 45.7 & $-$30 \\
+E4 & 0.258 & 28.3 & \ba{$-$53} \\
+\bottomrule
+\end{tabular}
+\end{center}
+\small 7 个可观测点 6 个为负，均值 $-$21，随噪声增大；跨 5 训练 seed 稳定。已排除先验质量、噪声尺度/颜色。工作假说：条件于自身指令历史的 copycat 型因果混淆，增益漂移恰好打断这条捷径。\textbf{当前可观测与重训先验完全混杂}——决定性实验 R1 在跑。
+\column{0.5\textwidth}
+\textbf{修正装在哪一侧决定滤波器是否保护它}
 \begin{itemize}
-\item 下游（执行指令）：同一估计器恢复所有臂（原版 81$\to$99、接口 28$\to$91、低通 41$\to$97），测的是策略，不是接口
-\item 上游（策略输出，事实 1 适用）：低通 92--93\% 与下游等效，适应噪声 jerk $\times$1.40 vs 下游 $\times$6.11，\hl{界是真的}
-\item 可观测接口上游：\ba{27--36\%}（下游 87--91），且更抖 $\times$1.7--2.3：策略把缩放当扰动纠正（推论 iii）
-\item 受保护的适应位点对可观测接口\ba{不存在}
+\item 下游（执行指令）：同一估计器恢复所有臂（原版 81$\to$99、接口 28$\to$91、低通 41$\to$97）——测的是策略
+\item 上游（策略输出，事实 1 适用）：低通 92–93\% 与下游等效，适应噪声 jerk $\times$1.40 vs 下游 $\times$6.11
+\item 可观测接口上游：\ba{27–36\%}（下游 87–91），且更抖 $\times$1.7–2.3：策略把缩放当扰动纠正（推论 iii）
+\item 受保护的上游适应位点对可观测接口不存在
 \end{itemize}
-\textbf{残差}：E4、F7 稳定低于噪声趋势（5 训练 seed）；已排除先验质量、seed、噪声尺度与颜色；工作假说：条件于自身指令历史的 copycat 型因果混淆，增益漂移恰好打断这条捷径。
+\vspace{1mm}
+\includegraphics[width=\textwidth]{../figures/P1_upstream.png}
 \end{columns}
 \end{frame}
 
 \begin{frame}{对动作空间设计的五条规则}
 \begin{enumerate}
-\item \textbf{匹配执行端噪声 $\schunk$，不是 $\sigma$。} 同 $\sigma$ 的比较是不等探索预算的比较。
-\item \textbf{平滑意图与导数先验二选一。} 不可观测滤波器平滑意图但标签不可辨识；可观测滤波器可训练但只平滑扰动。平滑主张要在确定性 rollout 上与同界低通比。
-\item \textbf{归一化导数目标。} $s$ 决定标签相对生成模型输出噪声底的信噪比；归一化单位下 $s=1$ 是原接口最坏的一个选择。
-\item \textbf{预期指令条件带来的漂移惩罚}，用历史丢弃检验。
-\item \textbf{不要指望策略看得见滤波器时还有受保护的上游适应位点。}
+\item \textbf{匹配执行端噪声 $\schunk$，不是 $\sigma$。} 同 $\sigma$ 的比较是不等探索预算的比较（曾虚报 25–37 pp）。
+\item \textbf{平滑意图与导数先验二选一。} 不可观测滤波器平滑意图但标签不可辨识；可观测滤波器可训练但只平滑扰动。平滑主张在确定性 rollout 上与同界低通比。
+\item \textbf{归一化导数目标。} $s$ 决定标签信噪比；归一化单位下 $s=1$ 是原接口最坏的选择。
+\item \textbf{给上一步指令定价。} 条件于 $c_{t-1}$ 抬先验、随执行噪声增大而损增益漂移鲁棒性；用 BC 期隐藏状态检验。
+\item \textbf{要么下游适应，要么不适应。} 策略看得见滤波器时上游位点被抵消。
 \end{enumerate}
-\begin{block}{把规则 1、3 用在原接口上：F6 $=(0.9,0.3)$ @ $\sigma$=0.07}
-先验 +9.5 pp、终值 99.5、增益鲁棒 +10、观测噪声鲁棒 +11、最大单步 0.33 vs 0.79、被骗代价 +2 vs $-$11：除延迟外每个轴都优于原接口；
-但零适应鲁棒性仍 38 vs 原版 81，正如规则 1 所预测。
+\begin{block}{规则 1、3 用在原接口上：F6 $=(0.9,0.3)$ @ $\sigma$=0.07}
+先验 +9.5、终值 99.5、增益鲁棒 +10、最大单步 0.33 vs 0.79、被骗代价 +2 vs $-$11；\ba{延迟鲁棒性 $-$20}（67 vs 87）。\\
+与 A 几乎同 $\schunk$（0.18 vs 0.20）却落后 43 pp（增益）与 24 pp（延迟）——这个差就是条件代价。
 \end{block}
 \end{frame}
 
 \begin{frame}{准备跑 / 在跑的实验}
-\begin{tabular}{p{0.34\textwidth} p{0.40\textwidth} p{0.18\textwidth}}
+\begin{tabular}{p{0.36\textwidth} p{0.40\textwidth} p{0.16\textwidth}}
 \toprule
 \textbf{实验} & \textbf{回答什么 / 预注册预测} & \textbf{状态} \\
 \midrule
-$\lambda=0$ 角点 2$\times$2：$(0,1)$、$(0,0.6)$ $\times$ \{可观测, 不可观测\}（仅 BC） & 先验提升分解：条件于 $c_{t-1}$ 占大头，缩放次之，仅重训 $\approx$ 原版 38 & \hl{在跑}（4 GPU，约 8 h） \\
-BC 期历史丢弃（可观测点） & copycat 假说：E4 / F7 应回到 $\schunk$ 趋势线 & 待启动，约 1 天 \\
-块长 $H\in\{1,4,8\}$，固定 $\sexec$ & $\schunk$ 的坍缩应变紧、$\sexec$ 的不变 & 待启动，约 2 天 \\
-$\schunk$ 匹配的原版孪生 & 补上先导实验没做的那一组对照 & 待启动，约 1 天 \\
-第二任务 robomimic Transport & 恒等式推论与噪声中介是否与任务无关 & 待启动，约 1 周 \\
-主要点 5 训练 seed（现仅 E4 / E5） & 轴 3--5 的 seed 方差 & 视算力 \\
+\textbf{R1} 原版 + 观测里加 $c_{t-1}$，$\sigma$=.10（$\schunk$=0.20 = A） & \textbf{决定性}：条件代价假说 $\Rightarrow$ ×0.7 从 81 掉向 40；重训假说 $\Rightarrow$ 留在 81 & \hl{在跑}（等 C2 先验） \\
+R0 同上但不观测（重训对照） & 排除「重训本身」 & \hl{在跑} \\
+R2 原版 $\sigma$=.13（$\schunk$=0.26 = E4） & 不可观测曲线顶端；E4 的 $\schunk$ 匹配孪生；预测 $\ge$75 & \hl{在跑} \\
+R3 低通 (0.8,0.2) $\sigma$=.17（$\schunk$=0.20 = A） & 不可观测曲线顶端第二点；预测 $\ge$75 & \hl{在跑} \\
+$\lambda=0$ 角点 2$\times$2（仅 BC） & 先验提升分解：条件 / 缩放 / 重训 & \hl{在跑}，今晨 \\
+块长 $H\in\{1,4,8\}$，固定 $\sexec$ & $\schunk$ 的排序应变紧、$\sexec$ 的不变 & 待启动 \\
+BC 期历史丢弃 & 条件代价若是因果混淆应缩小 & 待启动 \\
+第二任务 Transport & 三量分解是否与任务无关 & 待启动，约 1 周 \\
 \bottomrule
 \end{tabular}
-\vspace{3mm}
+\vspace{2mm}
 
-\textbf{论文侧}：相关工作已按六条线补入；图的论文级排版（同坐标点标签）；附录含自我修正案例研究与估计器细节。
-
-\textbf{时间}：角点结果明早；第二任务决定是否在本轮投稿内，这是投稿前最大的一个决定。
+\textbf{论文侧}：v0.4 已按三量分解重写（ICLR 格式 12 页）；预注册表进附录；相关工作六条线；可观测惩罚升为第三贡献。\\
+\textbf{时间}：R 系列明日出；第二任务是否纳入本轮投稿待定。
 \end{frame}
 
 \begin{frame}{局限与结论}
@@ -305,22 +320,22 @@ $\schunk$ 匹配的原版孪生 & 补上先导实验没做的那一组对照 & �
 \textbf{局限}
 \begin{itemize}
 \item 一个任务（准静态插入）、一个仿真器、一个 RL 算法、低维观测
-\item 多数点单训练 seed（主臂 5 个）
-\item E4 / F7 低于趋势的残差已刻画、未解决
+\item 多数点单训练 seed（主臂 5 个）；鲁棒性主张限定为执行器增益漂移
+\item 可观测与重训先验目前混杂，R1 分离之
 \item 平滑度是硬约束的任务（液体、易碎接触）可能给滤波接口不同的回报；由推论 (iv)，候选是不可观测低通而非导数接口
 \end{itemize}
 \column{0.5\textwidth}
 \textbf{结论}
 \begin{itemize}
 \item 导数 / 速度 / 低通接口是同一族一阶滤波器
-\item 策略看得见滤波器状态时，接口是位置策略的精确换坐标：\hl{重塑探索与适应噪声，不重塑行为}
-\item 它买到的：更好的先验（条件 + 归一化）、有色探索
-\item 它没买到的：意图平滑、微调、零适应鲁棒、受保护的适应
+\item 策略看得见滤波器状态时，接口是位置策略的精确换坐标，能改的只剩三件事：目标缩放、噪声汇率、条件于上一步指令
+\item 图给三件事定价：先验 +11–21 pp；一条所有接口共用的鲁棒性曲线（按 $\schunk$）；高噪声下 12–53 pp 的条件代价
+\item 平滑意图与可训练导数先验互斥
 \item 图 + 恒等式 + 四条对照，让下一个动作空间提案更便宜地被检验、更难被高估
 \end{itemize}
 \end{columns}
 \vspace{2mm}
-\centering\small 稿件：\texttt{paper/main.pdf}（ICLR 2027 格式，11 页含附录）· 证据链：\texttt{proposal/CADI\_TTT\_PROPOSAL\_v2.md} §1.5--1.11 · 审稿：\texttt{paper/REVIEW\_iclr\_story\_v0.1.md}
+\centering\small 稿件：\texttt{paper/main.pdf}（ICLR 2027 格式，v0.4，12 页含附录）· 证据链：\texttt{proposal/CADI\_TTT\_PROPOSAL\_v2.md} §1.5--1.11 · 审稿：\texttt{paper/REVIEW\_iclr\_story\_v0.1.md}
 \end{frame}
 
 \end{document}

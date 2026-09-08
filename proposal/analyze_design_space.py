@@ -176,6 +176,80 @@ fig.text(0.5, 0.005, "red = sigma_train 0.10, dark = 0.03;  o = observable filte
 plt.tight_layout(rect=(0, 0.04, 1, 1)); plt.savefig("figures/DS_h9.png", dpi=150); plt.close()
 print("saved figures/DS_h9.png")
 
+# ---------------------------------------------------------------- review round 1: sigma_chunk view, observability penalty, pre-registration table
+H = 4
+
+
+def sigma_chunk(r):
+    lam, s, sig = r["lam"], r["s"], r["sig"]
+    if lam is None:
+        return np.nan
+    if lam >= 1.0:
+        return s * sig * np.sqrt(sum((H - k) ** 2 for k in range(H)))  # random-walk positions summed over the chunk
+    se = s * sig / np.sqrt(1 - lam ** 2)
+    return se * np.sqrt(sum(lam ** abs(i - j) for i in range(H) for j in range(H)))
+
+
+PILOT = {"E3": dict(lam=0.9, s=1.0, sig=0.10, obs=True, final=12.5), "C": dict(lam=1.0, s=1.0, sig=0.10, obs=True, final=24.5)}
+PREREG = [  # (point, sigma_exec, predicted range for gain x0.7, source)
+    ("F1", 0.021, (5, 15), "H9, 09-06 17:50"), ("F2", 0.042, (25, 40), "H9"), ("F3", 0.048, (30, 45), "H9"),
+    ("F5", 0.010, (0, 5), "H9-only vs H10 8-15"), ("F6", 0.048, (30, 45), "H9-only vs H10 >=50"), ("F7", 0.033, (36, 46), "H9: ~B (41)"),
+]
+rows = {k: dict(r, sc=sigma_chunk(r)) for k, r in table.items() if r["lam"] is not None}
+stat = {k: v for k, v in rows.items() if v["lam"] < 1.0 and v["gain07"] is not None}
+xs = np.array([v["sc"] for v in stat.values()]); ys = np.array([v["gain07"] for v in stat.values()]); obs = np.array([v["obs"] for v in stat.values()])
+names = list(stat.keys())
+def spearman(a, b):
+    ra = np.argsort(np.argsort(a)); rb = np.argsort(np.argsort(b)); return float(np.corrcoef(ra, rb)[0, 1])
+print("\n== review-1 analysis: gain x0.7 vs sigma_chunk (stationary points) ==")
+print(f"n={len(names)}  Spearman(sigma_chunk)={spearman(xs, ys):.3f}   without E4: {spearman(xs[[n != 'E4' for n in names]], ys[[n != 'E4' for n in names]]):.3f}")
+# unobservable reference curve: monotone (isotonic-like) fit through unobservable points in log sigma_chunk, then residuals of observable points
+unobs = [(v["sc"], v["gain07"]) for v in stat.values() if not v["obs"]]; unobs.sort()
+ux = np.log(np.array([u[0] for u in unobs])); uy = np.array([u[1] for u in unobs])
+def ref(x):
+    lx = np.log(x)
+    return float(np.interp(lx, ux, uy, left=uy[0], right=uy[-1]))
+print("unobservable reference (sigma_chunk -> gain0.7):", [(round(float(np.exp(a)), 3), b) for a, b in zip(ux, uy)])
+res_o, res_u = [], []
+for k, v in stat.items():
+    r_ = v["gain07"] - ref(v["sc"])
+    (res_o if v["obs"] else res_u).append((k, round(v["sc"], 3), v["gain07"], round(r_, 1)))
+    if v["obs"]:
+        print(f"  {k:<3} obs  sigma_chunk {v['sc']:.3f}  gain0.7 {v['gain07']:5.1f}  ref {ref(v['sc']):5.1f}  residual {r_:+6.1f}")
+# rank-sum (Mann-Whitney U) of observable residuals vs unobservable residuals (the latter are 0 by construction at their own points,
+# so test observable residuals against 0 with a sign test as well)
+ro = np.array([r[3] for r in res_o]); 
+neg = int(np.sum(ro < 0)); print(f"observable residuals: {ro.tolist()}  ({neg}/{len(ro)} negative; mean {ro.mean():+.1f})")
+from math import comb
+p_sign = sum(comb(len(ro), k) for k in range(neg, len(ro) + 1)) / 2 ** len(ro)
+print(f"one-sided sign test P(>= {neg} of {len(ro)} negative | fair) = {p_sign:.3f}")
+print("\n== pre-registration table (gain x0.7) ==")
+for pt, se, (lo, hi), src in PREREG:
+    ob = table.get(pt, {}).get("gain07")
+    hit = "hit" if ob is not None and lo <= ob <= hi else ("edge" if ob is not None and min(abs(ob - lo), abs(ob - hi)) <= 1.0 else "MISS")
+    print(f"  {pt}: predicted [{lo},{hi}] ({src})  observed {ob}  -> {hit}")
+
+# figure: gain x0.7 and final vs sigma_chunk, observability marked, unobservable reference curve
+fig, ax = plt.subplots(1, 2, figsize=(12, 4.4))
+for k, v in rows.items():
+    if np.isnan(v["sc"]):
+        continue
+    col = "#c0392b" if v["obs"] else "#2c3e50"; mk = "o" if v["obs"] else "s"
+    if v.get("final") is not None:
+        ax[0].scatter(v["sc"], v["final"], s=90, c=col, marker=mk, zorder=3); ax[0].annotate(k, (v["sc"], v["final"]), xytext=(5, 4), textcoords="offset points", fontsize=8)
+    if v.get("gain07") is not None:
+        ax[1].scatter(v["sc"], v["gain07"], s=90, c=col, marker=mk, zorder=3); ax[1].annotate(k, (v["sc"], v["gain07"]), xytext=(5, 4), textcoords="offset points", fontsize=8)
+for k, v in PILOT.items():
+    sc = sigma_chunk(v); ax[0].scatter(sc, v["final"], s=90, c="#c0392b", marker="o", zorder=3); ax[0].annotate(f"{k} (pilot)", (sc, v["final"]), xytext=(5, 4), textcoords="offset points", fontsize=8)
+gx = np.exp(np.linspace(ux.min(), ux.max(), 50)); ax[1].plot(gx, [ref(x) for x in gx], color="#2c3e50", lw=1.2, ls="--", label="unobservable-state reference (interp.)")
+for a, ttl, yl in ((ax[0], "Trainability vs executed chunk-scale noise", "final success after 200 itr (%)"), (ax[1], "Gain x0.7 robustness vs executed chunk-scale noise", "frozen success under gain x0.7 (%)")):
+    a.set_xscale("log"); a.set_xlim(0.025, 3.0); a.set_ylim(0, 105); a.set_xlabel("sigma_chunk (executed displacement noise within one H=4 chunk)"); a.set_ylabel(yl); a.set_title(ttl, fontsize=9.5)
+ax[1].legend(fontsize=7.5, loc="upper left")
+fig.text(0.5, 0.005, "red circle = policy observes the filter state; dark square = it does not (raw, low-pass);  the vertical gap between the two classes at equal sigma_chunk is the observability penalty",
+         ha="center", fontsize=7.5)
+plt.tight_layout(rect=(0, 0.04, 1, 1)); plt.savefig("figures/DS_h9_chunk.png", dpi=150); plt.close()
+print("saved figures/DS_h9_chunk.png")
+
 with open("design_space_table.md", "w", encoding="utf-8") as fo:
     fo.write("| point | lam | s | sigma | DC gain | BC | final | no-drift | jerk | max step | gain x0.7 | delay 2 | recover x0.7 | fooled cost | calib corr |\n|" + "---|" * 15 + "\n")
     for k, r in table.items():
