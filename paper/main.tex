@@ -1,0 +1,250 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{cite}
+\usepackage{url}
+\usepackage{siunitx}
+
+\newtheorem{proposition}{Proposition}
+\newcommand{\sexec}{\sigma_{\mathrm{exec}}}
+\newcommand{\schunk}{\sigma_{\mathrm{chunk}}}
+\newcommand{\todo}[1]{\textcolor{red}{[#1]}}
+
+\begin{document}
+
+\title{What Does a Derivative Action Space Buy a Diffusion Policy?\\
+\Large A Controlled Map of First-Order Action Filters}
+
+\author{\IEEEauthorblockN{Yufeng Li}
+\IEEEauthorblockA{\todo{affiliation}}}
+
+\maketitle
+
+\begin{abstract}
+Reparameterizing a robot policy's action space---velocities instead of positions, accelerations instead of velocities, or a learned ``derivative'' command that a low-level controller integrates---is a recurring proposal with recurring claims: smoother execution, easier reinforcement-learning (RL) fine-tuning, better robustness, safer adaptation. We show that every such interface is a first-order filter $c_t=\lambda c_{t-1}+s\,u_t$ between the policy output $u_t$ and the plant, differing from a plain low-pass filter only in its DC gain and in whether the filter state is exposed to the policy. We map this $(\lambda,s)$ space on a diffusion-policy RL fine-tuning pipeline (robomimic Square, DPPO) along five axes: prior alignment, RL trainability, execution smoothness, deployment robustness, and self-supervised signal quality, using twelve trained configurations, three evaluation seeds per cell, and five training seeds for the two main arms. The map is built with a protocol we found necessary to avoid false positives: a matched-exploration-budget twin, the strongest raw baseline we could train, a low-pass null hypothesis, direct mechanistic measurements, and upstream-versus-downstream perturbation injection; each control is motivated by a wrong conclusion we would otherwise have drawn. On this map, the derivative interface buys a better behaviour-cloning prior---and the prior improves as the derivative scale $s$ \emph{shrinks}, the opposite of the common intuition---and it colours exploration noise. It does not improve fine-tuning, zero-shot drift robustness, or adaptation: trainability and robustness are functions of the executed exploration noise $\sexec=s\sigma/\sqrt{1-\lambda^2}$ (Spearman $\rho=0.92$ across ten points) rather than of filter structure, and a raw policy trained with larger exploration noise is far more robust than any interface. Exposing the filter state to the policy, which the derivative parameterization requires for identifiable labels, carries a triple cost: it whitens the policy output so that the executed trajectory is no smoother than the demonstrations (2.8--3.2$\times$ the jerk of an unobservable-state twin at equal filter and noise), it blocks adaptation of the interface parameters upstream of the filter, and it degrades the identifiability of tracking-residual signals. We release the map, the protocol, and the drift and misadaptation suites.
+\end{abstract}
+
+\section{Introduction}
+
+A robot policy rarely commands the plant directly. Between the network output and the actuators sits an \emph{action interface}: a position-delta command tracked by an operational-space controller, a velocity command integrated by the controller, an acceleration or ``derivative'' command that is integrated once more, or a learned command passed through a low-pass filter. Changing this interface is cheap and is repeatedly proposed as a way to obtain smoother execution~\cite{raffin2021smoothexplorationroboticreinforcement}, better-shaped exploration noise~\cite{eberhard2023pink}, easier or more stable RL fine-tuning of imitation-learned policies~\cite{ren2024diffusionpolicypolicyoptimization,li2026reinforcementlearningactionchunking}, robustness to actuator and sensor drift, and a safer place to perform deployment-time adaptation~\cite{muttaqien2026orpaonlineresidualpolicy,wagenmaker2025steeringdiffusionpolicylatent}. These claims are usually supported by a single configuration compared against a single baseline.
+
+We started from exactly such a proposal: a \emph{derivative action interface} in which a diffusion policy~\cite{chi2023diffusionpolicy} outputs the increment of the operational-space command, a leaky integrator accumulates it, and the integrator state is appended to the observation. The intended benefits were the standard list above. Over ten days and roughly nine hundred evaluation rollouts, each of the intended benefits either failed to materialize against a sufficiently strong control or turned out to be a property of a scalar noise quantity rather than of the interface. This paper reports what survived.
+
+Our first observation is structural. Writing the interface as
+\begin{equation}
+c_t=\lambda\,c_{t-1}+s\,u_t,\qquad \lambda\in[0,1],\ s>0,
+\label{eq:filter}
+\end{equation}
+where $u_t$ is the policy output and $c_t$ the executed command, the raw policy is the point $(\lambda,s)=(0,1)$, a first-order low-pass filter with coefficient $\alpha$ is $(\alpha,1-\alpha)$ with unit DC gain, and a leaky ``derivative'' interface is any point with DC gain $s/(1-\lambda)>1$. The derivative interface therefore differs from a low-pass filter on a position-domain policy in exactly two respects: its DC gain, and the fact that its state $c_{t-1}$ is observed by the policy (which, as we show, is necessary for the derivative labels to be identifiable from demonstrations). The question ``what does a derivative action space buy'' becomes a question about the $(\lambda,s)$ plane, the training exploration noise $\sigma$, and one binary design choice.
+
+Our second observation is methodological. The first version of our study compared the interface against a \emph{matched-budget twin}---the raw policy fine-tuned with the same policy-side exploration noise $\sigma$---and found large advantages: $+25$ to $+37$ percentage points (pp) under actuator-gain drift, and a residual-driven gain compensation that ``worked on the interface but not on the raw policy.'' All of these advantages disappeared against the raw policy trained with the default exploration noise $\sigma=0.10$, which is more robust than any interface configuration we trained (81\% versus at most 46\% under a 30\% actuator-gain loss) and uses the same compensation perfectly. The twin was a weak policy, not a fair control. Along the way we also (i) proposed and then refuted a mechanism (``integral action compensates multiplicative gain error'') by a direct measurement of the compensation ratio, (ii) discovered that our first adaptation experiments applied the correction \emph{downstream} of the integrator and therefore never tested the structural bound they were meant to test, and (iii) shipped an estimator whose first batch of results was an artefact of a per-episode reset. We turned each of these into a rule of the evaluation protocol (Sec.~\ref{sec:protocol}).
+
+\textbf{Contributions.}
+\begin{enumerate}
+\item \textbf{The map.} Twelve configurations on the $(\lambda,s)\times\sigma\times\{\text{observable state}\}$ space (Table~\ref{tab:points}), each evaluated on five axes with three evaluation seeds; the two principal arms with five training seeds. Most action-space papers report one point and no controls.
+\item \textbf{The protocol.} Five controls---matched-budget twin, strongest raw baseline, low-pass null hypothesis, direct mechanistic measurement, upstream-versus-downstream injection---each paired with the wrong conclusion it prevented in this study.
+\item \textbf{Findings.} (a) Trainability and zero-shot drift robustness are governed by the \emph{executed} exploration noise during fine-tuning, $\sexec=s\sigma/\sqrt{1-\lambda^2}$, and its chunk-scale, colour-aware variant, not by filter structure; high-DC-gain interfaces amplify noise and therefore force training at low $\sigma$, which is why the original interface was fragile. (b) The leaky integrator is a high-DC-gain low-pass filter; the scale $s$ trades a tighter execution-space trust region against \emph{nothing}: the behaviour-cloning prior \emph{improves} as $s$ shrinks (49\%$\to$58.5\% from $s=1$ to $s=0.3$ at $\lambda=0.9$), because small $s$ spreads the derivative labels over the full action range. (c) Observing the filter state is required for identifiable derivative labels but whitens the policy output (closed-loop derivative labels are the innovation of the demonstration sequence), so the executed trajectory returns to the demonstration spectrum and the smoothness advantage is forfeited; it also blocks upstream adaptation and degrades residual-signal identifiability. (d) The interface arm's fine-tuning outcome has $6.5\times$ the training-seed variance of the raw arm at equal mean.
+\end{enumerate}
+
+\section{Related Work}
+
+\textbf{Action spaces and smoothing.} Velocity, acceleration and delta parameterizations are standard in manipulation and driving; smoothing is obtained either at the policy (state-dependent exploration~\cite{raffin2021smoothexplorationroboticreinforcement}, coloured exploration noise~\cite{eberhard2023pink}, action chunking~\cite{li2026reinforcementlearningactionchunking,chen2026dreamchunkreactiveactionchunking}) or at the plant (low-pass filters, impedance control). Pink noise~\cite{eberhard2023pink} establishes that a spectral exponent $\beta\approx1$ is a good default for exploration in continuous control; we show that a leaky integrator implements a continuously tunable $\beta(\lambda)$ on the executed command but also that the same shaping caps the usable $\sigma$.
+
+\textbf{RL fine-tuning of diffusion policies.} DPPO~\cite{ren2024diffusionpolicypolicyoptimization} fine-tunes the last denoising steps of a diffusion policy with PPO~\cite{schulman2017ppo}; its exploration noise is the sampling standard deviation of those steps. Stability of offline-to-online transitions has been studied through value calibration~\cite{nakamoto2024calqlcalibratedofflinerl}, replay~\cite{ball2023efficientonlinereinforcementlearning} and warm-starts~\cite{zhou2025efficientonlinereinforcementlearning}; action chunking~\cite{li2026reinforcementlearningactionchunking} is the closest to an interface-level intervention. We take DPPO as a fixed pipeline and vary only the interface and $\sigma$.
+
+\textbf{Adaptation at deployment.} Parameter-level online adaptation with stability guarantees~\cite{oconnell2024neuralflyenablesrapidlearning}, feed-forward adaptation~\cite{kumar2021rmarapidmotoradaptation}, self-supervised policy adaptation~\cite{hansen2021selfsupervisedpolicyadaptationdeployment}, test-time training of robot policies~\cite{jiang2026robotttcontextscalingrobot,sima2025centaurrobustendtoendautonomous,zhang2026tttvlatesttimelatentprompt} and weight-free steering~\cite{wagenmaker2025steeringdiffusionpolicylatent,muttaqien2026orpaonlineresidualpolicy} all change something between observation and actuator. Our contribution to this literature is negative and structural: we measure where in the interface an adaptive correction can be applied at all, and show that the one place that would enjoy a propagation bound is unavailable when the filter state is observed.
+
+\textbf{Evaluation methodology.} Our protocol is in the spirit of studies that question progress by strengthening baselines~\cite{press2024rdumbsimpleapproachquestions,dauner2023partingmisconceptionslearningbasedvehicle}; we add controls specific to action-interface claims.
+
+\section{First-Order Action Filters}
+\label{sec:theory}
+
+\subsection{Definitions}
+
+Let the operational-space controller accept a normalized command $c_t\in[-1,1]^d$ per control step (position and rotation deltas; the gripper dimension bypasses the filter). A policy $\pi$ outputs $u_t$; the interface is~\eqref{eq:filter} with clipping to $[-1,1]$. The \emph{raw} interface is $(\lambda,s)=(0,1)$. A \emph{low-pass} interface with coefficient $\alpha$ is $(\alpha,1-\alpha)$: unit DC gain, the policy trained in the position domain, the filter inserted at fine-tuning time. A \emph{derivative} interface is $(\lambda,s)$ with DC gain $s/(1-\lambda)>1$; $\lambda=1$ is a pure integrator. Its policy is trained on relabelled demonstrations
+\begin{equation}
+u_t=\mathrm{clip}\!\big((a_t-\lambda c_{t-1})/s,\,-1,1\big),\quad c_t=\lambda c_{t-1}+s\,u_t,
+\label{eq:relabel}
+\end{equation}
+computed \emph{closed-loop} against the integrator's own state so that clipping errors do not accumulate. Because $u_t$ depends on $c_{t-1}$, which is not a function of the robot state, the label is not identifiable from the observation alone; in a pilot the diffusion prior without access to $c_{t-1}$ fit the position dimensions with correlation $\approx0$ and achieved 0\% success. We therefore append $c_{t-1}$ to the observation for all derivative points (\emph{observable state}). The low-pass points do not observe the filter state.
+
+\subsection{Three linear-system facts}
+
+Let $\delta u_t$ be a perturbation of the policy output (exploration noise or an adaptation error) and $\delta c_t$ its image on the executed command.
+
+\begin{proposition}[Spectral shaping]
+For white $\delta u_t$ with variance $\sigma^2$ and $\lambda<1$, $\delta c_t$ is AR(1) with stationary variance $s^2\sigma^2/(1-\lambda^2)$ and low-frequency spectral exponent rising from $0$ ($\lambda=0$) to $2$ ($\lambda\to1$); for $\lambda=1$ the variance grows as $s^2\sigma^2 t$.
+\end{proposition}
+We call $\sexec=s\sigma/\sqrt{1-\lambda^2}$ the executed exploration noise. Because the policy replans every $H=4$ steps, the perturbation it can react to is the displacement accumulated over a chunk; for an AR(1) process this is $\schunk=\sexec\sqrt{\sum_{i,j<H}\lambda^{|i-j|}}$, which equals $2\sigma$ for white noise and $3.5$--$3.9\,\sexec$ for $\lambda\in[0.8,0.95]$.
+
+\begin{proposition}[Bounded propagation]
+If $|\delta u_t|\le\Delta$ for all $t$ and $\lambda<1$, then $|\delta c_t|\le s\Delta/(1-\lambda)$ and $|\delta x_t|\le\|g\|_1 s\Delta/(1-\lambda)$ for a tracking controller with impulse response $g$.
+\end{proposition}
+
+\begin{proposition}[Execution-space trust region]
+$|c_t-c_{t-1}|\le(1-\lambda)\,C_{\max}+s$ regardless of how far the policy parameters moved.
+\end{proposition}
+Propositions 2--3 hold identically for the low-pass and the derivative interface; they depend on $(\lambda,s)$ only. With $C_{\max}=1$ the bound is $0.4$ for $(0.8,0.2)$ and $1.1$ for $(0.9,1.0)$---the original interface's choice of $s=1$ made its trust region barely tighter than the raw policy's ($2$).
+
+Two consequences frame the experiments. First, Proposition~1 applies to \emph{any} perturbation injected upstream of the filter, but to \emph{nothing} injected downstream; the placement of an adaptive correction therefore decides whether the filter protects it. Second, Propositions~1--3 say nothing about the policy's own command spectrum, which is determined by the demonstrations and the labels~\eqref{eq:relabel}; we return to this in Sec.~\ref{sec:smooth}.
+
+\section{Evaluation Protocol}
+\label{sec:protocol}
+
+Each control below is stated with the false conclusion it prevented in this study.
+
+\begin{enumerate}
+\item \textbf{Matched-budget twin \emph{and} strongest raw baseline.} Compare the interface both to the raw policy trained with the same policy-side $\sigma$ (to isolate mechanism) and to the raw policy trained with its best $\sigma$ (to measure deployment value). Against the twin, the interface showed $+25$--$37$~pp drift robustness and ``made residual compensation usable''; against the strongest raw policy, both advantages reversed (Sec.~\ref{sec:robust},~\ref{sec:adapt}).
+\item \textbf{Low-pass null hypothesis.} Include a unit-DC-gain filter at the same $(\lambda,s)$-bound. The low-pass arm turned out to be $4\times$ tighter on the execution-space trust region and $3\times$ smoother than the interface.
+\item \textbf{Direct mechanistic measurement.} A proposed mechanism must come with a measurement that would refute it. ``Integral action compensates gain loss'' predicts an executed-magnitude ratio near $1$ under gain drift; the measured ratio was $0.66$ at gain $0.7$ for both interface and raw policy---the interface did not wind up at all.
+\item \textbf{Upstream versus downstream injection.} Perturb (and adapt) on both sides of the filter. Our first adaptation experiments applied $1/\hat g$ to the executed command, downstream of the integrator, and therefore measured the policy's closed-loop robustness rather than the interface's bound.
+\item \textbf{Equivalence check for new estimator paths.} Before a new estimator enters a drift grid, verify on the no-drift condition that its activation rate and estimate trajectory match the old path step by step. A per-episode reset of the history buffer in our delay-aware estimator produced a plausible-looking ``fixes the negative control, costs 20~pp'' result that was entirely an artefact.
+\end{enumerate}
+A sixth rule emerged from the map itself: \textbf{matched exploration budget must match $\sexec$}, not $\sigma$. The seven-arm study that motivated this work matched $\sigma$ and thereby compared an interface at $\sexec=0.069$ with a raw policy at $0.030$.
+
+\section{Experimental Setup}
+
+\textbf{Task and pipeline.} robomimic \emph{Square} (nut assembly, mixed-human demonstrations)~\cite{mandlekar2021robomimic} in robosuite/MuJoCo~\cite{zhu2020robosuite}, low-dimensional observations, OSC pose control at \SI{20}{Hz}, action chunks of $H=4$, 400-step episodes. Policies are DPPO diffusion MLPs~\cite{ren2024diffusionpolicypolicyoptimization}: a diffusion prior pre-trained for 3000 epochs (stock prior for raw and low-pass points; a prior trained on relabelled data~\eqref{eq:relabel} for derivative points), then 200 PPO iterations with the final-step sampling noise $\sigma$ as the exploration parameter. Training seed 42 for all points; seeds 43--46 additionally for E4 and E5.
+
+\textbf{Points.} Table~\ref{tab:points} lists the twelve configurations. A, E5, B, E1, E4 come from the original seven-arm study; F1--F7 were trained for the map. F4/F7 and F5 share the $(0.8,0.2)$ filter with B and form a $\{\text{prior}\}\times\{\sigma\}$ factorial; F6 is F1's prior fine-tuned at $\sigma=0.07$.
+
+\textbf{Axes and metrics.} (1) \emph{Prior alignment}: success of the pre-trained prior through the interface before RL (200 episodes). (2) \emph{Trainability}: success after 200 iterations. (3) \emph{Smoothness}: mean executed jerk and maximum per-step change of the executed position command, deterministic rollouts. (4) \emph{Deployment robustness}: frozen success under actuator gain $\times0.7$, a two-step control delay, and observation noise $\sigma_{\text{obs}}=0.05$. (5) \emph{Signal and adaptation}: correlation of the free-motion tracking residual with the command (identifiability of the nominal map $K$), recovery of a residual-driven gain compensation under gain $\times0.7$, and the \emph{misadaptation cost}---success change when the same estimator is fooled by a delay it misreads as a gain loss. Axes 3--5 use three evaluation seeds $\times$ 100 episodes per cell.
+
+\begin{table*}[t]
+\centering
+\caption{The map. $\sexec=s\sigma/\sqrt{1-\lambda^2}$ ($\lambda=1$: end-of-episode random-walk std). Prior and final success from training seed 42; deployment columns are means over three evaluation seeds $\times$ 100 episodes. Obs.: filter state observed by the policy. P3: bound $(1-\lambda)+s$.}
+\label{tab:points}
+\small
+\begin{tabular}{l ccc c c c | cc | cc | ccc | ccc}
+\toprule
+& $\lambda$ & $s$ & $\sigma$ & Obs. & DC & $\sexec$ & Prior & Final & Jerk & Max step (P3) & Gain$\times$0.7 & Delay 2 & Obs.\ noise & Calib.\ $\rho$ & Recover & Fooled \\
+\midrule
+A  & 0    & 1.0 & .10 & --  & 1        & .100 & 38.0 & 99.5 & .17 & .68 (2.0) & 81.3 & 91.0 & -- & .81 & +17.0 & $-$39.3 \\
+E5 & 0    & 1.0 & .03 & --  & 1        & .030 & 38.0 & 93.0 & .16 & .67 (2.0) & 3.7  & 80.0 & 49 & .75 & +40.7 & $-$19.3 \\
+B  & .8   & .2  & .10 & no  & 1        & .033 & 23.5 & 96.0 & .03 & .20 (0.4) & 41.0 & 87.0 & -- & .93 & +55.7 & $-$5.3 \\
+F4 & .8   & .2  & .03 & no  & 1        & .010 & 23.5 & 77.5 & .03 & .14 (0.4) & 1.0  & 64.7 & -- & .80 & +39.7 & $-$18.3 \\
+F5 & .8   & .2  & .03 & yes & 1        & .010 & 59.5 & 94.0 & .07 & .26 (0.4) & 4.0  & 73.3 & -- & .94 & +79.0 & $-$5.7 \\
+F7 & .8   & .2  & .10 & yes & 1        & .033 & 59.5 & 99.5 & .10 & .29 (0.4) & 28.7 & 86.7 & -- & .73 & +19.7 & $-$23.3 \\
+F1 & .9   & .3  & .03 & yes & 3        & .021 & 58.5 & 94.0 & .07 & .30 (0.4) & 12.0 & 74.7 & -- & .89 & +73.7 & +0.7 \\
+F6 & .9   & .3  & .07 & yes & 3        & .048 & 58.5 & 99.5 & .09 & .33 (0.4) & 38.3 & 67.3 & 89 & .90 & +56.3 & +2.3 \\
+F2 & .7   & 1.0 & .03 & yes & 3.3      & .042 & 54.0 & 98.0 & .11 & .60 (1.3) & 38.7 & 80.0 & -- & .93 & +58.7 & $-$21.3 \\
+F3 & .95  & .5  & .03 & yes & 10       & .048 & 59.5 & 99.0 & .10 & .43 (0.55) & 45.7 & 84.0 & 84 & .85 & +48.7 & $-$11.0 \\
+E4 & .9   & 1.0 & .03 & yes & 10       & .069 & 49.0 & 95.0 & .13 & .79 (1.1) & 28.3 & 87.3 & 78 & .75 & +62.7 & $-$11.0 \\
+E1 & 1.0  & 1.0 & .03 & yes & $\infty$ & .60  & 43.5 & 92.0 & .12 & .76 (1.0) & 45.3 & 83.0 & 76 & -- & -- & -- \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/DS_map.png}
+\caption{The $(\lambda,s)$ design space, one panel per axis. Raw policies are the point $(0,1)$; low-pass filters lie on $s=1-\lambda$; derivative interfaces have $s/(1-\lambda)>1$. Marker: circle = filter state observed, square = low-pass, diamond = raw; edge colour: training $\sigma=0.10$ (red) or $0.03$ (dark). Grey contours: the Proposition~3 bound $(1-\lambda)+s$. Smoothness (panel~3) follows the bound; robustness (panel~4) follows the edge colour, i.e.\ the training noise.}
+\label{fig:map}
+\end{figure*}
+
+\section{Results}
+
+\subsection{Prior alignment: smaller $s$ is better}
+\label{sec:prior}
+
+The derivative prior is better than the stock prior for every $(\lambda,s)$ we trained (49.0--59.5\% versus 38.0\%), and---contrary to our pre-registered expectation that a small $s$ would clip demonstration increments and hurt alignment---it improves as $s$ shrinks: at $\lambda=0.9$, $s=1.0\to0.3$ raises the prior from 49.0 to 58.5\%; at $s=1$, $\lambda=0.9\to0.7$ raises it from 49.0 to 54.0\%. The mechanism is label range: with $s=1$ the closed-loop labels~\eqref{eq:relabel} have mean magnitude $|u|\approx0.09$ and are dominated by the diffusion model's output noise; with $s=0.3$ they fill the $[-1,1]$ range while clipping fewer than 1\% of steps. The low-pass arms, which use the stock prior through an unmatched filter, start at 23.5\%. Retraining the prior for the same $(0.8,0.2)$ filter with an observable state (F5) gives 59.5\%, identical to the best derivative point: on this axis the effect is entirely due to retraining and observability, not to DC gain.
+
+\subsection{Trainability: an inverted U in $\sexec$, and seed variance}
+\label{sec:train}
+
+Final success is high (94--99.5\%) for every point with $\sexec\in[0.02,0.10]$ and collapses outside it: the low-pass arm at $\sigma=0.03$ (F4, $\sexec=0.010$) reaches only 77.5\%, the derivative arms at $\sigma=0.10$ (E3 at $\sexec=0.23$, C with a pure integrator) collapsed to 12.5 and 24.5\% in the original study (Fig.~\ref{fig:h9}, left). The filter's noise gain, not its structure, sets the usable $\sigma$: a low-pass attenuates policy-side noise by $(1-\alpha)/(1+\alpha)=0.11$ in variance and under-explores at $\sigma=0.03$; a leaky integrator with $s=1$ amplifies it by $1/(1-\lambda^2)=5.3$ and over-explores at $\sigma=0.10$. The original interface at $\sigma=0.03$ sits at the right edge of the sweet spot; across five training seeds its final success is $92.5\pm8.5\%$ (one seed at 77.5\%) versus $92.1\pm1.3\%$ for the raw twin---equal mean, $6.5\times$ the standard deviation. The prior also matters for trainability: at equal filter and $\sigma$, the retrained-prior point F5 reaches 94.0\% where the stock-prior F4 reaches 77.5\%.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/DS_h9.png}
+\caption{Trainability (left) and gain-drift robustness (right) against the executed exploration noise $\sexec$. Left: an inverted U with a sweet spot around $0.03$--$0.10$. Right: robustness rises monotonically with $\sexec$ except for two configurations with observable state (E4, F7) that sit below the trend; both are stable across training seeds.}
+\label{fig:h9}
+\end{figure*}
+
+\subsection{Smoothness: the bound holds, but the observable state whitens the policy}
+\label{sec:smooth}
+
+The maximum per-step change of the executed command tracks the Proposition~3 bound across all twelve points (Table~\ref{tab:points}: 0.14--0.33 for bound 0.4, 0.43 for 0.55, 0.60 for 1.3, 0.67--0.79 for bounds 1.1--2.0). Within a bound, however, the points split by observability. Table~\ref{tab:white} reports the lag-1 autocorrelation of the policy output and of the executed command. Policies that cannot see the filter state (B, F4) produce output as smooth as the raw policy (0.78--0.81) and the filter adds genuine smoothing on top: executed jerk 0.026--0.032, spectral exponent $\beta_c\approx3$. Policies that see the filter state produce output that is white or anti-correlated ($-0.14$ to $0.40$; sign-flip rate 0.67--0.73 versus 0.60), and their executed jerk is $2.8$--$3.2\times$ that of the unobservable twin at the same filter and $\sigma$ (F4$\to$F5: 0.026$\to$0.074; B$\to$F7: 0.032$\to$0.101); their executed spectral exponent is 1.8--2.25, and E4's ($1.83$) is indistinguishable from the raw policy's ($1.76$).
+
+This is not something RL learned. The closed-loop derivative label $u_t=(a_t-\lambda c_{t-1})/s$ is, for a filter that tracks the demonstration, the \emph{innovation} of the demonstration sequence, which is nearly white; the integrator then re-reddens it, and the executed command recovers the demonstration's own spectrum. A low-pass filter instead acts on a policy that is already smooth and smooths it further. The claim ``derivative interfaces execute more smoothly'' is therefore true of the \emph{exploration noise} (Proposition~1; in stochastic rollouts the executed exponent of E4 rises to 2.1--2.5 against 0.9 for the raw twin) and false of the \emph{intended trajectory}.
+
+\begin{table}[t]
+\centering
+\caption{Command statistics on deterministic no-drift rollouts (position dimensions, three evaluation seeds). ac$_1$: lag-1 autocorrelation; $\beta$: low-frequency spectral exponent.}
+\label{tab:white}
+\small
+\begin{tabular}{l l cc c c c}
+\toprule
+Point & State & ac$_1(u)$ & ac$_1(c)$ & flips & jerk & $\beta_c$ \\
+\midrule
+A  & raw & .80 & .80 & .59 & .175 & 1.48 \\
+E5 & raw & .77 & .77 & .60 & .161 & 1.76 \\
+B  & unobserved & .81 & .99 & .61 & .032 & 3.04 \\
+F4 & unobserved & .78 & .99 & .61 & .026 & 2.85 \\
+F5 & observed & .31 & .96 & .70 & .074 & 1.98 \\
+F7 & observed & .25 & .96 & .70 & .101 & 2.25 \\
+E4 & observed & $-$.14 & .93 & .71 & .134 & 1.83 \\
+F1 & observed & $-$.11 & .95 & .73 & .073 & 2.08 \\
+F6 & observed & .03 & .96 & .72 & .086 & 2.14 \\
+F2 & observed & .40 & .94 & .67 & .115 & 2.01 \\
+F3 & observed & $-$.11 & .94 & .71 & .098 & 1.78 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Deployment robustness: a function of executed noise}
+\label{sec:robust}
+
+Under a 30\% actuator-gain loss, frozen success ranges from 1\% to 81\% across the map, and the ordering is explained by the training noise, not by the interface (Fig.~\ref{fig:h9}, right). Against $\sexec$, Spearman's $\rho=0.76$ over the ten stationary points; against the chunk-scale, colour-aware $\schunk$ it is also $0.76$, rising to $0.92$ when the original interface E4 is excluded. The chunk-scale variant explains why the raw policy at $\sigma=0.03$ is as fragile as the $\sigma=0.03$ low-pass arms (3.7\% versus 1--4\%): white noise of standard deviation 0.03 accumulates to only $0.06$ within one decision period, too little for the policy ever to observe and correct a deviation, whereas the same $\sexec$ passed through a $\lambda=0.8$ filter accumulates to $0.12$ (B: 41\%).
+
+Two configurations sit below the trend, both with observable state: E4 ($\schunk=0.26$, 28.3\%) and F7 ($\schunk=0.12$, 28.7\% against 41\% for its unobservable twin B). Neither is training-seed noise: across five training seeds E4's gain-drift success is $25.9\pm7.5\%$ and E5's $4.3\pm2.7\%$. We tested and rejected three explanations. Prior quality: F5 and F6, with the best priors on the map, land inside the range predicted from $\sexec$ alone (4.0\% and 38.3\%). Training-seed variance: above. Noise scale and colour: the residual survives both metrics. What remains is that a policy observing $c_{t-1}$ relies on the consistency between the command it observes and the motion it observes, which a gain change breaks; the other observable-state points (F1, F2, F3, F5, F6) sit on the trend, so this cannot be the whole story, and we leave it open. What is not open is the ranking: the raw policy trained with $\sigma=0.10$ (81.3\%) is more robust than any interface configuration (at most 45.7\%), and the interface's apparent $+25$~pp advantage over its matched-$\sigma$ twin is the difference between two points that both lie below the curve.
+
+Robustness to a two-step control delay behaves differently: it runs \emph{opposite} to $s$ among the $\sigma=0.03$ derivative points (73--75\% at $s\le0.3$, 84\% at $s=0.5$, 80--87\% at $s=1$) and drops further when $\sigma$ is raised (F6: 67\%), while the raw policy at $\sigma=0.10$ reaches 91\%. A smaller $s$ makes the policy output larger and more feedback-dependent, and a delay corrupts exactly that feedback; we report it as a separate sub-axis.
+
+\subsection{Signals and adaptation: where the correction is applied decides everything}
+\label{sec:adapt}
+
+We estimate the actuator gain ratio $\hat g$ from free-motion tracking residuals with a sliding-window least squares against a per-policy calibrated nominal map $K$, and apply $1/\hat g$ with a dead-band trigger. Two facts organise the results (Fig.~\ref{fig:upstream}).
+
+\textbf{Downstream compensation measures the policy, not the interface.} Applied to the executed command, the same estimator recovers every arm: the raw $\sigma=0.10$ policy from 81 to 99\% with a misadaptation cost of $-0.3$~pp under no drift, the interface from 28 to 91\%, the low-pass from 41 to 97\%. The matched-$\sigma$ raw twin recovers only to 44\% and loses 38--48~pp when the estimator is active without drift---but it is a fragile policy, not a policy without an interface. When the estimator is fooled by a two-step delay it misreads as $\hat g\approx0.65$, the strong raw policy loses 37--42~pp and doubles its jerk while the interface loses 11--25~pp; at an \emph{equal} injected gain error, however ($\times1.4$ / $\times1.6$ on frozen policies), the raw policy keeps 88/67\% and the interface 68/33\%---the crossover was a difference in how badly each arm's estimator was fooled, not a structural protection.
+
+\textbf{Upstream compensation is protected by the filter but is absorbed by an observable-state policy.} Applied to the policy output, so that Proposition~1 applies, the correction recovers the low-pass arm exactly as well as downstream (92--93\% versus 94--97\%) while injected white adaptation noise of relative standard deviation 0.5 raises executed jerk by only $1.40\times$ upstream against $6.11\times$ downstream---the structural bound is real. On the derivative interface the same upstream correction does \emph{not} recover gain drift (27--36\% versus 87--91\% downstream) and makes execution \emph{jerkier} ($1.7$--$2.3\times$): the policy observes $c_{t-1}$, regulates $c$ rather than $u$, and undoes the upstream scaling at the next decision, fighting it. For an observable-state interface the parameters can therefore only be adapted downstream, where the filter offers no protection. Zero-mean adaptation noise, finally, barely affects success for any arm ($\le6$~pp at relative std 0.5); what costs success is bias, and bias is placement-invariant.
+
+Signal quality follows command colour: the calibration correlation is highest for the unobservable low-pass (0.93) and the observable-state point with the smoothest output (F5, 0.94) and lowest for the whitened E4/E5/F7 (0.73--0.75); the smoothed commands of all filtered arms make a delay harder to distinguish from a gain loss (Sec.~\ref{sec:robust}).
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/P1_upstream.png}
+\caption{Placement of the adaptive correction. Left/centre: triggered gain compensation applied downstream (solid) versus upstream (hatched) of the filter under gain $\times0.7$ and under an estimator fooled by delay; on the low-pass arm (B) both placements work, on the observable-state interface (E4) only downstream does. Right: maximum executed step under injected white adaptation noise; the low-pass arm with upstream injection stays within its Proposition~3 bound (0.22 at relative std 0.5) while downstream injection and the interface do not.}
+\label{fig:upstream}
+\end{figure*}
+
+\subsection{Putting the axes together}
+
+No point dominates. The strongest raw policy (A) wins zero-shot robustness (81\%), delay robustness (91\%) and final success (99.5\%) but has the worst prior (38\%), the largest misadaptation cost ($-39$~pp) and raw-policy jerk. The unobservable low-pass (B) wins smoothness and the execution-space bound by $4\times$ and has the smallest misadaptation cost among the $\sigma=0.10$ arms, but starts from the worst prior (23.5\%). The best derivative configuration we found, F6 $=(0.9,0.3)$ at $\sigma=0.07$, improves on the original interface E4 on every axis but delay---prior $+9.5$~pp, final $+4.5$, gain robustness $+10$, observation-noise robustness $+11$, maximum step 0.33 versus 0.79, misadaptation cost $+2$ versus $-11$---by moving two of E4's three knobs: $s$ was set to 1 on a mistaken belief about prior alignment, and $\sigma$ to 0.03 because the interface's noise gain left no choice. F6 still loses to A on robustness (38 versus 81\%).
+
+What the derivative interface buys, on this task, is therefore: a better behaviour-cloning prior (via retraining with an observable state and a small $s$) and coloured exploration noise. What it does not buy: smoother intended trajectories (the observable state whitens the policy), better fine-tuning (equal mean, $6.5\times$ the variance), zero-shot robustness (governed by $\sexec$, which the interface caps), usable adaptation (only downstream, unprotected), or better self-supervised signals.
+
+\section{Discussion and Limitations}
+
+\textbf{Why the first study was wrong.} Every advantage in our seven-arm pilot came from comparing against a raw policy fine-tuned at $\sigma=0.03$. That twin is the correct control for \emph{mechanism}---it isolates the interface---but the wrong control for \emph{value}, because the interface's own noise gain is what forced $\sigma=0.03$ in the first place. The protocol of Sec.~\ref{sec:protocol} exists so that the two questions are answered by different comparisons.
+
+\textbf{On ``smoother'' action spaces.} Propositions~1--3 are correct and are the usual justification for derivative parameterizations. They constrain perturbations, not the policy's command, and the relabelling that makes a derivative policy trainable also makes its command white. Any claim of smoother execution should be checked on deterministic rollouts against an unobservable low-pass filter of the same bound.
+
+\textbf{Limitations.} One task (quasi-static insertion), one simulator, one RL algorithm, low-dimensional observations. Most points have a single training seed; the two principal arms have five. The open residual of Sec.~\ref{sec:robust} (E4 and F7 below the $\sexec$ trend) is unexplained. Tasks where smoothness is a constraint rather than a preference (liquids, fragile contact) may reward the filtered arms differently; there the unobservable low-pass, not the derivative interface, is the natural candidate.
+
+\section{Conclusion}
+
+We recast derivative, velocity and low-pass action interfaces as points of one first-order filter family and measured a diffusion-policy RL pipeline across that family on five axes. The interface that motivated the study buys a better prior and coloured exploration noise; its remaining claimed benefits are either properties of the executed exploration noise---which any filter sets and which the derivative interface sets badly---or are forfeited by the observable filter state that its labels require. We hope the map and the protocol make the next action-space proposal cheaper to evaluate and harder to over-claim.
+
+\section*{Reproducibility}
+Code, configurations, the drift and misadaptation suites, and all rollout statistics are released with the paper.\todo{URL}
+
+\bibliographystyle{IEEEtran}
+\bibliography{refs}
+
+\end{document}
